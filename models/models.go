@@ -2,33 +2,29 @@ package models
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
 var (
-	db gorm.DB
+	db *sqlx.DB
 )
 
 func init() {
 	var err error
-	db, err = gorm.Open("postgres", "user=Matt dbname=dev_goGradeGorm1 sslmode=disable")
+	db, err = sqlx.Open("mysql", "root@tcp(127.0.0.1:3306)/dev_GoGrade?parseTime=true&loc=Local")
 	if err != nil {
 		panic(fmt.Sprintf("Got error when connect database, the error is '%v'", err))
 	}
+	err = db.Ping()
 
-	// With it you could use package `database/sql`'s builtin methods
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
-	db.DB().Ping()
-	db.SingularTable(true)
-
+	if err != nil {
+		panic(err)
+	}
 }
 
 func SetupDB() error {
 
-	db.AutoMigrate(User{})
-	db.AutoMigrate(Class{})
 	_, err := CreateUser("test@test.com", "somePassword", "Admin")
 	if err != nil {
 		panic(err)

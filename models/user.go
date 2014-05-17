@@ -3,7 +3,7 @@ package models
 import (
 	"code.google.com/p/go.crypto/bcrypt"
 	"errors"
-	"fmt"
+	// "fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"time"
 )
@@ -13,27 +13,27 @@ var (
 )
 
 type User struct {
-	Id           int64
-	Email        string `sql:"not null;unique"`
-	EmailLower   string `sql:"not null;unique"`
-	HashedPasswd []byte `sql:"not null"`
-	PlainPasswd  string `sql:"-"`
-	Role         string `sql:"not null"`
-	Disabled     bool
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	Id             int64
+	Email          string
+	EmailLower     string
+	HashedPassword []byte `db:"hashedPassword"`
+	// PlainPasswd    string
+	Role      string
+	Disabled  bool
+	CreatedAt time.Time `db:"createdAt"`
+	UpdatedAt time.Time `db:"updatedAt"`
 }
 
-func GetUsersCount() int {
-	var count int
-	// err := db.QueryRow(`select COUNT(*) from user`).Scan(&count)
-	err := db.Model(User{}).Count(&count)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(count)
-	return count
-}
+// func GetUsersCount() int {
+// 	var count int
+// 	// err := db.QueryRow(`select COUNT(*) from user`).Scan(&count)
+// 	err := db.Model(User{}).Count(&count)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println(count)
+// 	return count
+// }
 
 func CreateUser(email string, password string, role string) (*User, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -42,8 +42,9 @@ func CreateUser(email string, password string, role string) (*User, error) {
 		return nil, err
 	}
 	//TODO: Make fill in EmailLower!!
-	user := User{Email: email, EmailLower: "test", HashedPasswd: hashedPassword, Role: role}
-	db.Save(&user)
+	user := User{Email: email, EmailLower: "test", HashedPassword: hashedPassword, Role: role}
+	// db.Save(&user)
+	_, err = db.Exec("INSERT INTO user(email, hashedPassword, role) VALUES(?,?,?)", user.Email, user.HashedPassword, user.Role)
 
 	if err != nil {
 		return nil, err
@@ -51,14 +52,30 @@ func CreateUser(email string, password string, role string) (*User, error) {
 	// TODO: We are supposed to return a user here!
 	return nil, nil
 }
+func GetUserByEmail(email string) (*User, error) {
+	u := &User{}
+	// err := db.QueryRow("SELECT id, email, hashedPassword FROM user where email = ?", email).Scan(&u.Id, &u.Email, &u.HashedPassword)
+	err := db.Get(u, "SELECT * FROM user where email = ? LIMIT 1", email)
+
+	if err != nil {
+		return nil, err
+	}
+	return u, nil
+
+}
 
 // Verifies that the password matches the hashed password.
 func VerifyPasswd(email, passwd string) (*User, error) {
-	u := &User{}
+	u, err := GetUserByEmail(email)
+	if err != nil {
+		panic(err)
+	}
 
-	db.Where("email = ?", email).First(u)
+	// fmt.Printf("%v",u)
 
-	if bcrypt.CompareHashAndPassword([]byte(u.HashedPasswd), []byte(passwd)) != nil {
+	// db.Where("email = ?", email).First(u)
+
+	if bcrypt.CompareHashAndPassword([]byte(u.HashedPassword), []byte(passwd)) != nil {
 
 		return nil, ErrUserOrPasswdIncorrect
 	}
@@ -83,17 +100,19 @@ func (a *User) CreateToken() (string, error) {
 	// Sould we just return a Token instead of a string???
 	return tokenString, err
 }
+
 func GetAllUsers() []User {
-	users := []User{}
+	// users := []User{}
 
-	db.Find(&users)
+	// db.Find(&users)
 
-	return users
+	return nil
 }
-func GetUserById(id int) *User {
-	user := &User{}
 
-	db.Find(user, id)
-	fmt.Println(id)
-	return user
+func GetUserById(id int) *User {
+	// user := &User{}
+
+	// db.Find(user, id)
+	// fmt.Println(id)
+	return nil
 }

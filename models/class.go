@@ -16,17 +16,17 @@ type Class struct {
 	Archived   bool
 }
 
-func CreateClass(class *Class) error {
+// func CreateClass(class *Class) error {
 
-	db.Save(&class)
+// 	db.Save(&class)
 
-	return nil
-}
+// 	return nil
+// }
 
 func GetAllClasses() ([]Class, error) {
 
-	classes := []Class{}
-	db.Find(&classes)
+	// classes := []Class{}
+	// db.Find(&classes)
 
-	return classes, nil
+	return nil, nil
 }

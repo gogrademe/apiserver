@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	h "github.com/Lanciv/GoGradeAPI/handlers"
-	"github.com/Lanciv/GoGradeAPI/models"
+	// "github.com/Lanciv/GoGradeAPI/models"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -12,13 +12,13 @@ func main() {
 
 	fmt.Println("Server is starting...")
 
-	models.SetupDB()
+	// models.SetupDB()
 
 	r := mux.NewRouter()
 	r.HandleFunc("/auth", h.Login)
 
-	http.Handle("/api", r)
+	http.Handle("/", r)
 	// TODO: Add port to Config.
 	http.ListenAndServe(":3000", nil)
-	fmt.Println("Server is running...")
+	fmt.Printf("%v", "Server is running...")
 }
