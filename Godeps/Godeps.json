@@ -1,0 +1,49 @@
+{
+	"ImportPath": "github.com/Lanciv/GoGradeAPI",
+	"GoVersion": "go1.2.1",
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go.crypto/bcrypt",
+			"Comment": "null-192",
+			"Rev": "2990fc550b9ff92bc33c848f92c87a305ae62934"
+		},
+		{
+			"ImportPath": "code.google.com/p/go.crypto/blowfish",
+			"Comment": "null-192",
+			"Rev": "2990fc550b9ff92bc33c848f92c87a305ae62934"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Rev": "9aea7a2fa5b79ef7fc00f63a575e72df33b4e886"
+		},
+		{
+			"ImportPath": "github.com/dgrijalva/jwt-go",
+			"Rev": "71c6a65cfe7e0714f999c0269b20dd522df3b99c"
+		},
+		{
+			"ImportPath": "github.com/go-martini/martini",
+			"Comment": "v0.1-149-g7cea1b3",
+			"Rev": "7cea1b34e29976de64195b7cca1f668cad9abc8d"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1be7a086a5fd6440ef16fe96baeda0c78282b980"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "270c42505a11c779b5a5aaecfa5ec717adac996e"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Rev": "452123479eeb47612bd52b4307e2ea1b08835675"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Rev": "c808a1bb644594ca717ac61f71e6b0e454b835e2"
+		},
+		{
+			"ImportPath": "github.com/martini-contrib/render",
+			"Rev": "7b617783357fec5b5a6d4ecac82e747e4a14d1b5"
+		}
+	]
+}
