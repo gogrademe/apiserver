@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"log"
 	"time"
 )
 
@@ -19,7 +20,7 @@ type AutoFields struct {
 
 func (a *AutoFields) UpdateAuto() {
 
-	t := time.Now()
+	t := time.Now().UTC()
 	if a.Id != 0 {
 		a.UpdatedAt = t
 		return
@@ -38,7 +39,7 @@ func init() {
 	err = db.Ping()
 
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 }
 
@@ -46,7 +47,7 @@ func SetupDB() error {
 
 	_, err := CreateUser("test@test.com", "somePassword", "Admin")
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return nil

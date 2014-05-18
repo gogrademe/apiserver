@@ -8,11 +8,15 @@ import (
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
-	users := models.GetAllUsers()
-
-	enc := json.NewEncoder(w)
-	err := enc.Encode(users)
+	users, err := models.GetAllUsers()
 	if err != nil {
-		panic(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	enc := json.NewEncoder(w)
+	err = enc.Encode(users)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }

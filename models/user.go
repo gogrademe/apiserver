@@ -5,6 +5,7 @@ import (
 	"errors"
 	// "fmt"
 	jwt "github.com/dgrijalva/jwt-go"
+	"log"
 	"strings"
 	"time"
 )
@@ -43,7 +44,7 @@ func CreateUser(email string, password string, role string) (*User, error) {
 	emailLower := strings.ToLower(email)
 	user := &User{Email: email, EmailLower: emailLower, HashedPassword: hashedPassword, Role: role}
 	user.UpdateAuto()
-	_, err = db.Exec(`INSERT INTO useraccount (email, emailLower, hashedPassword, role, createdAt, updatedAt) VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt)
+	_, err = db.Exec(`INSERT INTO user_account (email, email_lower, hashed_password, role, created_at, updated_at) VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		return nil, err
@@ -57,7 +58,7 @@ func CreateUser(email string, password string, role string) (*User, error) {
 func GetUserByEmail(email string) (*User, error) {
 	u := &User{}
 
-	err := db.Get(u, "SELECT * FROM userAccount where emailLower = $1 LIMIT 1", email)
+	err := db.Get(u, "SELECT * FROM user_account where email_lower = $1 LIMIT 1", email)
 
 	if err != nil {
 		return nil, err
@@ -70,12 +71,8 @@ func GetUserByEmail(email string) (*User, error) {
 func VerifyPasswd(email, passwd string) (*User, error) {
 	u, err := GetUserByEmail(email)
 	if err != nil {
-		panic(err)
+		return nil, ErrUserOrPasswdIncorrect
 	}
-
-	// fmt.Printf("%v",u)
-
-	// db.Where("email = ?", email).First(u)
 
 	if bcrypt.CompareHashAndPassword([]byte(u.HashedPassword), []byte(passwd)) != nil {
 
@@ -103,16 +100,18 @@ func (a *User) CreateToken() (string, error) {
 	return tokenString, err
 }
 
-func GetAllUsers() []User {
+func GetAllUsers() ([]User, error) {
 	users := []User{}
 
-	err := db.Select(&users, "SELECT * FROM userAccount WHERE disabled = 0")
+	err := db.Select(&users, "SELECT * FROM user_account WHERE disabled = 0")
 	if err != nil {
-		panic(err)
+		// Check to make sure this error is okay. (Not a connection error)
+		log.Println(err)
+		return nil, errors.New("Couldn't find any users.")
 	}
 	// db.Find(&users)
 
-	return users
+	return users, nil
 }
 
 func GetUserById(id int) *User {

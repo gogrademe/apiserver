@@ -33,7 +33,7 @@ func CreatePerson(t *Person) (*Person, error) {
 		return nil, errors.New("Person not valid.")
 	}
 
-	_, err := db.Exec("INSERT INTO person(firstName, middleName, lastName, updatedAt, createdAt) VALUES(?,?,?,?,?)", t.FirstName, t.MiddleName, t.LastName, t.UpdatedAt, t.CreatedAt)
+	_, err := db.Exec("INSERT INTO person(first_name, middle_name, last_name, updated_at, created_at) VALUES($1,$2,$3,$4,$5)", t.FirstName, t.MiddleName, t.LastName, t.UpdatedAt, t.CreatedAt)
 
 	if err != nil {
 		return nil, err

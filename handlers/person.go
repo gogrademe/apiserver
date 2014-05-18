@@ -13,8 +13,12 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 		_, err := m.CreatePerson(&person)
 
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+	} else {
+		http.Error(w, "", http.StatusBadRequest)
+		return
 	}
 
 	writeJson(w, person)
