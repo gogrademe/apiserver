@@ -33,7 +33,8 @@ func CreatePerson(t *Person) (*Person, error) {
 		return nil, errors.New("Person not valid.")
 	}
 
-	_, err := db.Exec("INSERT INTO person(first_name, middle_name, last_name, updated_at, created_at) VALUES($1,$2,$3,$4,$5)", t.FirstName, t.MiddleName, t.LastName, t.UpdatedAt, t.CreatedAt)
+	err := db.QueryRow(`INSERT INTO person(first_name, middle_name, last_name, updated_at, created_at)
+    VALUES($1,$2,$3,$4,$5) RETURNING id`, t.FirstName, t.MiddleName, t.LastName, t.UpdatedAt, t.CreatedAt).Scan(&t.Id)
 
 	if err != nil {
 		return nil, err

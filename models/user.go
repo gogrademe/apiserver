@@ -43,8 +43,11 @@ func CreateUser(email string, password string, role string) (*User, error) {
 	//TODO: Make fill in EmailLower!!
 	emailLower := strings.ToLower(email)
 	user := &User{Email: email, EmailLower: emailLower, HashedPassword: hashedPassword, Role: role}
+	//TODO: Move this to a Validate() func.
 	user.UpdateAuto()
-	_, err = db.Exec(`INSERT INTO user_account (email, email_lower, hashed_password, role, created_at, updated_at) VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt)
+
+	err = db.QueryRow(`INSERT INTO user_account (email, email_lower, hashed_password, role, created_at, updated_at)
+		VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt).Scan(&user.Id)
 
 	if err != nil {
 		return nil, err
