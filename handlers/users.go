@@ -1,14 +1,18 @@
 package handlers
 
 import (
+	"encoding/json"
 	"github.com/Lanciv/GoGradeAPI/models"
-	"github.com/martini-contrib/render"
 	"net/http"
 )
 
-func GetAllUsers(r render.Render, req *http.Request) {
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
 	users := models.GetAllUsers()
 
-	r.JSON(200, users)
+	enc := json.NewEncoder(w)
+	err := enc.Encode(users)
+	if err != nil {
+		panic(err)
+	}
 }

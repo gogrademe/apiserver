@@ -6,6 +6,7 @@ import (
 	// "github.com/Lanciv/GoGradeAPI/models"
 	"github.com/gorilla/mux"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -15,10 +16,20 @@ func main() {
 	// models.SetupDB()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/auth", h.Login)
+	s := r.PathPrefix("/api").Subrouter()
 
+	/* Auth */
+	s.HandleFunc("/auth/login", h.Login)
+
+	/* Users */
+	s.HandleFunc("/users", h.AuthRequired(h.GetAllUsers))
 	http.Handle("/", r)
 	// TODO: Add port to Config.
-	http.ListenAndServe(":3000", nil)
-	fmt.Printf("%v", "Server is running...")
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+
+	http.ListenAndServe(":"+port, nil)
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	// "fmt"
 	jwt "github.com/dgrijalva/jwt-go"
+	"strings"
 	"time"
 )
 
@@ -15,7 +16,7 @@ var (
 type User struct {
 	Id             int64
 	Email          string
-	EmailLower     string
+	EmailLower     string `db:"emailLower"`
 	HashedPassword []byte `db:"hashedPassword"`
 	// PlainPasswd    string
 	Role      string
@@ -42,20 +43,24 @@ func CreateUser(email string, password string, role string) (*User, error) {
 		return nil, err
 	}
 	//TODO: Make fill in EmailLower!!
-	user := User{Email: email, EmailLower: "test", HashedPassword: hashedPassword, Role: role}
-	// db.Save(&user)
-	_, err = db.Exec("INSERT INTO user(email, hashedPassword, role) VALUES(?,?,?)", user.Email, user.HashedPassword, user.Role)
+	emailLower := strings.ToLower(email)
+	user := &User{Email: email, EmailLower: emailLower, HashedPassword: hashedPassword, Role: role}
+
+	res, err := db.Exec("INSERT INTO user(email, emailLower, hashedPassword, role) VALUES(?,?,?,?)", user.Email, user.EmailLower, user.HashedPassword, user.Role)
 
 	if err != nil {
 		return nil, err
 	}
-	// TODO: We are supposed to return a user here!
-	return nil, nil
+
+	lastId, err := res.LastInsertId()
+
+	user.Id = lastId
+	return user, nil
 }
 func GetUserByEmail(email string) (*User, error) {
 	u := &User{}
-	// err := db.QueryRow("SELECT id, email, hashedPassword FROM user where email = ?", email).Scan(&u.Id, &u.Email, &u.HashedPassword)
-	err := db.Get(u, "SELECT * FROM user where email = ? LIMIT 1", email)
+
+	err := db.Get(u, "SELECT * FROM user where emailLower = ? LIMIT 1", email)
 
 	if err != nil {
 		return nil, err
@@ -102,11 +107,15 @@ func (a *User) CreateToken() (string, error) {
 }
 
 func GetAllUsers() []User {
-	// users := []User{}
+	users := []User{}
 
+	err := db.Select(&users, "SELECT * FROM user WHERE disabled = 0")
+	if err != nil {
+		panic(err)
+	}
 	// db.Find(&users)
 
-	return nil
+	return users
 }
 
 func GetUserById(id int) *User {

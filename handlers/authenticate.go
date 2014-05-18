@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	m "github.com/Lanciv/GoGradeAPI/models"
 	jwt "github.com/dgrijalva/jwt-go"
 	"net/http"
@@ -35,21 +34,35 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-func VerifyToken(w http.ResponseWriter, r *http.Request) {
 
-	token, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {
-		return []byte("someRandomSigningKey"), nil
-	})
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
+func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		_, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {
+			return []byte("someRandomSigningKey"), nil
+		})
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		handler(w, r)
 	}
-	fmt.Println(token.Claims["Id"])
-	userId := token.Claims["Id"].(int)
-	user := &m.User{}
-	m.GetUserById(userId)
-
-	fmt.Println(user.Email)
-	// c.Map(user)
-
 }
+
+// func VerifyToken(w http.ResponseWriter, r *http.Request) {
+
+// 	token, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {
+// 		return []byte("someRandomSigningKey"), nil
+// 	})
+// 	if err != nil {
+// 		w.WriteHeader(http.StatusUnauthorized)
+// 		return
+// 	}
+// 	fmt.Println(token.Claims["Id"])
+// 	userId := token.Claims["Id"].(int)
+// 	user := &m.User{}
+// 	m.GetUserById(userId)
+
+// 	fmt.Println(user.Email)
+// 	// c.Map(user)
+
+// }
