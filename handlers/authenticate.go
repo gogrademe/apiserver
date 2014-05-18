@@ -47,22 +47,3 @@ func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.Re
 		handler(w, r)
 	}
 }
-
-// func VerifyToken(w http.ResponseWriter, r *http.Request) {
-
-// 	token, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {
-// 		return []byte("someRandomSigningKey"), nil
-// 	})
-// 	if err != nil {
-// 		w.WriteHeader(http.StatusUnauthorized)
-// 		return
-// 	}
-// 	fmt.Println(token.Claims["Id"])
-// 	userId := token.Claims["Id"].(int)
-// 	user := &m.User{}
-// 	m.GetUserById(userId)
-
-// 	fmt.Println(user.Email)
-// 	// c.Map(user)
-
-// }

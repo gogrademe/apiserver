@@ -14,15 +14,12 @@ var (
 )
 
 type User struct {
-	Id             int64
 	Email          string
 	EmailLower     string `db:"emailLower"`
 	HashedPassword []byte `db:"hashedPassword"`
-	// PlainPasswd    string
-	Role      string
-	Disabled  bool
-	CreatedAt time.Time `db:"createdAt"`
-	UpdatedAt time.Time `db:"updatedAt"`
+	Role           string
+	Disabled       bool
+	AutoFields
 }
 
 // func GetUsersCount() int {
@@ -45,22 +42,22 @@ func CreateUser(email string, password string, role string) (*User, error) {
 	//TODO: Make fill in EmailLower!!
 	emailLower := strings.ToLower(email)
 	user := &User{Email: email, EmailLower: emailLower, HashedPassword: hashedPassword, Role: role}
-
-	res, err := db.Exec("INSERT INTO user(email, emailLower, hashedPassword, role) VALUES(?,?,?,?)", user.Email, user.EmailLower, user.HashedPassword, user.Role)
+	user.UpdateAuto()
+	_, err = db.Exec(`INSERT INTO useraccount (email, emailLower, hashedPassword, role, createdAt, updatedAt) VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		return nil, err
 	}
 
-	lastId, err := res.LastInsertId()
+	// lastId, err := res.LastInsertId()
 
-	user.Id = lastId
+	// user.Id = lastId
 	return user, nil
 }
 func GetUserByEmail(email string) (*User, error) {
 	u := &User{}
 
-	err := db.Get(u, "SELECT * FROM user where emailLower = ? LIMIT 1", email)
+	err := db.Get(u, "SELECT * FROM userAccount where emailLower = $1 LIMIT 1", email)
 
 	if err != nil {
 		return nil, err
@@ -109,7 +106,7 @@ func (a *User) CreateToken() (string, error) {
 func GetAllUsers() []User {
 	users := []User{}
 
-	err := db.Select(&users, "SELECT * FROM user WHERE disabled = 0")
+	err := db.Select(&users, "SELECT * FROM userAccount WHERE disabled = 0")
 	if err != nil {
 		panic(err)
 	}
