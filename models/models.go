@@ -14,8 +14,8 @@ var (
 
 type AutoFields struct {
 	Id        int
-	CreatedAt time.Time `db:"createdAt"`
-	UpdatedAt time.Time `db:"updatedAt"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 func (a *AutoFields) UpdateAuto() {

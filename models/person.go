@@ -5,10 +5,10 @@ import (
 )
 
 type Person struct {
-	FirstName        string `db:"firstName"`
-	MiddleName       string `db:"middleName"`
-	LastName         string `db:"lastName"`
-	StudentProfileId int    `db:"studentProfileId"`
+	FirstName        string `db:"first_name"`
+	MiddleName       string `db:"middle_name"`
+	LastName         string `db:"last_name"`
+	StudentProfileId int    `db:"student_profile_id"`
 	AutoFields
 }
 
@@ -40,10 +40,5 @@ func CreatePerson(t *Person) (*Person, error) {
 		return nil, err
 	}
 
-	// t.Id, err = res.LastInsertId()
-
-	if err != nil {
-		return nil, err
-	}
 	return t, nil
 }

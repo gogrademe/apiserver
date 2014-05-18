@@ -16,8 +16,8 @@ var (
 
 type User struct {
 	Email          string
-	EmailLower     string `db:"emailLower"`
-	HashedPassword []byte `db:"hashedPassword"`
+	EmailLower     string `db:"email_lower"`
+	HashedPassword []byte `db:"hashed_password"`
 	Role           string
 	Disabled       bool
 	AutoFields
