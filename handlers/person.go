@@ -23,3 +23,12 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 
 	writeJson(w, person)
 }
+func GetAllPeople(w http.ResponseWriter, r *http.Request) {
+
+	people, err := m.GetAllPeople()
+	if err != nil {
+
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	writeJson(w, people)
+}

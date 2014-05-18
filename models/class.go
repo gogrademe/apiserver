@@ -7,21 +7,15 @@ import (
 type Class struct {
 	Id         int64
 	Name       string
-	TeacherId  int64
-	GradeLevel string
+	TeacherId  int64  `db:"teacher_id"`
+	GradeLevel string `db:"grade_level"`
 	Subject    string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	ArchivedAt time.Time
-	Archived   bool
+	AutoFields
 }
 
-// func CreateClass(class *Class) error {
-
-// 	db.Save(&class)
-
-// 	return nil
-// }
+func (c *Class) Validate() bool {
+	return false
+}
 
 func GetAllClasses() ([]Class, error) {
 

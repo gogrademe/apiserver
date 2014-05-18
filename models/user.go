@@ -61,7 +61,7 @@ func CreateUser(email string, password string, role string) (*User, error) {
 func GetUserByEmail(email string) (*User, error) {
 	u := &User{}
 
-	err := db.Get(u, "SELECT * FROM user_account where email_lower = $1 LIMIT 1", email)
+	err := db.Get(u, "SELECT * FROM user_account where email_lower = $1 and disabled = false", email)
 
 	if err != nil {
 		return nil, err
@@ -74,6 +74,7 @@ func GetUserByEmail(email string) (*User, error) {
 func VerifyPasswd(email, passwd string) (*User, error) {
 	u, err := GetUserByEmail(email)
 	if err != nil {
+		log.Println(err)
 		return nil, ErrUserOrPasswdIncorrect
 	}
 
@@ -106,13 +107,12 @@ func (a *User) CreateToken() (string, error) {
 func GetAllUsers() ([]User, error) {
 	users := []User{}
 
-	err := db.Select(&users, "SELECT * FROM user_account WHERE disabled = 0")
+	err := db.Select(&users, "SELECT * FROM user_account WHERE disabled = false")
 	if err != nil {
 		// Check to make sure this error is okay. (Not a connection error)
 		log.Println(err)
 		return nil, errors.New("Couldn't find any users.")
 	}
-	// db.Find(&users)
 
 	return users, nil
 }

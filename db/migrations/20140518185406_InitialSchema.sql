@@ -9,7 +9,14 @@ CREATE TABLE user_account (
   hashed_password text,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
-  disabled boolean
+  disabled boolean DEFAULT FALSE
+);
+
+CREATE TABLE student_profile (
+  id SERIAL PRIMARY KEY,
+  grade_level text NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
 );
 CREATE TABLE person (
   id SERIAL PRIMARY KEY,
@@ -17,8 +24,10 @@ CREATE TABLE person (
   middle_name text,
   last_name text NOT NULL,
   created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL
+  updated_at TIMESTAMP NOT NULL,
+  student_profile_id integer REFERENCES student_profile
 );
+
 
 -- +goose Down
 DROP TABLE user_account;

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
@@ -13,7 +12,7 @@ var (
 )
 
 type AutoFields struct {
-	Id        int
+	Id        int64
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }
@@ -34,7 +33,7 @@ func init() {
 	// db, err = sqlx.Open("mysql", "root@tcp(127.0.0.1:3306)/dev_GoGrade?parseTime=true&loc=Local")
 	db, err = sqlx.Open("postgres", "user=Matt dbname=dev_goGrade2 sslmode=disable")
 	if err != nil {
-		panic(fmt.Sprintf("Got error when connect database, the error is '%v'", err))
+		log.Fatalln(err)
 	}
 	err = db.Ping()
 

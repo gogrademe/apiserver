@@ -1,14 +1,15 @@
 package models
 
 import (
+	"database/sql"
 	"errors"
 )
 
 type Person struct {
-	FirstName        string `db:"first_name"`
-	MiddleName       string `db:"middle_name"`
-	LastName         string `db:"last_name"`
-	StudentProfileId int    `db:"student_profile_id"`
+	FirstName        string        `db:"first_name"`
+	MiddleName       string        `db:"middle_name"`
+	LastName         string        `db:"last_name"`
+	StudentProfileId sql.NullInt64 `db:"student_profile_id"`
 	AutoFields
 }
 
@@ -41,4 +42,14 @@ func CreatePerson(t *Person) (*Person, error) {
 	}
 
 	return t, nil
+}
+func GetAllPeople() ([]Person, error) {
+	people := []Person{}
+	err := db.Select(&people, `SELECT * FROM person`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return people, nil
 }

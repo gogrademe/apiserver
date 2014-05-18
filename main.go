@@ -30,6 +30,7 @@ func main() {
 
 	/* person */
 	s.HandleFunc("/person/create", h.AuthRequired(h.CreatePerson))
+	s.HandleFunc("/person/", h.AuthRequired(h.GetAllPeople))
 	http.Handle("/", r)
 
 	port := os.Getenv("PORT")
