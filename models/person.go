@@ -1,16 +1,17 @@
 package models
 
 import (
-	"database/sql"
 	"errors"
+	"log"
 )
 
 type Person struct {
-	FirstName        string        `db:"first_name"`
-	MiddleName       string        `db:"middle_name"`
-	LastName         string        `db:"last_name"`
-	StudentProfileId sql.NullInt64 `db:"student_profile_id"`
-	AutoFields
+	Id             int64
+	FirstName      string          `db:"first_name"`
+	MiddleName     string          `db:"middle_name"`
+	LastName       string          `db:"last_name"`
+	StudentProfile *StudentProfile `json:",omitempty"`
+	TimeStamp
 }
 
 func (t *Person) Validate() bool {
@@ -20,7 +21,7 @@ func (t *Person) Validate() bool {
 	if t.LastName == "" {
 		return false
 	}
-	t.UpdateAuto()
+	t.UpdateTime()
 	return true
 }
 
@@ -41,11 +42,22 @@ func CreatePerson(t *Person) (*Person, error) {
 		return nil, err
 	}
 
+	if t.StudentProfile != nil {
+		t.StudentProfile.PersonId = t.Id
+		_, err = CreateStudentProfile(t.StudentProfile)
+	}
+
+	if err != nil {
+		log.Println(err)
+		t.StudentProfile = nil
+		return t, errors.New("Failed to create student profile")
+	}
+
 	return t, nil
 }
 func GetAllPeople() ([]Person, error) {
 	people := []Person{}
-	err := db.Select(&people, `SELECT * FROM person`)
+	err := db.Select(&people, `SELECT * FROM person LEFT OUTER JOIN student_profile ON (person.Id = student_profile.person_id)`)
 
 	if err != nil {
 		return nil, err

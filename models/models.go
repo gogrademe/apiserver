@@ -11,16 +11,20 @@ var (
 	db *sqlx.DB
 )
 
-type AutoFields struct {
-	Id        int64
+// type AutoFields struct {
+// 	Id        int64
+// 	CreatedAt time.Time `db:"created_at"`
+// 	UpdatedAt time.Time `db:"updated_at"`
+// }
+type TimeStamp struct {
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }
 
-func (a *AutoFields) UpdateAuto() {
+func (a *TimeStamp) UpdateTime() {
 
 	t := time.Now().UTC()
-	if a.Id != 0 {
+	if !a.CreatedAt.IsZero() {
 		a.UpdatedAt = t
 		return
 	}

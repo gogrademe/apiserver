@@ -6,14 +6,14 @@ import (
 	"net/http"
 )
 
-// func GetAllClasses(r render.Render, req *http.Request) {
+func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 
-// 	classes, err := m.GetAllClasses()
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	r.JSON(200, classes)
-// }
+	classes, err := m.GetAllClasses()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	writeJson(w, classes)
+}
 
 // func handleTodoCreate(w http.ResponseWriter, r *http.Request) {
 //   var (

@@ -20,17 +20,19 @@ func main() {
 	s := r.PathPrefix("/api").Subrouter()
 
 	/* Auth */
-	s.HandleFunc("/auth/login", h.Login)
+	s.HandleFunc("/auth/login", h.Login).Methods("POST")
 
 	/* Users */
-	s.HandleFunc("/users", h.AuthRequired(h.GetAllUsers))
+	s.HandleFunc("/users", h.AuthRequired(h.GetAllUsers)).Methods("GET")
 
 	/* Class */
-	s.HandleFunc("/class/create", h.AuthRequired(h.CreateClass))
+	s.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
+	s.HandleFunc("/class/create", h.AuthRequired(h.CreateClass)).Methods("POST")
 
-	/* person */
-	s.HandleFunc("/person/create", h.AuthRequired(h.CreatePerson))
-	s.HandleFunc("/person/", h.AuthRequired(h.GetAllPeople))
+	/* Person */
+	s.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
+	s.HandleFunc("/person/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
+
 	http.Handle("/", r)
 
 	port := os.Getenv("PORT")

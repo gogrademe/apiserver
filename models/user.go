@@ -15,12 +15,13 @@ var (
 )
 
 type User struct {
+	Id             int64
 	Email          string
 	EmailLower     string `db:"email_lower"`
 	HashedPassword []byte `db:"hashed_password"`
 	Role           string
 	Disabled       bool
-	AutoFields
+	TimeStamp
 }
 
 // func GetUsersCount() int {
@@ -44,7 +45,7 @@ func CreateUser(email string, password string, role string) (*User, error) {
 	emailLower := strings.ToLower(email)
 	user := &User{Email: email, EmailLower: emailLower, HashedPassword: hashedPassword, Role: role}
 	//TODO: Move this to a Validate() func.
-	user.UpdateAuto()
+	user.UpdateTime()
 
 	err = db.QueryRow(`INSERT INTO user_account (email, email_lower, hashed_password, role, created_at, updated_at)
 		VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt).Scan(&user.Id)
