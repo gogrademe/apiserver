@@ -1,3 +1,3 @@
 development:
     driver: postgres
-    open: user=Matt dbname=dev_goGrade2 sslmode=disable
+    open: user=Matt dbname=dev_go_grade sslmode=disable

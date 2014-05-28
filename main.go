@@ -1,18 +1,34 @@
 package main
 
 import (
-	"fmt"
-	h "github.com/Lanciv/GoGradeAPI/handlers"
-	"github.com/Lanciv/GoGradeAPI/models"
+	// "flag"
+	"bitbucket.org/lanciv/GoGradeAPI/config"
+	h "bitbucket.org/lanciv/GoGradeAPI/handlers"
+	"bitbucket.org/lanciv/GoGradeAPI/models"
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"log"
-	"net/http"
 	"os"
+)
+
+var (
+	AppConfig *config.Conf
 )
 
 func main() {
 
-	fmt.Println("Server is starting...")
+	log.Println("Server is starting...")
+
+	// configfile := flag.String("c", "config.gcfg", "Configuration file")
+
+	// flag.Parse()
+
+	// var err error
+	// AppConfig, err = config.Load(*configfile)
+
+	// if err != nil {
+	// 	log.Fatalf("Config Error:", err.Error())
+	// }
 
 	models.SetupDB()
 
@@ -33,15 +49,14 @@ func main() {
 	s.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
 	s.HandleFunc("/person/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
 
-	http.Handle("/", r)
+	n := negroni.Classic()
 
+	n.UseHandler(r)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
 	}
 
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	n.Run(":" + port)
+
 }

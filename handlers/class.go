@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	m "bitbucket.org/lanciv/GoGradeAPI/models"
 	"fmt"
-	m "github.com/Lanciv/GoGradeAPI/models"
 	"net/http"
 )
 

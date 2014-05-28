@@ -57,11 +57,35 @@ func CreatePerson(t *Person) (*Person, error) {
 }
 func GetAllPeople() ([]Person, error) {
 	people := []Person{}
-	err := db.Select(&people, `SELECT * FROM person LEFT OUTER JOIN student_profile ON (person.Id = student_profile.person_id)`)
+
+	// err := db.Select(&people, `SELECT id, first_name, middle_name, last_name, person.created_at, person.updated_at, student_profile.grade_level  FROM person LEFT OUTER JOIN student_profile ON (person.Id = student_profile.person_id)`)
+	// err := db.Select(&people, `SELECT *  FROM person`)
+
+	rows, err := db.Query(`SELECT id, first_name, middle_name, last_name, person.created_at, person.updated_at, student_profile.grade_level  FROM person LEFT OUTER JOIN student_profile ON (person.Id = student_profile.person_id)`)
 
 	if err != nil {
 		return nil, err
 	}
+	for rows.Next() {
+		var first_name string
+		if err := rows.Scan(&first_name); err != nil {
+			return nil, err
+		}
+		log.Printf("%s\n", first_name)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	// people := []interface{}{}
+	// rows, err := db.Queryx("SELECT * FROM place")
+	// for rows.Next() {
+	// 	results := make(map[string]interface{})
+	// 	err = rows.MapScan(results)
 
+	// 	people = append(people, results)
+	// }
+	// if err != nil {
+	// 	return nil, err
+	// }
 	return people, nil
 }

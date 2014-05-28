@@ -3,7 +3,6 @@ package models
 import (
 	"code.google.com/p/go.crypto/bcrypt"
 	"errors"
-	// "fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"log"
 	"strings"

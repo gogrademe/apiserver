@@ -35,14 +35,14 @@ func (a *TimeStamp) UpdateTime() {
 func init() {
 	var err error
 	// db, err = sqlx.Open("mysql", "root@tcp(127.0.0.1:3306)/dev_GoGrade?parseTime=true&loc=Local")
-	db, err = sqlx.Open("postgres", "user=Matt dbname=dev_goGrade2 sslmode=disable")
+	db, err = sqlx.Open("postgres", "user=Matt dbname=dev_go_grade sslmode=disable")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("Postgres:", err)
 	}
 	err = db.Ping()
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("Postgres:", err)
 	}
 }
 

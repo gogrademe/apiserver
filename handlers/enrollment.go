@@ -1,7 +1,7 @@
 package handlers
 
 // import (
-// 	"github.com/Lanciv/GoGradeAPI/models"
+// 	"bitbucket.org/lanciv/GoGradeAPI/models"
 // 	"github.com/martini-contrib/render"
 // 	"net/http"
 // )
