@@ -1,14 +1,15 @@
 package handlers
 
 import (
-	m "bitbucket.org/lanciv/GoGradeAPI/models"
+	d "bitbucket.org/lanciv/GoGradeAPI/database"
+	m "bitbucket.org/lanciv/GoGradeAPI/model"
 	"net/http"
 )
 
 func CreatePerson(w http.ResponseWriter, r *http.Request) {
 	var person m.Person
 	if readJson(r, &person) {
-		_, err := m.CreatePerson(&person)
+		_, err := d.CreatePerson(&person)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -23,7 +24,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 }
 func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 
-	people, err := m.GetAllPeople()
+	people, err := d.GetAllPeople()
 	if err != nil {
 
 		http.Error(w, err.Error(), http.StatusInternalServerError)

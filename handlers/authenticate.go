@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	m "bitbucket.org/lanciv/GoGradeAPI/models"
+	d "bitbucket.org/lanciv/GoGradeAPI/database"
 	"encoding/json"
 	jwt "github.com/dgrijalva/jwt-go"
 	"net/http"
@@ -10,7 +10,7 @@ import (
 func Login(w http.ResponseWriter, r *http.Request) {
 	// Get username and password then verify it.
 	email, password := r.FormValue("email"), r.FormValue("password")
-	user, err := m.VerifyPasswd(email, password)
+	user, err := d.VerifyPasswd(email, password)
 
 	// Something happened with verifying the password. We either couldn't find the user,
 	// password didn't match or something else went wrong.

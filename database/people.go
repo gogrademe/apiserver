@@ -1,34 +1,11 @@
-package models
+package database
 
 import (
+	. "bitbucket.org/lanciv/GoGradeAPI/model"
 	"errors"
 	"log"
 )
 
-type Person struct {
-	Id             int64
-	FirstName      string          `db:"first_name"`
-	MiddleName     string          `db:"middle_name"`
-	LastName       string          `db:"last_name"`
-	StudentProfile *StudentProfile `json:",omitempty"`
-	TimeStamp
-}
-
-func (t *Person) Validate() bool {
-	if t.FirstName == "" {
-		return false
-	}
-	if t.LastName == "" {
-		return false
-	}
-	t.UpdateTime()
-	return true
-}
-
-// Index in elastic
-func (t *Person) Index() error {
-	return nil
-}
 func CreatePerson(t *Person) (*Person, error) {
 
 	if !t.Validate() {

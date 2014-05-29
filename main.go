@@ -3,11 +3,12 @@ package main
 import (
 	// "flag"
 	"bitbucket.org/lanciv/GoGradeAPI/config"
+	"bitbucket.org/lanciv/GoGradeAPI/database"
 	h "bitbucket.org/lanciv/GoGradeAPI/handlers"
-	"bitbucket.org/lanciv/GoGradeAPI/models"
-	"github.com/codegangsta/negroni"
+	// "github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -30,33 +31,38 @@ func main() {
 	// 	log.Fatalf("Config Error:", err.Error())
 	// }
 
-	models.SetupDB()
+	database.SetupDB()
 
-	r := mux.NewRouter()
-	s := r.PathPrefix("/api").Subrouter()
+	setupHandlers()
 
-	/* Auth */
-	s.HandleFunc("/auth/login", h.Login).Methods("POST")
-
-	/* Users */
-	s.HandleFunc("/users", h.AuthRequired(h.GetAllUsers)).Methods("GET")
-
-	/* Class */
-	s.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
-	s.HandleFunc("/class/create", h.AuthRequired(h.CreateClass)).Methods("POST")
-
-	/* Person */
-	s.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
-	s.HandleFunc("/person/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
-
-	n := negroni.Classic()
-
-	n.UseHandler(r)
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "3007"
 	}
 
-	n.Run(":" + port)
+	panic(http.ListenAndServe(":"+port, nil))
 
+}
+
+func setupHandlers() {
+	r := mux.NewRouter()
+	m := r.PathPrefix("/api").Subrouter()
+
+	// Auth
+	m.HandleFunc("/auth/login", h.Login).Methods("POST")
+
+	// Users
+	m.HandleFunc("/user", h.AuthRequired(h.GetAllUsers)).Methods("GET")
+
+	// Classes
+	m.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
+	m.HandleFunc("/class/create", h.AuthRequired(h.CreateClass)).Methods("POST")
+
+	// People
+	m.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
+	m.HandleFunc("/person/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		m.ServeHTTP(w, r)
+	})
 }

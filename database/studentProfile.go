@@ -1,10 +1,8 @@
-package models
+package database
 
-type StudentProfile struct {
-	PersonId   int64  `db:"person_id"`
-	GradeLevel string `db:"grade_level"`
-	TimeStamp
-}
+import (
+	. "bitbucket.org/lanciv/GoGradeAPI/model"
+)
 
 func CreateStudentProfile(s *StudentProfile) (*StudentProfile, error) {
 	s.UpdateTime()

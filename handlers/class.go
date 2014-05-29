@@ -1,14 +1,15 @@
 package handlers
 
 import (
-	m "bitbucket.org/lanciv/GoGradeAPI/models"
+	d "bitbucket.org/lanciv/GoGradeAPI/database"
+	m "bitbucket.org/lanciv/GoGradeAPI/model"
 	"fmt"
 	"net/http"
 )
 
 func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 
-	classes, err := m.GetAllClasses()
+	classes, err := d.GetAllClasses()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

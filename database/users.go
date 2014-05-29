@@ -1,38 +1,21 @@
-package models
+package database
 
 import (
+	. "bitbucket.org/lanciv/GoGradeAPI/model"
 	"code.google.com/p/go.crypto/bcrypt"
 	"errors"
-	jwt "github.com/dgrijalva/jwt-go"
+	// jwt "github.com/dgrijalva/jwt-go"
 	"log"
 	"strings"
-	"time"
 )
 
 var (
 	ErrUserOrPasswdIncorrect = errors.New("Username or password incorrect.")
 )
 
-type User struct {
-	Id             int64
-	Email          string
-	EmailLower     string `db:"email_lower"`
-	HashedPassword []byte `db:"hashed_password"`
-	Role           string
-	Disabled       bool
-	TimeStamp
-}
-
-// func GetUsersCount() int {
-// 	var count int
-// 	// err := db.QueryRow(`select COUNT(*) from user`).Scan(&count)
-// 	err := db.Model(User{}).Count(&count)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	fmt.Println(count)
-// 	return count
-// }
+const userFindEmailStmt = `
+SELECT * FROM user_account where email_lower = $1 and disabled = false
+`
 
 func CreateUser(email string, password string, role string) (*User, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -58,10 +41,10 @@ func CreateUser(email string, password string, role string) (*User, error) {
 	// user.Id = lastId
 	return user, nil
 }
-func GetUserByEmail(email string) (*User, error) {
+func GetUserEmail(email string) (*User, error) {
 	u := &User{}
 
-	err := db.Get(u, "SELECT * FROM user_account where email_lower = $1 and disabled = false", email)
+	err := db.Get(u, userFindEmailStmt, email)
 
 	if err != nil {
 		return nil, err
@@ -72,7 +55,7 @@ func GetUserByEmail(email string) (*User, error) {
 
 // Verifies that the password matches the hashed password.
 func VerifyPasswd(email, passwd string) (*User, error) {
-	u, err := GetUserByEmail(email)
+	u, err := GetUserEmail(email)
 	if err != nil {
 		log.Println(err)
 		return nil, ErrUserOrPasswdIncorrect
@@ -84,24 +67,6 @@ func VerifyPasswd(email, passwd string) (*User, error) {
 	}
 
 	return u, nil
-}
-
-// Create a token for the user after we verified their password.
-// TODO: Store this in a db? This would be helpful if we would like to invalidate a login.
-func (a *User) CreateToken() (string, error) {
-	token := jwt.New(jwt.GetSigningMethod("HS256"))
-
-	token.Claims["Id"] = a.Id
-	token.Claims["Email"] = a.Email
-	token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-	// TODO: Move this to a config file.
-	tokenString, err := token.SignedString([]byte("someRandomSigningKey"))
-	if err != nil {
-		return "", err
-	}
-	// Sould we just return a Token instead of a string???
-	return tokenString, err
 }
 
 func GetAllUsers() ([]User, error) {

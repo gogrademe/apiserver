@@ -1,14 +1,14 @@
 package handlers
 
 // import (
-// 	"bitbucket.org/lanciv/GoGradeAPI/models"
+// 	"bitbucket.org/lanciv/GoGradeAPI/model"
 // 	"github.com/martini-contrib/render"
 // 	"net/http"
 // )
 
 // func GetEnrollmentsByClass(r render.Render, req *http.Request) {
 
-// 	res, err := models.GetEnrollmentsByClass("065b3083-532a-4e29-bbae-aded10d081fa")
+// 	res, err := model.GetEnrollmentsByClass("065b3083-532a-4e29-bbae-aded10d081fa")
 // 	if err != nil {
 // 		panic(err)
 // 	}
