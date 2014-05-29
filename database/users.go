@@ -2,11 +2,8 @@ package database
 
 import (
 	. "bitbucket.org/lanciv/GoGradeAPI/model"
-	"code.google.com/p/go.crypto/bcrypt"
 	"errors"
-	// jwt "github.com/dgrijalva/jwt-go"
 	"log"
-	"strings"
 )
 
 var (
@@ -14,32 +11,37 @@ var (
 )
 
 const userFindEmailStmt = `
-SELECT * FROM user_account where email_lower = $1 and disabled = false
+SELECT id, email, hashed_password, role, created_at, updated_at
+FROM user_account WHERE email_lower = $1 and disabled = false
+`
+const userCreateStmt = `
+INSERT INTO user_account (email, email_lower, hashed_password, role, created_at, updated_at)
+VALUES($1,$2,$3,$4,$5,$6) RETURNING id
+`
+
+const userGetAllStmt = `
+SELECT id, email, hashed_password, role, created_at, updated_at 
+FROM user_account WHERE disabled = false
 `
 
 func CreateUser(email string, password string, role string) (*User, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	u := NewUser(email, role)
 
-	if err != nil {
-		return nil, err
-	}
-	//TODO: Make fill in EmailLower!!
-	emailLower := strings.ToLower(email)
-	user := &User{Email: email, EmailLower: emailLower, HashedPassword: hashedPassword, Role: role}
-	//TODO: Move this to a Validate() func.
-	user.UpdateTime()
-
-	err = db.QueryRow(`INSERT INTO user_account (email, email_lower, hashed_password, role, created_at, updated_at)
-		VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, user.Email, user.EmailLower, user.HashedPassword, user.Role, user.CreatedAt, user.UpdatedAt).Scan(&user.Id)
-
+	err := u.SetPassword(password)
 	if err != nil {
 		return nil, err
 	}
 
-	// lastId, err := res.LastInsertId()
+	u.UpdateTime()
 
-	// user.Id = lastId
-	return user, nil
+	err = db.QueryRow(userCreateStmt, u.Email, u.EmailLower, u.HashedPassword,
+		u.Role, u.CreatedAt, u.UpdatedAt).Scan(&u.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 func GetUserEmail(email string) (*User, error) {
 	u := &User{}
@@ -53,26 +55,25 @@ func GetUserEmail(email string) (*User, error) {
 
 }
 
-// Verifies that the password matches the hashed password.
-func VerifyPasswd(email, passwd string) (*User, error) {
-	u, err := GetUserEmail(email)
-	if err != nil {
-		log.Println(err)
-		return nil, ErrUserOrPasswdIncorrect
-	}
+// // Verifies that the password matches the hashed password.
+// func VerifyPasswd(email, passwd string) (*User, error) {
+// 	u, err := GetUserEmail(email)
+// 	if err != nil {
+// 		log.Println(err)
+// 		return nil, ErrUserOrPasswdIncorrect
+// 	}
 
-	if bcrypt.CompareHashAndPassword([]byte(u.HashedPassword), []byte(passwd)) != nil {
+// 	if bcrypt.CompareHashAndPassword([]byte(u.HashedPassword), []byte(passwd)) != nil {
+// 		return nil, ErrUserOrPasswdIncorrect
+// 	}
 
-		return nil, ErrUserOrPasswdIncorrect
-	}
+// 	return u, nil
+// }
 
-	return u, nil
-}
+func GetAllUsers() ([]*User, error) {
+	users := []*User{}
 
-func GetAllUsers() ([]User, error) {
-	users := []User{}
-
-	err := db.Select(&users, "SELECT * FROM user_account WHERE disabled = false")
+	err := db.Select(&users, userGetAllStmt)
 	if err != nil {
 		// Check to make sure this error is okay. (Not a connection error)
 		log.Println(err)

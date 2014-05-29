@@ -8,13 +8,16 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	// Get username and password then verify it.
+	// Get username and password
 	email, password := r.FormValue("email"), r.FormValue("password")
-	user, err := d.VerifyPasswd(email, password)
+	user, err := d.GetUserEmail(email)
 
-	// Something happened with verifying the password. We either couldn't find the user,
-	// password didn't match or something else went wrong.
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	if err := user.ComparePassword(password); err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
