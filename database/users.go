@@ -20,7 +20,7 @@ VALUES($1,$2,$3,$4,$5,$6) RETURNING id
 `
 
 const userGetAllStmt = `
-SELECT id, email, hashed_password, role, created_at, updated_at 
+SELECT id, email, hashed_password, role, created_at, updated_at
 FROM user_account WHERE disabled = false
 `
 
@@ -43,33 +43,29 @@ func CreateUser(email string, password string, role string) (*User, error) {
 
 	return u, nil
 }
-func GetUserEmail(email string) (*User, error) {
-	u := &User{}
 
-	err := db.Get(u, userFindEmailStmt, email)
+// func GetUserEmail(email string) (*User, error) {
+// 	u := &User{}
+//
+// 	err := db.Get(u, userFindEmailStmt, email)
+//
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return u, nil
+//
+// }
+func GetUserEmail(email string) (User, error) {
+	var u User
+
+	err := db.Get(&u, userFindEmailStmt, email)
 
 	if err != nil {
-		return nil, err
+		return u, err
 	}
 	return u, nil
 
 }
-
-// // Verifies that the password matches the hashed password.
-// func VerifyPasswd(email, passwd string) (*User, error) {
-// 	u, err := GetUserEmail(email)
-// 	if err != nil {
-// 		log.Println(err)
-// 		return nil, ErrUserOrPasswdIncorrect
-// 	}
-
-// 	if bcrypt.CompareHashAndPassword([]byte(u.HashedPassword), []byte(passwd)) != nil {
-// 		return nil, ErrUserOrPasswdIncorrect
-// 	}
-
-// 	return u, nil
-// }
-
 func GetAllUsers() ([]*User, error) {
 	users := []*User{}
 

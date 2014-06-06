@@ -14,8 +14,8 @@ import (
 // // 	UpdatedAt time.Time `db:"updated_at"`
 // // }
 type TimeStamp struct {
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
+	CreatedAt time.Time `db:"created_at"json:"createdAt"`
+	UpdatedAt time.Time `db:"updated_at"json:"updatedAt"`
 }
 
 func (a *TimeStamp) UpdateTime() {

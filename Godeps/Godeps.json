@@ -1,6 +1,6 @@
 {
 	"ImportPath": "bitbucket.org/lanciv/GoGradeAPI",
-	"GoVersion": "go1.2.2",
+	"GoVersion": "go1.3beta2",
 	"Deps": [
 		{
 			"ImportPath": "code.google.com/p/gcfg",

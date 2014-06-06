@@ -3,9 +3,13 @@ package handlers
 import (
 	d "bitbucket.org/lanciv/GoGradeAPI/database"
 	"encoding/json"
-	jwt "github.com/dgrijalva/jwt-go"
+	"errors"
+	jwt "github.com/MattAitchison/jwt-go"
+	"log"
 	"net/http"
 )
+
+var ErrLoginFailed = errors.New("Login Failed! Email and/or password incorrect.")
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	// Get username and password
@@ -13,12 +17,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	user, err := d.GetUserEmail(email)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Error(w, ErrLoginFailed.Error(), http.StatusUnauthorized)
 		return
 	}
 
 	if err := user.ComparePassword(password); err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Error(w, ErrLoginFailed.Error(), http.StatusUnauthorized)
 		return
 	}
 
@@ -44,7 +48,9 @@ func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.Re
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {
+			log.Println("error", err)
 			w.WriteHeader(http.StatusUnauthorized)
+			writeJson(w, map[string]interface{}{"error": "Access denied."})
 			return
 		}
 		handler(w, r)
