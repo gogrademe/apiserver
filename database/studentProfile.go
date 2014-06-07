@@ -1,7 +1,7 @@
 package database
 
 import (
-	. "bitbucket.org/lanciv/GoGradeAPI/model"
+	. "github.com/Lanciv/GoGradeAPI/model"
 )
 
 func CreateStudentProfile(s *StudentProfile) (*StudentProfile, error) {

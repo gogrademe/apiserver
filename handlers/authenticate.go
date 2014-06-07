@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	d "bitbucket.org/lanciv/GoGradeAPI/database"
+	d "github.com/Lanciv/GoGradeAPI/database"
 	"encoding/json"
 	"errors"
 	jwt "github.com/MattAitchison/jwt-go"

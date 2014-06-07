@@ -2,9 +2,9 @@ package main
 
 import (
 	// "flag"
-	"bitbucket.org/lanciv/GoGradeAPI/config"
-	"bitbucket.org/lanciv/GoGradeAPI/database"
-	h "bitbucket.org/lanciv/GoGradeAPI/handlers"
+	"github.com/Lanciv/GoGradeAPI/config"
+	"github.com/Lanciv/GoGradeAPI/database"
+	h "github.com/Lanciv/GoGradeAPI/handlers"
 	// "github.com/codegangsta/negroni"
 	"fmt"
 	"github.com/gorilla/mux"

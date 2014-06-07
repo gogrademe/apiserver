@@ -1,5 +1,5 @@
 {
-	"ImportPath": "bitbucket.org/lanciv/GoGradeAPI",
+	"ImportPath": "github.com/Lanciv/GoGradeAPI",
 	"GoVersion": "go1.3beta2",
 	"Deps": [
 		{
@@ -15,6 +15,10 @@
 			"ImportPath": "code.google.com/p/go.crypto/blowfish",
 			"Comment": "null-211",
 			"Rev": "8a278ade38cb210d3474afacef2c294ab5fd08ae"
+		},
+		{
+			"ImportPath": "github.com/MattAitchison/jwt-go",
+			"Rev": "679bf0f3c975ebe7f610e09854cdf820603be862"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/negroni",
