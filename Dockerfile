@@ -11,12 +11,14 @@ ENV GOPATH /opt
 RUN go get github.com/tools/godep
 
 
-ADD .ssh /user/deploy/.ssh
+ADD . $GOPATH/src/github.com/Lanciv/GoGradeAPI
 
-RUN go get github.com/Lanciv/GoGradeAPI
+RUN cd $GOPATH/src/github.com/Lanciv/GoGradeAPI && go get .
+RUN cd $GOPATH/src/github.com/Lanciv/GoGradeAPI && go build .
 
 # Clean all the unused packages
 RUN apt-get autoremove -y
 RUN apt-get clean all
 
-EXPOSE 3000
+
+CMD 'gogradeapi'
