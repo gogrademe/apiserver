@@ -1,47 +1,35 @@
 package main
 
 import (
-	// "flag"
-	"github.com/Lanciv/GoGradeAPI/config"
+	"flag"
+	"fmt"
 	"github.com/Lanciv/GoGradeAPI/database"
 	h "github.com/Lanciv/GoGradeAPI/handlers"
-	// "github.com/codegangsta/negroni"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"os"
 )
 
 var (
-	AppConfig *config.Conf
+	port       string
+	driver     string
+	datasource string
 )
 
 func main() {
 
-	log.Println("Server is starting...")
+	flag.StringVar(&port, "port", ":3000", "")
+	flag.StringVar(&driver, "driver", "postgres", "")
+	flag.StringVar(&datasource, "datasource", "user=Matt dbname=dev_go_grade sslmode=disable", "")
+	flag.Parse()
 
-	// configfile := flag.String("c", "config.gcfg", "Configuration file")
-
-	// flag.Parse()
-
-	// var err error
-	// AppConfig, err = config.Load(*configfile)
-
-	// if err != nil {
-	// 	log.Fatalf("Config Error:", err.Error())
-	// }
-
-	database.SetupDB()
+	if err := database.Init(driver, datasource); err != nil {
+		log.Fatalf("Error setting up database: ", err)
+	}
 
 	setupHandlers()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3007"
-	}
-
-	panic(http.ListenAndServe(":"+port, nil))
+	panic(http.ListenAndServe(port, nil))
 
 }
 
@@ -61,6 +49,7 @@ func setupHandlers() {
 
 	// People
 	m.HandleFunc("/people", h.AuthRequired(h.GetAllPeople)).Methods("GET")
+	m.HandleFunc("/people/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
 	m.HandleFunc("/people/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
 
 	// https://groups.google.com/forum/#!searchin/gorilla-web/options/gorilla-web/Xv4vMOlACyc/g5k7FoazMyoJ

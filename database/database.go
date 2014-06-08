@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/jmoiron/sqlx"
+	// Imports pq sql implimentation.
 	_ "github.com/lib/pq"
 	"log"
 )
@@ -10,20 +11,23 @@ var (
 	db *sqlx.DB
 )
 
-func init() {
+// Init connects to the db.
+func Init(name, datasource string) error {
 	var err error
 
-	db, err = sqlx.Open("postgres", "user=Matt dbname=dev_go_grade sslmode=disable")
+	db, err = sqlx.Open(name, datasource)
 	if err != nil {
-		log.Fatalln("Postgres:", err)
+		return err
 	}
 	err = db.Ping()
 
 	if err != nil {
-		log.Fatalln("Postgres:", err)
+		return err
 	}
+	return nil
 }
 
+// SetupDB will be used to bootstrap the DB
 func SetupDB() error {
 
 	_, err := CreateUser("test@test.com", "somePassword", "Admin")

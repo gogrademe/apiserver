@@ -1,9 +1,22 @@
 package model
 
 type StudentProfile struct {
-	PersonId   int64  `db:"person_id"`
+	PersonID   int64  `db:"person_id"`
 	GradeLevel string `db:"grade_level"`
 	TimeStamp
+}
+
+func (sP *StudentProfile) Validate() bool {
+
+	// TODO: Fix
+	if sP.PersonID == 0 {
+		return false
+	}
+	if sP.GradeLevel == "" {
+		return false
+	}
+	sP.UpdateTime()
+	return true
 }
 
 // func CreateStudentProfile(s *StudentProfile) (*StudentProfile, error) {

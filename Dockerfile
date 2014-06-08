@@ -12,13 +12,13 @@ RUN go get github.com/tools/godep
 
 
 ADD . $GOPATH/src/github.com/Lanciv/GoGradeAPI
-
-RUN cd $GOPATH/src/github.com/Lanciv/GoGradeAPI && go get .
-RUN cd $GOPATH/src/github.com/Lanciv/GoGradeAPI && go build .
+RUN cd $GOPATH/src/github.com/Lanciv/GoGradeAPI && godep get . && godep go install .
 
 # Clean all the unused packages
+
 RUN apt-get autoremove -y
 RUN apt-get clean all
 
+EXPOSE 3000
 
-CMD 'gogradeapi'
+ENTRYPOINT ["GoGradeAPI"]

@@ -1,12 +1,13 @@
 package database
 
 import (
-	. "github.com/Lanciv/GoGradeAPI/model"
 	"errors"
+	m "github.com/Lanciv/GoGradeAPI/model"
 	"log"
 )
 
 var (
+	// Error for password incorrect
 	ErrUserOrPasswdIncorrect = errors.New("Username or password incorrect.")
 )
 
@@ -24,8 +25,8 @@ SELECT id, email, hashed_password, role, created_at, updated_at
 FROM user_account WHERE disabled = false
 `
 
-func CreateUser(email string, password string, role string) (*User, error) {
-	u := NewUser(email, role)
+func CreateUser(email string, password string, role string) (*m.User, error) {
+	u := m.NewUser(email, role)
 
 	err := u.SetPassword(password)
 	if err != nil {
@@ -55,8 +56,8 @@ func CreateUser(email string, password string, role string) (*User, error) {
 // 	return u, nil
 //
 // }
-func GetUserEmail(email string) (User, error) {
-	var u User
+func GetUserEmail(email string) (m.User, error) {
+	var u m.User
 
 	err := db.Get(&u, userFindEmailStmt, email)
 
@@ -66,8 +67,8 @@ func GetUserEmail(email string) (User, error) {
 	return u, nil
 
 }
-func GetAllUsers() ([]*User, error) {
-	users := []*User{}
+func GetAllUsers() ([]*m.User, error) {
+	users := []*m.User{}
 
 	err := db.Select(&users, userGetAllStmt)
 	if err != nil {
@@ -79,7 +80,7 @@ func GetAllUsers() ([]*User, error) {
 	return users, nil
 }
 
-func GetUserById(id int) *User {
+func GetUserByID(id int) *m.User {
 	// user := &User{}
 
 	// db.Find(user, id)
