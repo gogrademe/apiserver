@@ -9,38 +9,38 @@ import (
 	"strconv"
 )
 
-// PersonResponse will be used when returning People or a Person.
-// type PersonAPI struct {
-// 	Person         m.Person         `json:"person"`
-// 	StudentProfile m.StudentProfile `json:"studentProfile,omitempty"`
-// }
-
 // CreatePerson allows you to create a Person.
 func CreatePerson(w http.ResponseWriter, r *http.Request) {
 	var p m.PersonProfile
-	if readJson(r, &p) {
-		// Create Person.
 
-		err := d.CreatePerson(p.Person)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+	if readJson(r, &p) {
+		// Person should exist before trying to do anything.
+		if p.Person == nil {
+			writeError(w, "Person required", 400)
 			return
 		}
 
+		err := d.CreatePerson(p.Person)
+		if err != nil {
+			writeError(w, "Error creating Person", 500)
+			return
+		}
+		// If there is a StudentProfile then create it.
 		if p.StudentProfile != nil {
 			err = d.CreateStudentProfile(p.Person.Id, p.StudentProfile)
 			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				writeError(w, "Error creating Student Profile", 500)
 				return
 			}
 		}
 
 	} else {
-		http.Error(w, "", http.StatusBadRequest)
+		writeError(w, "Error parsing JSON", 400)
 		return
 	}
 
 	writeJson(w, p)
+	return
 }
 
 // GetPerson will return a Person with all of their Profiles.
@@ -52,27 +52,32 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	pID, ok := vars["id"]
 
 	if !ok {
-		http.Error(w, "error", http.StatusBadRequest)
+		writeError(w, "Invalid Person ID", 400)
+		return
 	}
 
 	id, err := strconv.Atoi(pID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		writeError(w, "Invalid Person ID", 400)
 		return
 	}
 
 	res.Person, err = d.GetPerson(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	if err == sql.ErrNoRows {
+		writeError(w, "Person not found", 404)
+		return
+	} else if err != nil {
+		writeError(w, err.Error(), 400)
 		return
 	}
 	res.StudentProfile, err = d.StudentProfileForPerson(id)
 	if err != nil && err != sql.ErrNoRows {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		writeError(w, err.Error(), 500)
 		return
 	}
 
 	writeJson(w, res)
+	return
 }
 
 // GetAllPeople returns all people without their profiles.
@@ -85,4 +90,5 @@ func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJson(w, people)
+	return
 }
