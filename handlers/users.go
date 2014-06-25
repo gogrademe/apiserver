@@ -11,9 +11,9 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
 	users, err := d.GetAllUsers()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		writeError(w, serverError, 500)
 		return
 	}
-	writeJson(w, users)
+	writeJSON(w, users)
 
 }

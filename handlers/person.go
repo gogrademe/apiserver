@@ -13,7 +13,7 @@ import (
 func CreatePerson(w http.ResponseWriter, r *http.Request) {
 	var p m.PersonProfile
 
-	if readJson(r, &p) {
+	if readJSON(r, &p) {
 		// Person should exist before trying to do anything.
 		if p.Person == nil {
 			writeError(w, "Person required", 400)
@@ -39,7 +39,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJson(w, p)
+	writeJSON(w, p)
 	return
 }
 
@@ -50,7 +50,6 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	pID, ok := vars["id"]
-
 	if !ok {
 		writeError(w, "Invalid Person ID", 400)
 		return
@@ -66,17 +65,19 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	if err == sql.ErrNoRows {
 		writeError(w, "Person not found", 404)
 		return
-	} else if err != nil {
-		writeError(w, err.Error(), 400)
-		return
 	}
-	res.StudentProfile, err = d.StudentProfileForPerson(id)
-	if err != nil && err != sql.ErrNoRows {
-		writeError(w, err.Error(), 500)
+	if err != nil {
+		writeError(w, serverError, 400)
 		return
 	}
 
-	writeJson(w, res)
+	res.StudentProfile, err = d.StudentProfileForPerson(id)
+	if err != nil && err != sql.ErrNoRows {
+		writeError(w, serverError, 500)
+		return
+	}
+
+	writeJSON(w, res)
 	return
 }
 
@@ -85,10 +86,9 @@ func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 
 	people, err := d.GetAllPeople()
 	if err != nil {
-
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		writeError(w, serverError, 500)
 		return
 	}
-	writeJson(w, people)
+	writeJSON(w, people)
 	return
 }

@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	d "github.com/Lanciv/GoGradeAPI/database"
 	"encoding/json"
 	"errors"
-	jwt "github.com/MattAitchison/jwt-go"
+	d "github.com/Lanciv/GoGradeAPI/database"
+	jwt "github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
 )
@@ -50,7 +50,7 @@ func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.Re
 		if err != nil {
 			log.Println("error", err)
 			w.WriteHeader(http.StatusUnauthorized)
-			writeJson(w, map[string]interface{}{"error": "Access denied."})
+			writeJSON(w, map[string]interface{}{"error": "Access denied."})
 			return
 		}
 		handler(w, r)

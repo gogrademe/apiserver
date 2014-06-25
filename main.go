@@ -2,12 +2,11 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/Lanciv/GoGradeAPI/database"
 	h "github.com/Lanciv/GoGradeAPI/handlers"
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"log"
-	"net/http"
 )
 
 var (
@@ -18,23 +17,26 @@ var (
 
 func main() {
 
-	flag.StringVar(&port, "port", ":3000", "")
+	flag.StringVar(&port, "port", ":5000", "")
 	flag.StringVar(&driver, "driver", "postgres", "")
 	flag.StringVar(&datasource, "datasource", "user=Matt dbname=dev_go_grade sslmode=disable", "")
 	flag.Parse()
 
 	if err := database.Init(driver, datasource); err != nil {
-		log.Fatalf("Error setting up database: ", err)
+		log.Fatalln("Error setting up database: ", err)
 	}
 
-	setupHandlers()
+	n := negroni.Classic()
+	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
+	n.UseHandler(setupHandlers())
 
-	panic(http.ListenAndServe(port, nil))
+	n.Run(port)
 
 }
 
-func setupHandlers() {
+func setupHandlers() *mux.Router {
 	r := mux.NewRouter()
+	r.StrictSlash(true)
 	m := r.PathPrefix("/api").Subrouter()
 
 	// Auth
@@ -52,15 +54,17 @@ func setupHandlers() {
 	m.HandleFunc("/people/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
 	m.HandleFunc("/people/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
 
+	return r
 	// https://groups.google.com/forum/#!searchin/gorilla-web/options/gorilla-web/Xv4vMOlACyc/g5k7FoazMyoJ
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		if r.Method == "OPTIONS" {
-			fmt.Fprint(w)
-			return
-		}
-		m.ServeHTTP(w, r)
-	})
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	w.Header().Set("Content-Type", "application/json")
+	// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	// 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	// 	if r.Method == "OPTIONS" {
+	// 		fmt.Fprint(w)
+	// 		return
+	// 	}
+	// 	m.ServeHTTP(w, r)
+	//
+	// })
 }

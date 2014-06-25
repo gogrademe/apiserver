@@ -5,34 +5,46 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 )
 
-// Error represents an error produced by the API
-type Error struct {
+// APIError represents an error produced by the API
+type APIError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
-// ErrorResponse represents the JSON response for endpoints which only return an error
-type ErrorResponse struct {
-	Error  *Error              `json:"error"`
-	writer http.ResponseWriter `json:"-"`
-}
+const serverError = "server error"
 
-func (e *ErrorResponse) ReturnError(code int, message string) {
-	writeJson(e.writer, ErrorResponse{
-		Error: &Error{
-			Code:    code,
-			Message: message,
-		},
-	})
+// writeError will write a JSON error to the client.
+func writeError(w http.ResponseWriter, message string, code int) {
+	e := APIError{
+		Code:    code,
+		Message: message,
+	}
+	data, err := json.MarshalIndent(e, "", "  ")
+	if err != nil {
+		log.Println(err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	w.WriteHeader(code)
+	w.Write(data)
+}
+func writeJSON(w http.ResponseWriter, v interface{}) {
+	data, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		log.Printf("Error marshalling json: %v", err)
+		w.WriteHeader(500)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(data)
 }
 
 /* https://github.com/DenverGophers/talks/blob/master/2013-04/mgo/example_6/read_json.go */
 
 // readJson will parses the JSON-encoded data in the http request and store the result in v
-func readJson(r *http.Request, v interface{}) bool {
+func readJSON(r *http.Request, v interface{}) bool {
 	defer r.Body.Close()
 
 	var (
@@ -53,14 +65,4 @@ func readJson(r *http.Request, v interface{}) bool {
 	}
 
 	return true
-}
-func writeJson(w http.ResponseWriter, v interface{}) {
-	// if data, err := json.Marshal(v); err != nil {
-	if data, err := json.MarshalIndent(v, "", "  "); err != nil {
-		log.Printf("Error marshalling json: %v", err)
-	} else {
-		w.Header().Set("Content-Length", strconv.Itoa(len(data)))
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(data)
-	}
 }

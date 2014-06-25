@@ -28,17 +28,6 @@ func StudentProfileForPerson(id int) (*m.StudentProfile, error) {
 }
 
 // CreateStudentProfile Create a profile for a student.
-// func CreateStudentProfile(s *m.StudentProfile) (*m.StudentProfile, error) {
-// 	_, err := db.Exec(studentProfileSaveStmt, s.PersonID, s.GradeLevel, s.UpdatedAt, s.CreatedAt)
-//
-// 	if err != nil {
-// 		return nil, err
-// 	}
-//
-// 	return s, nil
-// }
-
-// CreateStudentProfile Create a profile for a student.
 func CreateStudentProfile(pID int64, sP *m.StudentProfile) error {
 
 	sP.PersonID = pID

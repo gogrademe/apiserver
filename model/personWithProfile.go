@@ -1,8 +1,9 @@
 package model
 
 type PersonProfile struct {
-	Person         *Person         `json:"person"`
+	*Person
 	StudentProfile *StudentProfile `json:"studentProfile,omitempty"`
+	TeacherProfile *TeacherProfile `json:"teacherProfile,omitempty"`
 }
 
 func (p *PersonProfile) Validate() bool {

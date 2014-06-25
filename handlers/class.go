@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	d "github.com/Lanciv/GoGradeAPI/database"
 	m "github.com/Lanciv/GoGradeAPI/model"
-	"fmt"
 	"net/http"
 )
 
@@ -13,7 +13,7 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	writeJson(w, classes)
+	writeJSON(w, classes)
 }
 
 // func handleTodoCreate(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +41,7 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 func CreateClass(w http.ResponseWriter, r *http.Request) {
 	var class m.Class
 
-	if readJson(r, &class) {
+	if readJSON(r, &class) {
 		fmt.Println(class)
 	}
 

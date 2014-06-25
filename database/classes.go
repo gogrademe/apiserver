@@ -14,8 +14,5 @@ func GetAllClasses() ([]Class, error) {
 		return nil, err
 	}
 
-	// classes := []Class{}
-	// db.Find(&classes)
-
 	return classes, nil
 }
