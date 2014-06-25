@@ -14,7 +14,7 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	writeJSON(w, classes)
+	writeJSON(w, &APIRes{"class": classes})
 }
 
 func CreateClass(w http.ResponseWriter, r *http.Request) {

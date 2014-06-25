@@ -32,7 +32,7 @@ func writeError(w http.ResponseWriter, message string, code int) {
 	w.WriteHeader(code)
 	w.Write(data)
 }
-func writeJSON(w http.ResponseWriter, v interface{}) {
+func writeJSON(w http.ResponseWriter, v *APIRes) {
 	data, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		log.Printf("Error marshalling json: %v", err)

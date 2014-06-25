@@ -29,7 +29,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, p)
+	writeJSON(w, &APIRes{"person": p})
 	return
 }
 
@@ -50,7 +50,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, p)
+	writeJSON(w, &APIRes{"person": p})
 	return
 }
 
@@ -62,6 +62,6 @@ func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 		writeError(w, serverError, 500)
 		return
 	}
-	writeJSON(w, &APIRes{"people": people})
+	writeJSON(w, &APIRes{"person": people})
 	return
 }

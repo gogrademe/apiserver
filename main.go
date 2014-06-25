@@ -51,9 +51,9 @@ func setupHandlers() *mux.Router {
 	m.HandleFunc("/class", h.AuthRequired(h.CreateClass)).Methods("POST")
 
 	// People
-	m.HandleFunc("/people", h.AuthRequired(h.GetAllPeople)).Methods("GET")
-	m.HandleFunc("/people", h.AuthRequired(h.CreatePerson)).Methods("POST")
-	m.HandleFunc("/people/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
+	m.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
+	m.HandleFunc("/person", h.AuthRequired(h.CreatePerson)).Methods("POST")
+	m.HandleFunc("/person/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
 
 	return r
 }

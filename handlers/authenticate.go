@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
 	d "github.com/Lanciv/GoGradeAPI/database"
 	jwt "github.com/dgrijalva/jwt-go"
@@ -34,12 +33,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send token to the user so they can use it to to authenticate all further requests.
-	enc := json.NewEncoder(w)
-	err = enc.Encode(map[string]interface{}{"token": token})
-	if err != nil {
-		http.Error(w, "Something bad happened!", http.StatusInternalServerError)
-		return
-	}
+	writeJSON(w, &APIRes{"session": map[string]interface{}{"token": token}})
+	return
 }
 
 func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
@@ -49,8 +44,9 @@ func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.Re
 		})
 		if err != nil {
 			log.Println("error", err)
-			w.WriteHeader(http.StatusUnauthorized)
-			writeJSON(w, map[string]interface{}{"error": "Access denied."})
+			// w.WriteHeader(http.StatusUnauthorized)
+			// writeJSON(w, map[string]interface{}{"error": "Access denied."})
+			writeError(w, "Access denied.", http.StatusUnauthorized)
 			return
 		}
 		handler(w, r)

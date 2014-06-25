@@ -14,6 +14,6 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		writeError(w, serverError, 500)
 		return
 	}
-	writeJSON(w, users)
+	writeJSON(w, &APIRes{"user": users})
 
 }
