@@ -41,7 +41,6 @@ func setupHandlers() *mux.Router {
 	m := r.PathPrefix("/api").Subrouter()
 
 	// Auth
-	m.HandleFunc("/auth/login", h.Login).Methods("POST")
 	m.HandleFunc("/session", h.Login).Methods("POST")
 
 	// Users
@@ -49,12 +48,12 @@ func setupHandlers() *mux.Router {
 
 	// Classes
 	m.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
-	m.HandleFunc("/class/create", h.AuthRequired(h.CreateClass)).Methods("POST")
+	m.HandleFunc("/class", h.AuthRequired(h.CreateClass)).Methods("POST")
 
 	// People
 	m.HandleFunc("/people", h.AuthRequired(h.GetAllPeople)).Methods("GET")
+	m.HandleFunc("/people", h.AuthRequired(h.CreatePerson)).Methods("POST")
 	m.HandleFunc("/people/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
-	m.HandleFunc("/people/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
 
 	return r
 }
