@@ -10,16 +10,13 @@ import (
 )
 
 var (
-	port       string
-	driver     string
-	datasource string
+	address     string
+	database string
 )
 
 func main() {
-
-	flag.StringVar(&port, "port", ":5000", "")
-	flag.StringVar(&driver, "driver", "postgres", "")
-	flag.StringVar(&datasource, "datasource", "user=Matt dbname=dev_go_grade sslmode=disable", "")
+	flag.StringVar(&address, "address", "localhost:28015", "")
+	flag.StringVar(&database, "database", "dev_go_grade", "")
 	flag.Parse()
 
 	if err := database.Init(driver, datasource); err != nil {
