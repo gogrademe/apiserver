@@ -1,9 +1,10 @@
 package model
 
 import (
-// "errors"
-// "log"
-
+	// "errors"
+	// "log"
+	"github.com/mholt/binding"
+	"net/http"
 )
 
 type Person struct {
@@ -15,24 +16,28 @@ type Person struct {
 	TimeStamp
 }
 
-// func (p *Person) FieldMap() binding.FieldMap {
-// 	return binding.FieldMap{
-// 		&cf.User.ID: "user_id",
-// 		&cf.Email:   "email",
-// 		&cf.Message: binding.Field{
-// 			Form:     "message",
-// 			Required: true,
-// 		},
-// 	}
-// }
+func (p *Person) FieldMap() binding.FieldMap {
+	return binding.FieldMap{
+		&p.ID:         "id",
+		&p.FirstName:  "firstName",
+		&p.MiddleName: "middleName",
+		&p.LastName:   "lastName",
+	}
+}
 
-func (t *Person) Validate() bool {
-	if t.FirstName == "" {
-		return false
+func (p Person) Validate(r *http.Request, errs binding.Errors) binding.Errors {
+	if p.FirstName == "" {
+		errs = append(errs, binding.Error{
+			FieldNames: []string{"firstName"},
+			Message:    "Required",
+		})
 	}
-	if t.LastName == "" {
-		return false
+	if p.LastName == "" {
+		errs = append(errs, binding.Error{
+			FieldNames: []string{"lastName"},
+			Message:    "Required",
+		})
 	}
-	t.UpdateTime()
-	return true
+	p.UpdateTime()
+	return errs
 }

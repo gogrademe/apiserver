@@ -4,30 +4,37 @@ import (
 	d "github.com/Lanciv/GoGradeAPI/database"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/gorilla/mux"
+	"github.com/mholt/binding"
 	"net/http"
 )
 
 // CreatePerson allows you to create a Person.
 func CreatePerson(w http.ResponseWriter, r *http.Request) {
-	var p m.Person
+	p := new(m.Person)
 
-	if readJSON(r, &p) {
-		// Person should exist before trying to do anything.
-		// if (p == m.Person{}) {
-		// 	writeError(w, "Person required", 400)
-		// 	return
-		// }
+	// if readJSON(r, &p) {
+	// Person should exist before trying to do anything.
+	// if (p == m.Person{}) {
+	// 	writeError(w, "Person required", 400)
+	// 	return
+	// }
 
-		err := d.CreatePerson(&p)
-		if err != nil {
-			writeError(w, "Error creating Person", 500)
-			return
-		}
-
-	} else {
-		writeError(w, "Error parsing JSON", 400)
+	errs := binding.Bind(r, p)
+	if errs != nil {
+		writeError(w, errs, 400)
 		return
 	}
+	err := d.CreatePerson(p)
+
+	if err != nil {
+		writeError(w, "Error creating Person", 500)
+		return
+	}
+
+	// } else {
+	// 	writeError(w, "Error parsing JSON", 400)
+	// 	return
+	// }
 
 	writeJSON(w, &APIRes{"person": p})
 	return

@@ -1,22 +1,16 @@
 package database
 
 import (
-	"errors"
+	// "errors"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 )
 
 func CreatePerson(p *m.Person) error {
 
-	if !p.Validate() {
-		return errors.New("Person not valid")
-	}
-	// Create a m.Person and get its ID
-	// nstmt, err := db.PrepareNamed(personSaveStmt)
-	// if err != nil {
-	// 	return err
+	// if !p.Validate() {
+	// 	return errors.New("Person not valid")
 	// }
-	// err = nstmt.QueryRow(p).Scan(&p.ID)
 	_, err := r.Table("people").Insert(p).RunWrite(sess)
 	if err != nil {
 		return err

@@ -10,8 +10,8 @@ import (
 
 // APIError represents an error produced by the API
 type APIError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code    int         `json:"code"`
+	Message interface{} `json:"message"`
 }
 
 type APIRes map[string]interface{}
@@ -19,7 +19,7 @@ type APIRes map[string]interface{}
 const serverError = "server error"
 
 // writeError will write a JSON error to the client.
-func writeError(w http.ResponseWriter, message string, code int) {
+func writeError(w http.ResponseWriter, message interface{}, code int) {
 	e := APIError{
 		Code:    code,
 		Message: message,

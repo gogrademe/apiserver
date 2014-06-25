@@ -6,27 +6,31 @@ import (
 	h "github.com/Lanciv/GoGradeAPI/handlers"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/meatballhat/negroni-logrus"
 	"log"
 )
 
 var (
-	apiPort string
-	address string
-	dbName  string
+	apiPort  string
+	address  string
+	dbName   string
+	testData bool
 )
 
 func main() {
 	flag.StringVar(&apiPort, "apiPort", ":5000", "")
-	flag.StringVar(&address, "address", "localhost:28015", "")
+	flag.StringVar(&address, "dbAddress", "localhost:28015", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
+	flag.BoolVar(&testData, "testData", true, "")
 	flag.Parse()
 
 	if err := database.Connect(address, dbName); err != nil {
 		log.Fatalln("Error setting up database: ", err)
 	}
 
-	database.SetupDB(true)
-	n := negroni.Classic()
+	database.SetupDB(testData)
+	n := negroni.New()
+	n.Use(negronilogrus.NewMiddleware())
 	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
 	n.UseHandler(setupHandlers())
 
