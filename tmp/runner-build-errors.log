@@ -1,7 +1,0 @@
-# github.com/Lanciv/GoGradeAPI
-./main.go:14: database redeclared in this block
-	previous declaration at ./main.go:5
-./main.go:22: database.Init undefined (type string has no field or method Init)
-./main.go:22: undefined: driver
-./main.go:22: undefined: datasource
-./main.go:30: undefined: port

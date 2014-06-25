@@ -6,10 +6,11 @@ import (
 )
 
 type Person struct {
-	ID         int64  `json:"id"`
-	FirstName  string `db:"first_name"json:"firstName"`
-	MiddleName string `db:"middle_name"json:"middleName"`
-	LastName   string `db:"last_name"json:"lastName"`
+	ID         string `gorethink:"id,omitempty"`
+	FirstName  string `gorethink:"firstName"json:"firstName"`
+	MiddleName string `gorethink:"middleName"json:"middleName"`
+	LastName   string `gorethink:"lastName"json:"lastName"`
+	Profiles   map[string]string
 	TimeStamp
 }
 

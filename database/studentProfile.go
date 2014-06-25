@@ -1,9 +1,9 @@
 package database
 
-import (
-	"errors"
-	m "github.com/Lanciv/GoGradeAPI/model"
-)
+// import (
+// 	"errors"
+// 	m "github.com/Lanciv/GoGradeAPI/model"
+// )
 
 const studentGetForPerson = `
 SELECT person_id, grade_level, created_at, updated_at
@@ -16,29 +16,29 @@ VALUES(:person_id,:grade_level,:updated_at,:created_at) RETURNING person_id
 `
 
 // StudentProfileForPerson Get's a student profile from a Person.ID
-func StudentProfileForPerson(id int) (*m.StudentProfile, error) {
-	var sP m.StudentProfile
-
-	err := db.Get(&sP, studentGetForPerson, id)
-
-	if err != nil {
-		return &sP, err
-	}
-	return &sP, nil
-}
-
-// CreateStudentProfile Create a profile for a student.
-func CreateStudentProfile(pID int64, sP *m.StudentProfile) error {
-
-	sP.PersonID = pID
-
-	if !sP.Validate() {
-		return errors.New("Student not valid")
-	}
-	_, err := db.NamedExec(studentProfileSaveStmt, sP)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
+// func StudentProfileForPerson(id int) (*m.StudentProfile, error) {
+// 	var sP m.StudentProfile
+//
+// 	err := db.Get(&sP, studentGetForPerson, id)
+//
+// 	if err != nil {
+// 		return &sP, err
+// 	}
+// 	return &sP, nil
+// }
+//
+// // CreateStudentProfile Create a profile for a student.
+// func CreateStudentProfile(pID int64, sP *m.StudentProfile) error {
+//
+// 	sP.PersonID = pID
+//
+// 	if !sP.Validate() {
+// 		return errors.New("Student not valid")
+// 	}
+// 	_, err := db.NamedExec(studentProfileSaveStmt, sP)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	return nil
+// }

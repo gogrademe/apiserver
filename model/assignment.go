@@ -1,11 +1,15 @@
 package model
 
+import (
+	"time"
+)
+
 type Assignment struct {
-	ID        int64
-	Name      string
-	Type      string
-	DueDate   int64 `db:"due_date"`
-	ClassID   int64 `db:"class_id"`
-	ClassTerm int64 `db:"class_term_id"`
+	ID        string    `gorethink:"id,omitempty"`
+	Name      string    `gorethink:"name"`
+	Type      string    `gorethink:"type"`
+	DueDate   time.Time `gorethink:"dueDate"`
+	ClassID   string    `gorethink:"classID"`
+	ClassTerm string    `gorethink:"class_term_id"`
 	TimeStamp
 }
