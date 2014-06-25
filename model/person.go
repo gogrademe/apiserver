@@ -7,11 +7,11 @@ import (
 )
 
 type Person struct {
-	ID         string `gorethink:"id,omitempty"`
-	FirstName  string `gorethink:"firstName"json:"firstName"`
-	MiddleName string `gorethink:"middleName"json:"middleName"`
-	LastName   string `gorethink:"lastName"json:"lastName"`
-	Profiles   map[string]string
+	ID         string            `gorethink:"id,omitempty"json:"id"`
+	FirstName  string            `gorethink:"firstName"json:"firstName"`
+	MiddleName string            `gorethink:"middleName"json:"middleName"`
+	LastName   string            `gorethink:"lastName"json:"lastName"`
+	Profiles   map[string]string `gorethink:",omitempty"json:",omitempty"`
 	TimeStamp
 }
 
@@ -25,6 +25,7 @@ type Person struct {
 // 		},
 // 	}
 // }
+
 func (t *Person) Validate() bool {
 	if t.FirstName == "" {
 		return false

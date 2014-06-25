@@ -1,8 +1,8 @@
 package model
 
 type Student struct {
-	PersonID   string `gorethink:"personID"`
-	GradeLevel string `gorethink:"gradeLevel"`
+	PersonID   string `gorethink:"personID"json:"personId"`
+	GradeLevel string `gorethink:"gradeLevel"json:"gradeLevel"`
 	TimeStamp
 }
 
