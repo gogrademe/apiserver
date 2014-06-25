@@ -7,15 +7,18 @@ import (
 )
 
 func CreatePerson(p *m.Person) error {
-
-	// if !p.Validate() {
-	// 	return errors.New("Person not valid")
-	// }
+	res, err := r.Table("people").Insert(p).RunWrite(sess)
+	if err != nil {
+		return err
+	}
+	p.ID = res.GeneratedKeys[0]
+	return nil
+}
+func CreatePeople(p []m.Person) error {
 	_, err := r.Table("people").Insert(p).RunWrite(sess)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -46,6 +49,10 @@ func GetPerson(id string) (*m.Person, error) {
 		return &p, err
 	}
 
-	row.Scan(p)
+	if row.IsNil() {
+		return nil, nil
+	}
+
+	row.Scan(&p)
 	return &p, nil
 }

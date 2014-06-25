@@ -10,6 +10,6 @@ type Assignment struct {
 	Type      string    `gorethink:"type"json:"tpe"`
 	DueDate   time.Time `gorethink:"dueDate"json:"dueDate"`
 	ClassID   string    `gorethink:"classID"json:"classId"`
-	ClassTerm string    `gorethink:"class_term_id"json:"classTerm"`
+	// ClassTerm string    `gorethink:"classTerm"json:"classTerm"`
 	TimeStamp
 }

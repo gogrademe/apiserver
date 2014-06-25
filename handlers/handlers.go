@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -17,12 +18,17 @@ type APIError struct {
 type APIRes map[string]interface{}
 
 const serverError = "server error"
+const notFoundError = "not found"
 
 // writeError will write a JSON error to the client.
 func writeError(w http.ResponseWriter, message interface{}, code int) {
-	e := APIError{
-		Code:    code,
-		Message: message,
+	e := &APIRes{
+		"error": []APIError{
+			APIError{
+				Code:    code,
+				Message: fmt.Sprintf("%s", message),
+			},
+		},
 	}
 	data, err := json.MarshalIndent(e, "", "  ")
 	if err != nil {
@@ -30,8 +36,10 @@ func writeError(w http.ResponseWriter, message interface{}, code int) {
 		w.WriteHeader(500)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(data)
+	return
 }
 func writeJSON(w http.ResponseWriter, v *APIRes) {
 	data, err := json.MarshalIndent(v, "", "  ")
@@ -42,6 +50,7 @@ func writeJSON(w http.ResponseWriter, v *APIRes) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)
+	return
 }
 
 /* https://github.com/DenverGophers/talks/blob/master/2013-04/mgo/example_6/read_json.go */

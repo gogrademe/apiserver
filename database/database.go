@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 	"log"
@@ -8,8 +9,9 @@ import (
 )
 
 var (
-	sess   *r.Session
-	dbName string
+	sess        *r.Session
+	dbName      string
+	errNotFound = errors.New("record not found")
 )
 
 const testAddress = "localhost:28015"
@@ -81,7 +83,6 @@ func insertTestData() {
 	log.Println("InsertTestData")
 	CreateUser("test@test.com", "somePassword", "Admin")
 
-	CreateUser("test@test.com", "somePassword", "Admin")
 	createTestPeople()
 	log.Println("TestDataDone")
 	return
@@ -89,27 +90,41 @@ func insertTestData() {
 
 func createTestPeople() {
 	log.Println("CreatePeople")
-	log.Println("1")
-	CreatePerson(&m.Person{
-		FirstName:  "Jon",
-		MiddleName: "David",
-		LastName:   "Bush",
-	})
-	log.Println("2")
-	CreatePerson(&m.Person{
-		FirstName: "Frankie",
-		LastName:  "Bagnardi",
-	})
-	log.Println("3")
-	CreatePerson(&m.Person{
-		FirstName: "Adam",
-		LastName:  "Price",
-	})
-	log.Println("4")
-	CreatePerson(&m.Person{
-		FirstName:  "Jake",
-		MiddleName: "Matthew",
-		LastName:   "Price",
+	CreatePeople([]m.Person{
+		m.Person{
+			FirstName:  "Jon",
+			MiddleName: "David",
+			LastName:   "Bush",
+		},
+		m.Person{
+			FirstName: "Frankie",
+			LastName:  "Bagnardi",
+		},
+		m.Person{
+			FirstName: "Adam",
+			LastName:  "Price",
+		},
+		m.Person{
+			FirstName:  "Jake",
+			MiddleName: "Matthew",
+			LastName:   "Price",
+		},
+		m.Person{
+			FirstName: "Matthew",
+			LastName:  "Aitchison",
+		},
+		m.Person{
+			FirstName: "Natalie",
+			LastName:  "Aitchison",
+		},
+		m.Person{
+			FirstName: "Nicole",
+			LastName:  "Aitchison",
+		},
+		m.Person{
+			FirstName: "Angel",
+			LastName:  "Heredia",
+		},
 	})
 	log.Println("CreatePeopleDone")
 	return

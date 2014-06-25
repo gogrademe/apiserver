@@ -36,10 +36,11 @@ func CreateUser(email string, password string, role string) (*m.User, error) {
 		return nil, ErrUserAlreadyExists
 	}
 
-	_, err = r.Table("users").Insert(u).RunWrite(sess)
+	res, err := r.Table("users").Insert(u).RunWrite(sess)
 	if err != nil {
 		return nil, err
 	}
+	u.ID = res.GeneratedKeys[0]
 
 	return u, nil
 }
