@@ -65,6 +65,7 @@ func createTables() {
 	r.Db(dbName).TableCreate("students").Run(sess, r.RunOpts{NoReply: true})
 	r.Db(dbName).TableCreate("teachers").Run(sess, r.RunOpts{NoReply: true})
 	r.Db(dbName).TableCreate("parents").Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("sessions").Run(sess, r.RunOpts{NoReply: true})
 	log.Println("CreateTablesDone")
 	return
 }

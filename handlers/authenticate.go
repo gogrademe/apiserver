@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	d "github.com/Lanciv/GoGradeAPI/database"
+	m "github.com/Lanciv/GoGradeAPI/model"
 	jwt "github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
@@ -26,14 +27,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a token for the user.
-	token, err := user.CreateToken()
+	// token, err := user.CreateToken()
+	// if err != nil {
+	// 	http.Error(w, "Something bad happened!", http.StatusInternalServerError)
+	// 	return
+	// }
+
+	session, err := m.NewSession(user)
 	if err != nil {
 		http.Error(w, "Something bad happened!", http.StatusInternalServerError)
 		return
 	}
 
+	d.SaveSession(&session)
 	// Send token to the user so they can use it to to authenticate all further requests.
-	writeJSON(w, &APIRes{"session": map[string]interface{}{"token": token}})
+	writeJSON(w, &APIRes{"session": session})
 	return
 }
 
