@@ -8,26 +8,43 @@ import (
 
 // TestUserDatabase verifies that a User can be saved and loaded from the database
 func TestUserDatabase(t *testing.T) {
-	// var userTests = []struct {
-	// 	email      string
-	// 	password   string
-	// 	role       string
-	// 	shouldFail bool
-	// }{}
-
-	_, err := CreateUser("test@test.com", "somePassword", "Admin")
-	if err != nil {
-		t.Errorf("Create valid user expected nil got %s", err.Error())
+	var userTests = []struct {
+		email      string
+		password   string
+		role       string
+		shouldFail bool
+		checkErr   error
+	}{
+		{
+			email:    "test@test.com",
+			password: "somePassword",
+			role:     "Admin",
+		},
+		{
+			password: "somePassword",
+			role:     "Admin",
+		},
+		{
+			role: "Admin",
+		},
+		{
+			email:    "test@test.com",
+			password: "somePassword",
+			role:     "Admin",
+			checkErr: ErrUserAlreadyExists,
+		},
 	}
 
-	_, err = CreateUser("test@test.com", "somePassword", "Admin")
-	t.Log(err)
-	if err == nil {
-		t.Error("Create invalid user expected Err got nil")
+	for i, user := range userTests {
+		_, err := CreateUser(user.email, user.password, user.role)
+		if user.checkErr == nil {
+			if err != nil {
+				t.Errorf("Expected: nil error for user %v. Got: %s", i, err)
+			}
+		} else {
+			if err != user.checkErr {
+				t.Errorf("Expected: %s for user %v. Got: %s", user.checkErr, i, err)
+			}
+		}
 	}
-
-	// if user.ID == "" {
-	// 	t.Fatalf("exected user id to be defined")
-	// }
-
 }

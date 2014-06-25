@@ -6,19 +6,6 @@ import (
 	r "github.com/dancannon/gorethink"
 )
 
-const peopleGetAllStmt = `
-SELECT id, first_name, middle_name, last_name, created_at, updated_at
-FROM person
-`
-const peopleFindIDStmt = `
-SELECT id, first_name, middle_name, last_name, created_at, updated_at
-from person where id = $1
-`
-const personSaveStmt = `
-INSERT INTO person(first_name, middle_name, last_name, updated_at, created_at)
-VALUES(:first_name,:middle_name,:last_name,:updated_at,:created_at) RETURNING id
-`
-
 func CreatePerson(p *m.Person) error {
 
 	if !p.Validate() {

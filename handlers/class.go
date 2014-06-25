@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// GetAllClasses returns all classes, doesn't take in any params
 func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 
 	classes, err := d.GetAllClasses()
@@ -16,28 +17,6 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, classes)
 }
 
-// func handleTodoCreate(w http.ResponseWriter, r *http.Request) {
-//   var (
-//     todo Todo
-//     err  error
-//   )
-//   data := struct {
-//     Success bool `json:"success"`
-//     Todo    Todo `json:"todo"`
-//   }{
-//     Success: false,
-//   }
-//   if readJson(r, &todo) {
-//     if err = repo.Create(&todo); err != nil {
-//       log.Printf("%v", err)
-//     } else {
-//       data.Success = true
-//       data.Todo = todo
-//     }
-//   }
-
-//   writeJson(w, data)
-// }
 func CreateClass(w http.ResponseWriter, r *http.Request) {
 	var class m.Class
 

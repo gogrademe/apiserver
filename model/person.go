@@ -3,6 +3,7 @@ package model
 import (
 // "errors"
 // "log"
+
 )
 
 type Person struct {
@@ -14,6 +15,16 @@ type Person struct {
 	TimeStamp
 }
 
+// func (p *Person) FieldMap() binding.FieldMap {
+// 	return binding.FieldMap{
+// 		&cf.User.ID: "user_id",
+// 		&cf.Email:   "email",
+// 		&cf.Message: binding.Field{
+// 			Form:     "message",
+// 			Required: true,
+// 		},
+// 	}
+// }
 func (t *Person) Validate() bool {
 	if t.FirstName == "" {
 		return false
