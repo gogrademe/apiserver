@@ -6,8 +6,8 @@ import (
 
 type Class struct {
 	ID         string `gorethink:"id,omitempty"`
-	Name       string
-	TeacherId  int64  `gorethink:"teacher_id"`
+	Name       string	`gorethink:"name"`
+	// TeacherId  string  `gorethink:"teacher_id"`
 	GradeLevel string `gorethink:"grade_level"`
 	Subject    string
 	TimeStamp

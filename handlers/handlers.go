@@ -13,6 +13,8 @@ type APIError struct {
 	Message string `json:"message"`
 }
 
+type APIRes map[string]interface{}
+
 const serverError = "server error"
 
 // writeError will write a JSON error to the client.

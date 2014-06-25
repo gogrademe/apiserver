@@ -62,6 +62,6 @@ func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 		writeError(w, serverError, 500)
 		return
 	}
-	writeJSON(w, people)
+	writeJSON(w, &APIRes{"people": people})
 	return
 }
