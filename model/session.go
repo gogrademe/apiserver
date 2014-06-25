@@ -9,7 +9,7 @@ type Session struct {
 	ID        string    `gorethink:"id,omitempty"json:"id"`
 	Token     string    `gorethink:"token"json:"token"`
 	UserID    string    `gorethink:"userId"json:"userId"`
-	ExpiresAt time.Time `gorethink:"userId"json:"expiresAt"`
+	ExpiresAt time.Time `gorethink:"expiresAt"json:"expiresAt"`
 	TimeStamp
 }
 
