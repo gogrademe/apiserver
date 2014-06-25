@@ -14,12 +14,12 @@ var (
 )
 
 type User struct {
-	ID             int64
-	Email          string
-	EmailLower     string `db:"email_lower"`
-	HashedPassword []byte `db:"hashed_password"`
-	Role           string
-	Disabled       bool
+	ID             string `gorethink:"id,omitempty"json:"id"`
+	Email          string `gorethink:"email"json:"email"`
+	EmailLower     string `gorethink:"emailLower"json:"emailLower"`
+	HashedPassword string `gorethink:"hashedPassword"json:"-"`
+	Role           string `gorethink:"role"json:"role"`
+	Disabled       bool   `gorethink:"disabled"json:"disabled"`
 	TimeStamp
 }
 
@@ -28,8 +28,8 @@ type User struct {
 func (a *User) CreateToken() (string, error) {
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 
-	token.Claims["Id"] = a.ID
-	token.Claims["Email"] = a.Email
+	token.Claims["id"] = a.ID
+	token.Claims["email"] = a.Email
 	token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 	// TODO: Move this to a config file.
@@ -68,7 +68,7 @@ func (u *User) SetPassword(password string) error {
 		return err
 	}
 	//
-	u.HashedPassword = b
+	u.HashedPassword = string(b)
 
 	return nil
 }

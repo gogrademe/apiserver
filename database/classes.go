@@ -1,18 +1,20 @@
 package database
 
 import (
-	. "github.com/Lanciv/GoGradeAPI/model"
+	m "github.com/Lanciv/GoGradeAPI/model"
+	r "github.com/dancannon/gorethink"
 )
 
-func GetAllClasses() ([]Class, error) {
+func GetAllClasses() ([]m.Class, error) {
 
-	classes := []Class{}
+	classes := []m.Class{}
 
-	err := db.Get(&classes, "SELECT * FROM class limit 1")
+	rows, err := r.Table("classes").Run(sess)
 
 	if err != nil {
 		return nil, err
 	}
 
+	err = rows.ScanAll(&classes)
 	return classes, nil
 }

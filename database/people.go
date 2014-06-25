@@ -3,20 +3,8 @@ package database
 import (
 	"errors"
 	m "github.com/Lanciv/GoGradeAPI/model"
+	r "github.com/dancannon/gorethink"
 )
-
-const peopleGetAllStmt = `
-SELECT id, first_name, middle_name, last_name, created_at, updated_at
-FROM person
-`
-const peopleFindIDStmt = `
-SELECT id, first_name, middle_name, last_name, created_at, updated_at
-from person where id = $1
-`
-const personSaveStmt = `
-INSERT INTO person(first_name, middle_name, last_name, updated_at, created_at)
-VALUES(:first_name,:middle_name,:last_name,:updated_at,:created_at) RETURNING id
-`
 
 func CreatePerson(p *m.Person) error {
 
@@ -24,11 +12,12 @@ func CreatePerson(p *m.Person) error {
 		return errors.New("Person not valid")
 	}
 	// Create a m.Person and get its ID
-	nstmt, err := db.PrepareNamed(personSaveStmt)
-	if err != nil {
-		return err
-	}
-	err = nstmt.QueryRow(p).Scan(&p.ID)
+	// nstmt, err := db.PrepareNamed(personSaveStmt)
+	// if err != nil {
+	// 	return err
+	// }
+	// err = nstmt.QueryRow(p).Scan(&p.ID)
+	_, err := r.Table("people").Insert(p).RunWrite(sess)
 	if err != nil {
 		return err
 	}
@@ -40,8 +29,13 @@ func CreatePerson(p *m.Person) error {
 func GetAllPeople() ([]m.Person, error) {
 	people := []m.Person{}
 
-	err := db.Select(&people, peopleGetAllStmt)
+	// err := db.Select(&people, peopleGetAllStmt)
+	rows, err := r.Table("people").Run(sess)
+	if err != nil {
+		return nil, err
+	}
 
+	err = rows.ScanAll(&people)
 	if err != nil {
 		return nil, err
 	}
@@ -50,14 +44,14 @@ func GetAllPeople() ([]m.Person, error) {
 }
 
 // GetPerson get's a single person with it's profile(s)
-func GetPerson(id int) (*m.Person, error) {
+func GetPerson(id string) (*m.Person, error) {
 	var p m.Person
 
-	err := db.Get(&p, peopleFindIDStmt, id)
-
+	row, err := r.Table("people").Get(id).RunRow(sess)
 	if err != nil {
 		return &p, err
 	}
 
+	row.Scan(p)
 	return &p, nil
 }

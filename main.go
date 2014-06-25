@@ -10,61 +10,50 @@ import (
 )
 
 var (
-	port       string
-	driver     string
-	datasource string
+	apiPort string
+	address string
+	dbName  string
 )
 
 func main() {
-
-	flag.StringVar(&port, "port", ":5000", "")
-	flag.StringVar(&driver, "driver", "postgres", "")
-	flag.StringVar(&datasource, "datasource", "user=Matt dbname=dev_go_grade sslmode=disable", "")
+	flag.StringVar(&apiPort, "apiPort", ":5000", "")
+	flag.StringVar(&address, "address", "localhost:28015", "")
+	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
 	flag.Parse()
 
-	if err := database.Init(driver, datasource); err != nil {
+	if err := database.Connect(address, dbName); err != nil {
 		log.Fatalln("Error setting up database: ", err)
 	}
 
+	database.SetupDB(true)
 	n := negroni.Classic()
 	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
 	n.UseHandler(setupHandlers())
 
-	n.Run(port)
+	n.Run(apiPort)
 
 }
 
+// setupHandlers loads all routes into gorillaMux.
 func setupHandlers() *mux.Router {
 	r := mux.NewRouter()
 	r.StrictSlash(true)
 	m := r.PathPrefix("/api").Subrouter()
 
 	// Auth
-	m.HandleFunc("/auth/login", h.Login).Methods("POST")
+	m.HandleFunc("/session", h.Login).Methods("POST")
 
 	// Users
 	m.HandleFunc("/user", h.AuthRequired(h.GetAllUsers)).Methods("GET")
 
 	// Classes
 	m.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
-	m.HandleFunc("/class/create", h.AuthRequired(h.CreateClass)).Methods("POST")
+	m.HandleFunc("/class", h.AuthRequired(h.CreateClass)).Methods("POST")
 
 	// People
-	m.HandleFunc("/people", h.AuthRequired(h.GetAllPeople)).Methods("GET")
-	m.HandleFunc("/people/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
-	m.HandleFunc("/people/create", h.AuthRequired(h.CreatePerson)).Methods("POST")
+	m.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
+	m.HandleFunc("/person", h.AuthRequired(h.CreatePerson)).Methods("POST")
+	m.HandleFunc("/person/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
 
 	return r
-	// https://groups.google.com/forum/#!searchin/gorilla-web/options/gorilla-web/Xv4vMOlACyc/g5k7FoazMyoJ
-	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Header().Set("Content-Type", "application/json")
-	// 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	// 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-	// 	if r.Method == "OPTIONS" {
-	// 		fmt.Fprint(w)
-	// 		return
-	// 	}
-	// 	m.ServeHTTP(w, r)
-	//
-	// })
 }

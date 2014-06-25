@@ -5,8 +5,8 @@ import (
 )
 
 type TimeStamp struct {
-	CreatedAt time.Time `db:"created_at"json:"createdAt"`
-	UpdatedAt time.Time `db:"updated_at"json:"updatedAt"`
+	CreatedAt time.Time `gorethink:"createdAt"json:"createdAt"`
+	UpdatedAt time.Time `gorethink:"updatedAt"json:"updatedAt"`
 }
 
 func (a *TimeStamp) UpdateTime() {

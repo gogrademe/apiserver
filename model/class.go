@@ -5,17 +5,17 @@ import (
 )
 
 type Class struct {
-	ID         int64
-	Name       string
-	TeacherId  int64  `db:"teacher_id"`
-	GradeLevel string `db:"grade_level"`
-	Subject    string
+	ID   string `gorethink:"id,omitempty"json:"id"`
+	Name string `gorethink:"name"json:"name"`
+	// TeacherId  string  `gorethink:"teacher_id"`
+	GradeLevel string `gorethink:"gradeLevel"json:"gradeLevel"`
+	Subject    string `gorethink:"subject"json:"subject"`
 	TimeStamp
 }
 
 type ClassTerm struct {
-	ClassID   int64     `db:"class_id"`
-	StartDate time.Time `db:"start_date"`
-	EndDate   time.Time `db:"end_date"`
+	ClassID   int64     `gorethink:"classId"json:"classId"`
+	StartDate time.Time `gorethink:"startDate"json:"startDate"`
+	EndDate   time.Time `gorethink:"endDate"json:"endDate"`
 	TimeStamp
 }
