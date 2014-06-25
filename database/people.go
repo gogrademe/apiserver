@@ -28,7 +28,7 @@ func CreatePerson(p *m.Person) error {
 	if err != nil {
 		return err
 	}
-	err = nstmt.QueryRow(p).Scan(&p.Id)
+	err = nstmt.QueryRow(p).Scan(&p.ID)
 	if err != nil {
 		return err
 	}

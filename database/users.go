@@ -36,7 +36,7 @@ func CreateUser(email string, password string, role string) (*m.User, error) {
 	u.UpdateTime()
 
 	err = db.QueryRow(userCreateStmt, u.Email, u.EmailLower, u.HashedPassword,
-		u.Role, u.CreatedAt, u.UpdatedAt).Scan(&u.Id)
+		u.Role, u.CreatedAt, u.UpdatedAt).Scan(&u.ID)
 
 	if err != nil {
 		return nil, err

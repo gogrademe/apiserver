@@ -27,7 +27,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 		}
 		// If there is a StudentProfile then create it.
 		if p.StudentProfile != nil {
-			err = d.CreateStudentProfile(p.Person.Id, p.StudentProfile)
+			err = d.CreateStudentProfile(p.Person.ID, p.StudentProfile)
 			if err != nil {
 				writeError(w, "Error creating Student Profile", 500)
 				return

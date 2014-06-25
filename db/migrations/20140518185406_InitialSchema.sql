@@ -12,11 +12,50 @@ CREATE TABLE user_account (
   disabled boolean DEFAULT FALSE
 );
 
+CREATE TABLE class (
+  id SERIAL PRIMARY KEY,
+  name text NOT NULL,
+  grade_level text NOT NULL,
+  subject text NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+);
+CREATE TABLE class_term (
+  id SERIAL PRIMARY KEY,
+  class_id integer PRIMARY KEY REFERENCES class,
+  name text NOT NULL,
+  start_date TIMESTAMP NOT NULL,
+  end_date TIMESTAMP NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE class_term_people (
+  class_term_id integer PRIMARY KEY REFERENCES class,
+  person_id integer PRIMARY KEY REFERENCES person,
+  role text NOT NULL
+  enrolled_date TIMESTAMP NOT NULL,
+  unenrolled_date TIMESTAMP NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+);
+
+
 CREATE TABLE person (
   id SERIAL PRIMARY KEY,
   first_name text NOT NULL,
   middle_name text,
   last_name text NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE assignment (
+  id SERIAL PRIMARY KEY,
+  class_term_id integer PRIMARY KEY REFERENCES class_term,
+  name text NOT NULL,
+  type text NOT NULL,
+  due_date TIMESTAMP NOT NULL,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL
 );
@@ -37,8 +76,10 @@ CREATE TABLE teacher_profile (
 
 -- +goose Down
 DROP TABLE user_account;
+DROP TABLE class;
+DROP TABLE class_term;
+DROP TABLE class_term_people;
 DROP TABLE person;
 DROP TABLE student_profile;
 DROP TABLE teacher_profile;
 -- SQL section 'Down' is executed when this migration is rolled back
-

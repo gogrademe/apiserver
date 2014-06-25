@@ -14,7 +14,7 @@ var (
 )
 
 type User struct {
-	Id             int64
+	ID             int64
 	Email          string
 	EmailLower     string `db:"email_lower"`
 	HashedPassword []byte `db:"hashed_password"`
@@ -28,7 +28,7 @@ type User struct {
 func (a *User) CreateToken() (string, error) {
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 
-	token.Claims["Id"] = a.Id
+	token.Claims["Id"] = a.ID
 	token.Claims["Email"] = a.Email
 	token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
