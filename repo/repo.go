@@ -1,4 +1,4 @@
-package database
+package repo
 
 import (
 	"errors"
@@ -16,6 +16,18 @@ var (
 
 const testAddress = "localhost:28015"
 const testDBName = "test_goGrade"
+
+var (
+	Students StudentsRepo
+	Classes  ClassRepo
+	People   PersonRepo
+)
+
+func InitRepos() {
+	Students = NewStudentsRepo()
+	Classes = NewClassRepo()
+	People = NewPersonRepo()
+}
 
 // Connect establishes connection with rethinkDB
 func Connect(address, database string) error {
@@ -59,15 +71,15 @@ func createDatabase() {
 
 func createTables() {
 	log.Println("CreateTables")
-	r.Db(dbName).TableCreate("users", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("classes", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("classTerms", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("assignments", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("people", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("students", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("teachers", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("parents", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("sessions", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("users", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("classes", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("classTerms", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("assignments", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("people", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("students", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("teachers", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("parents", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("sessions", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
 	log.Println("CreateTablesDone")
 	return
 }

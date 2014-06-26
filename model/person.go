@@ -5,13 +5,21 @@ import (
 )
 
 type Person struct {
-	ID         string            `gorethink:"id,omitempty"json:"id"`
-	FirstName  string            `gorethink:"firstName"json:"firstName"`
-	MiddleName string            `gorethink:"middleName"json:"middleName"`
-	LastName   string            `gorethink:"lastName"json:"lastName"`
-	Profiles   map[string]string `gorethink:"profiles,omitempty"json:"profiles,omitempty"`
+	ID         string   `gorethink:"id,omitempty"json:"id"`
+	FirstName  string   `gorethink:"firstName"json:"firstName"`
+	MiddleName string   `gorethink:"middleName"json:"middleName"`
+	LastName   string   `gorethink:"lastName"json:"lastName"`
+	Profiles   Profiles `gorethink:"profiles"json:"profiles"`
 	TimeStamp
 }
+
+type Profiles struct {
+	StudentID string `gorethink:"studentId"json:"studentId"`
+	TeacherID string `gorethink:"teacherId"json:"teacherId"`
+	ParentID  string `gorethink:"parentId"json:"parentId"`
+}
+
+// map[string]string `gorethink:"profiles,omitempty"json:"profiles,omitempty"`
 
 func (p *Person) FieldMap() binding.FieldMap {
 	return binding.FieldMap{

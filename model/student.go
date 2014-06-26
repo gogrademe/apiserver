@@ -6,7 +6,7 @@ import (
 
 type Student struct {
 	ID         string `gorethink:"id,omitempty"json:"id"`
-	PersonID   string `gorethink:"personID"json:"personId"`
+	PersonID   string `gorethink:"personId"json:"personId"`
 	GradeLevel string `gorethink:"gradeLevel"json:"gradeLevel"`
 	TimeStamp
 }

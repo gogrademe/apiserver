@@ -1,13 +1,19 @@
-package database
+package repo
 
 import (
 	// "errors"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
-	"log"
 )
 
-func CreatePerson(p *m.Person) error {
+type PersonRepo struct {
+}
+
+func NewPersonRepo() PersonRepo {
+	return PersonRepo{}
+}
+
+func (pr *PersonRepo) Store(p *m.Person) error {
 	res, err := r.Table("people").Insert(p).RunWrite(sess)
 	if err != nil {
 		return err
@@ -23,8 +29,8 @@ func CreatePeople(p []m.Person) error {
 	return nil
 }
 
-func UpdatePerson(p m.Person) error {
-	_, err := r.Table("people").Insert(p).RunWrite(sess)
+func (pr *PersonRepo) Update(p *m.Person) error {
+	_, err := r.Table("people").Get(p.ID).Update(p).RunWrite(sess)
 	if err != nil {
 		return err
 	}
@@ -32,15 +38,15 @@ func UpdatePerson(p m.Person) error {
 }
 
 // GetAllPeople Return all people without their profiles.
-func GetAllPeople() ([]m.Person, error) {
+func (pr *PersonRepo) FindAll() ([]m.Person, error) {
 	people := []m.Person{}
 	query := r.Table("people")
 	// FIXME: Very expensive!
 	query = query.Map(func(row r.RqlTerm) interface{} {
 		return row.Merge(map[string]interface{}{
 			"profiles": map[string]interface{}{
-				"student": r.Table("students").Filter(func(s r.RqlTerm) r.RqlTerm {
-					return s.Field("personID").Eq(row.Field("id"))
+				"studentId": r.Table("students").Filter(func(s r.RqlTerm) r.RqlTerm {
+					return s.Field("personId").Eq(row.Field("id"))
 				}).CoerceTo("ARRAY").Map(func(s r.RqlTerm) interface{} {
 					return s.Field("id")
 				}).Nth(0).Default(""),
@@ -52,8 +58,6 @@ func GetAllPeople() ([]m.Person, error) {
 		return nil, err
 	}
 
-	log.Print(rows)
-
 	err = rows.ScanAll(&people)
 	if err != nil {
 		return nil, err
@@ -63,7 +67,7 @@ func GetAllPeople() ([]m.Person, error) {
 }
 
 // GetPerson get's a single person with it's profile(s)
-func GetPerson(id string) (*m.Person, error) {
+func (pr *PersonRepo) FindById(id string) (*m.Person, error) {
 	var p m.Person
 
 	row, err := r.Table("people").Get(id).RunRow(sess)

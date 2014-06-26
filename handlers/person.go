@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	d "github.com/Lanciv/GoGradeAPI/repo"
 	m "github.com/Lanciv/GoGradeAPI/model"
+	"github.com/Lanciv/GoGradeAPI/repo"
 	"github.com/gorilla/mux"
 	"github.com/mholt/binding"
 
@@ -18,7 +18,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 		writeError(w, errs, 400, nil)
 		return
 	}
-	err := d.CreatePerson(p)
+	err := repo.People.Store(p)
 
 	if err != nil {
 		writeError(w, "Error creating Person", 500, err)
@@ -35,7 +35,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
 
-	p, err := d.GetPerson(pID)
+	p, err := repo.People.FindById(pID)
 	if err != nil {
 		writeError(w, serverError, 400, nil)
 		return
@@ -52,7 +52,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 // GetAllPeople returns all people without their profiles.
 func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 
-	people, err := d.GetAllPeople()
+	people, err := repo.People.FindAll()
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	m "github.com/Lanciv/GoGradeAPI/model"
-	d "github.com/Lanciv/GoGradeAPI/repo"
+	"github.com/Lanciv/GoGradeAPI/repo"
 	"github.com/mholt/binding"
 
 	"net/http"
@@ -11,7 +11,7 @@ import (
 // GetAllClasses returns all classes, doesn't take in any params
 func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 
-	classes, err := d.GetAllClasses()
+	classes, err := repo.Classes.FindAll()
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return
@@ -30,7 +30,7 @@ func CreateClass(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := d.CreateClass(c)
+	err := repo.Classes.Store(c)
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return

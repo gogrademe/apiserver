@@ -1,4 +1,4 @@
-package database
+package repo
 
 import (
 	// m "github.com/Lanciv/GoGradeAPI/model"

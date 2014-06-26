@@ -24,11 +24,11 @@ func main() {
 	flag.BoolVar(&testData, "testData", true, "")
 	flag.Parse()
 
-	if err := database.Connect(address, dbName); err != nil {
+	if err := repo.Connect(address, dbName); err != nil {
 		log.Fatalln("Error setting up database: ", err)
 	}
 
-	database.SetupDB(testData)
+	repo.SetupDB(testData)
 	n := negroni.New()
 	n.Use(negronilogrus.NewMiddleware())
 	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
