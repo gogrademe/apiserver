@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	d "github.com/Lanciv/GoGradeAPI/database"
+	d "github.com/Lanciv/GoGradeAPI/repo"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/gorilla/mux"
 	"github.com/mholt/binding"
@@ -15,13 +15,13 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 
 	errs := binding.Bind(r, p)
 	if errs != nil {
-		writeError(w, errs, 400)
+		writeError(w, errs, 400, nil)
 		return
 	}
 	err := d.CreatePerson(p)
 
 	if err != nil {
-		writeError(w, "Error creating Person", 500)
+		writeError(w, "Error creating Person", 500, err)
 		return
 	}
 
@@ -37,11 +37,11 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 
 	p, err := d.GetPerson(pID)
 	if err != nil {
-		writeError(w, serverError, 400)
+		writeError(w, serverError, 400, nil)
 		return
 	}
 	if p == nil {
-		writeError(w, notFoundError, 404)
+		writeError(w, notFoundError, 404, nil)
 		return
 	}
 
@@ -54,7 +54,7 @@ func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 
 	people, err := d.GetAllPeople()
 	if err != nil {
-		writeError(w, serverError, 500)
+		writeError(w, serverError, 500, err)
 		return
 	}
 

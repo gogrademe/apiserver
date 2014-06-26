@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"github.com/Lanciv/GoGradeAPI/database"
 	h "github.com/Lanciv/GoGradeAPI/handlers"
+	"github.com/Lanciv/GoGradeAPI/repo"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/meatballhat/negroni-logrus"

@@ -59,15 +59,15 @@ func createDatabase() {
 
 func createTables() {
 	log.Println("CreateTables")
-	r.Db(dbName).TableCreate("users").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("classes").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("classTerms").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("assignments").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("people").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("students").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("teachers").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("parents").Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("sessions").Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("users", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("classes", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("classTerms", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("assignments", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("people", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("students", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("teachers", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("parents", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("sessions", r.TableCreateOpts{Durability:"soft"}).Run(sess, r.RunOpts{NoReply: true})
 	log.Println("CreateTablesDone")
 	return
 }
@@ -81,8 +81,9 @@ func createIndexes() {
 
 func insertTestData() {
 	log.Println("InsertTestData")
+	log.Println("Create User")
 	CreateUser("test@test.com", "somePassword", "Admin")
-
+	log.Println("Create People")
 	createTestPeople()
 	log.Println("TestDataDone")
 	return

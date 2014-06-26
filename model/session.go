@@ -14,12 +14,11 @@ type Session struct {
 }
 
 // Create a token for the user after we verified their password.
-// TODO: Store this in a db? This would be helpful if we would like to invalidate a login.
 func NewSession(u User) (Session, error) {
 	var s Session
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 
-	tokenExpires := time.Now().Add(time.Hour * 72)
+	tokenExpires := time.Now().UTC().Add(time.Hour * 72)
 	token.Claims["id"] = u.ID
 	token.Claims["email"] = u.Email
 	token.Claims["exp"] = tokenExpires.Unix()

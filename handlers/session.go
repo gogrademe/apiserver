@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"errors"
-	d "github.com/Lanciv/GoGradeAPI/database"
+	d "github.com/Lanciv/GoGradeAPI/repo"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/mholt/binding"
@@ -30,25 +30,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	errs := binding.Bind(r, lf)
 	if errs != nil {
-		writeError(w, errs, 400)
+		writeError(w, errs, 400, nil)
 		return
 	}
 
 	user, err := d.GetUserEmail(lf.Email)
 	if err != nil {
-		writeError(w, ErrLoginFailed, http.StatusUnauthorized)
+		writeError(w, ErrLoginFailed, http.StatusUnauthorized, err)
 		return
 	}
 
 	if err := user.ComparePassword(lf.Password); err != nil {
-		writeError(w, ErrLoginFailed, http.StatusUnauthorized)
+		writeError(w, ErrLoginFailed, http.StatusUnauthorized, nil)
 		return
 	}
 
 	// Create a session for the user.
 	session, err := m.NewSession(user)
 	if err != nil {
-		writeError(w, serverError, 500)
+		writeError(w, serverError, 500, err)
 		return
 	}
 
@@ -64,7 +64,7 @@ func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.Re
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {
-			writeError(w, "Access denied.", http.StatusUnauthorized)
+			writeError(w, "Access denied.", http.StatusUnauthorized, nil)
 			return
 		}
 		handler(w, r)

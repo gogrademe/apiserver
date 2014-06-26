@@ -13,6 +13,7 @@ type Student struct {
 
 func (s *Student) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
+		&s.ID:         field("id", false),
 		&s.PersonID:   field("personId", true),
 		&s.GradeLevel: field("gradeLevel", true),
 	}

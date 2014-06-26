@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,12 +19,13 @@ const serverError = "server error"
 const notFoundError = "not found"
 
 // writeError will write a JSON error to the client.
-func writeError(w http.ResponseWriter, message interface{}, code int) {
+func writeError(w http.ResponseWriter, message interface{}, code int, errorToLog error) {
+	log.Println("Friendly Message: ", message, " Raw Error: ", errorToLog)
 	e := &APIRes{
 		"error": []APIError{
 			APIError{
 				Code:    code,
-				Message: fmt.Sprintf("%s", message),
+				Message: message,
 			},
 		},
 	}

@@ -1,29 +1,34 @@
 package database
 
 import (
-	// "errors"
+	"errors"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 )
 
-//StudentProfileForPerson Get's a student profile from a Person.ID
-// func StudentProfileForPerson(id int) (*m.Student, error) {
-// 	var s m.Student
-//
-// 	err := db.Get(&s, studentGetForPerson, id)
-//
-// 	if err != nil {
-// 		return &s, err
-// 	}
-// 	return &s, nil
-// }
+type StudentRepo struct {
+}
 
 func CreateStudent(s *m.Student) error {
+	var p *m.Person
+	p, err := GetPerson(s.PersonID)
+	if err != nil {
+		return err
+	}
+	if p == nil {
+		return errors.New("person doesn't exist")
+	}
+	if p.Profiles["Student"] != "" {
+		return errors.New("student for person already exists.")
+	}
 	res, err := r.Table("students").Insert(s).RunWrite(sess)
 	if err != nil {
 		return err
 	}
 	s.ID = res.GeneratedKeys[0]
+
+	p.Profiles["Student"] = s.ID
+	err = UpdatePerson(p)
 
 	return nil
 }

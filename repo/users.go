@@ -23,23 +23,25 @@ func userExist(email string) bool {
 
 // CreateUser will create a user with a email, password and role.
 func CreateUser(email string, password string, role string) (*m.User, error) {
+	log.Println("1")
 	u := m.NewUser(email, role)
 
 	err := u.SetPassword(password)
 	if err != nil {
 		return nil, err
 	}
-
+	log.Println("2")
 	u.UpdateTime()
 
 	if userExist(email) {
 		return nil, ErrUserAlreadyExists
 	}
-
+	log.Println("3")
 	res, err := r.Table("users").Insert(u).RunWrite(sess)
 	if err != nil {
 		return nil, err
 	}
+	log.Println("4")
 	u.ID = res.GeneratedKeys[0]
 
 	return u, nil

@@ -2,9 +2,8 @@ package model
 
 import (
 	"code.google.com/p/go.crypto/bcrypt"
-	"errors"
 
-	// 	"log"
+	"errors"
 	"strings"
 )
 
@@ -48,7 +47,7 @@ func (u *User) SetPassword(password string) error {
 	if err != nil {
 		return err
 	}
-	//
+
 	u.HashedPassword = string(b)
 
 	return nil

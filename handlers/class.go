@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"fmt"
-	d "github.com/Lanciv/GoGradeAPI/database"
 	m "github.com/Lanciv/GoGradeAPI/model"
+	d "github.com/Lanciv/GoGradeAPI/repo"
+	"github.com/mholt/binding"
+
 	"net/http"
 )
 
@@ -12,7 +13,7 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 
 	classes, err := d.GetAllClasses()
 	if err != nil {
-		writeError(w, serverError, 500)
+		writeError(w, serverError, 500, err)
 		return
 	}
 
@@ -21,10 +22,20 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateClass(w http.ResponseWriter, r *http.Request) {
-	var class m.Class
+	c := new(m.Class)
 
-	if readJSON(r, &class) {
-		fmt.Println(class)
+	errs := binding.Bind(r, c)
+	if errs != nil {
+		writeError(w, errs, 400, nil)
+		return
 	}
 
+	err := d.CreateClass(c)
+	if err != nil {
+		writeError(w, serverError, 500, err)
+		return
+	}
+
+	writeJSON(w, &APIRes{"class": c})
+	return
 }
