@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	d "github.com/Lanciv/GoGradeAPI/repo"
+	d "github.com/Lanciv/GoGradeAPI/store"
 	// "github.com/Lanciv/GoGradeAPI/model"
 
 	"net/http"

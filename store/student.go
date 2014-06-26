@@ -1,4 +1,4 @@
-package repo
+package store
 
 import (
 	// "errors"
@@ -6,14 +6,14 @@ import (
 	r "github.com/dancannon/gorethink"
 )
 
-type StudentsRepo struct {
+type StudentsStore struct {
 }
 
-func NewStudentsRepo() StudentsRepo {
-	return StudentsRepo{}
+func NewStudentsStore() StudentsStore {
+	return StudentsStore{}
 }
 
-func (sr *StudentsRepo) Store(s *m.Student) error {
+func (sr *StudentsStore) Store(s *m.Student) error {
 	res, err := r.Table("students").Insert(s).RunWrite(sess)
 	if err != nil {
 		return err

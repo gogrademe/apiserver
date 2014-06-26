@@ -9,11 +9,11 @@ MAINTAINER SvenDowideit@docker.com
 # It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
 
-# Add PostgreSQL's repository. It contains the most recent stable release
+# Add PostgreSQL's storesitory. It contains the most recent stable release
 #     of PostgreSQL, ``9.3``.
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN echo "deb http://apt.postgresql.org/pub/stores/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 
-# Update the Ubuntu and PostgreSQL repository indexes
+# Update the Ubuntu and PostgreSQL storesitory indexes
 RUN apt-get update
 
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.3

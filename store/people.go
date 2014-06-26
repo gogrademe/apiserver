@@ -1,4 +1,4 @@
-package repo
+package store
 
 import (
 	// "errors"
@@ -6,14 +6,14 @@ import (
 	r "github.com/dancannon/gorethink"
 )
 
-type PersonRepo struct {
+type PersonStore struct {
 }
 
-func NewPersonRepo() PersonRepo {
-	return PersonRepo{}
+func NewPersonStore() PersonStore {
+	return PersonStore{}
 }
 
-func (pr *PersonRepo) Store(p *m.Person) error {
+func (pr *PersonStore) Store(p *m.Person) error {
 	res, err := r.Table("people").Insert(p).RunWrite(sess)
 	if err != nil {
 		return err
@@ -29,7 +29,7 @@ func CreatePeople(p []m.Person) error {
 	return nil
 }
 
-func (pr *PersonRepo) Update(p *m.Person) error {
+func (pr *PersonStore) Update(p *m.Person) error {
 	_, err := r.Table("people").Get(p.ID).Update(p).RunWrite(sess)
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func (pr *PersonRepo) Update(p *m.Person) error {
 }
 
 // GetAllPeople Return all people without their profiles.
-func (pr *PersonRepo) FindAll() ([]m.Person, error) {
+func (pr *PersonStore) FindAll() ([]m.Person, error) {
 	people := []m.Person{}
 	query := r.Table("people")
 	// FIXME: Very expensive!
@@ -67,7 +67,7 @@ func (pr *PersonRepo) FindAll() ([]m.Person, error) {
 }
 
 // GetPerson get's a single person with it's profile(s)
-func (pr *PersonRepo) FindById(id string) (*m.Person, error) {
+func (pr *PersonStore) FindById(id string) (*m.Person, error) {
 	var p m.Person
 
 	row, err := r.Table("people").Get(id).RunRow(sess)

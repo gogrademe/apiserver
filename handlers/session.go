@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"errors"
-	d "github.com/Lanciv/GoGradeAPI/repo"
+	d "github.com/Lanciv/GoGradeAPI/store"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/mholt/binding"

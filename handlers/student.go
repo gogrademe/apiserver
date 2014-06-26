@@ -2,7 +2,7 @@ package handlers
 
 import (
 	m "github.com/Lanciv/GoGradeAPI/model"
-	"github.com/Lanciv/GoGradeAPI/repo"
+	"github.com/Lanciv/GoGradeAPI/store"
 	"github.com/mholt/binding"
 	"net/http"
 )
@@ -17,7 +17,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := repo.Students.Store(s)
+	err := store.Students.Store(s)
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return

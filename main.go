@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	h "github.com/Lanciv/GoGradeAPI/handlers"
-	"github.com/Lanciv/GoGradeAPI/repo"
+	"github.com/Lanciv/GoGradeAPI/store"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/meatballhat/negroni-logrus"
@@ -24,11 +24,11 @@ func main() {
 	flag.BoolVar(&testData, "testData", true, "")
 	flag.Parse()
 
-	if err := repo.Connect(address, dbName); err != nil {
+	if err := store.Connect(address, dbName); err != nil {
 		log.Fatalln("Error setting up database: ", err)
 	}
 
-	repo.SetupDB(testData)
+	store.SetupDB(testData)
 	n := negroni.New()
 	n.Use(negronilogrus.NewMiddleware())
 	n.Use(negroni.HandlerFunc(h.CORSMiddleware))

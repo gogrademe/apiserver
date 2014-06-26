@@ -1,4 +1,4 @@
-package repo
+package store
 
 import (
 	"errors"
@@ -18,15 +18,15 @@ const testAddress = "localhost:28015"
 const testDBName = "test_goGrade"
 
 var (
-	Students StudentsRepo
-	Classes  ClassRepo
-	People   PersonRepo
+	Students StudentsStore
+	Classes  ClassStore
+	People   PersonStore
 )
 
-func InitRepos() {
-	Students = NewStudentsRepo()
-	Classes = NewClassRepo()
-	People = NewPersonRepo()
+func InitStores() {
+	Students = NewStudentsStore()
+	Classes = NewClassStore()
+	People = NewPersonStore()
 }
 
 // Connect establishes connection with rethinkDB

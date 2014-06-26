@@ -1,18 +1,18 @@
-package repo
+package store
 
 import (
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 )
 
-type ClassRepo struct {
+type ClassStore struct {
 }
 
-func NewClassRepo() ClassRepo {
-	return ClassRepo{}
+func NewClassStore() ClassStore {
+	return ClassStore{}
 }
 
-func (sr *ClassRepo) Store(c *m.Class) error {
+func (sr *ClassStore) Store(c *m.Class) error {
 	res, err := r.Table("classes").Insert(c).RunWrite(sess)
 	if err != nil {
 		return err
@@ -21,7 +21,7 @@ func (sr *ClassRepo) Store(c *m.Class) error {
 
 	return nil
 }
-func (sr *ClassRepo) FindAll() ([]*m.Class, error) {
+func (sr *ClassStore) FindAll() ([]*m.Class, error) {
 	var c []*m.Class
 
 	rows, err := r.Table("classes").Run(sess)
