@@ -42,23 +42,23 @@ func (pr *PersonStore) FindAll() ([]m.Person, error) {
 	people := []m.Person{}
 	query := r.Table("people")
 	// FIXME: Very expensive!
-	query = query.Map(func(row r.RqlTerm) interface{} {
+	query = query.Map(func(row r.Term) interface{} {
 		return row.Merge(map[string]interface{}{
 			"profiles": map[string]interface{}{
-				"studentId": r.Table("students").Filter(func(s r.RqlTerm) r.RqlTerm {
+				"studentId": r.Table("students").Filter(func(s r.Term) r.Term {
 					return s.Field("personId").Eq(row.Field("id"))
-				}).CoerceTo("ARRAY").Map(func(s r.RqlTerm) interface{} {
+				}).CoerceTo("ARRAY").Map(func(s r.Term) interface{} {
 					return s.Field("id")
 				}).Nth(0).Default(""),
 			},
 		})
 	})
-	rows, err := query.Run(sess)
+	res, err := query.Run(sess)
 	if err != nil {
 		return nil, err
 	}
 
-	err = rows.ScanAll(&people)
+	err = res.All(&people)
 	if err != nil {
 		return nil, err
 	}
@@ -70,15 +70,15 @@ func (pr *PersonStore) FindAll() ([]m.Person, error) {
 func (pr *PersonStore) FindById(id string) (*m.Person, error) {
 	var p m.Person
 
-	row, err := r.Table("people").Get(id).RunRow(sess)
+	res, err := r.Table("people").Get(id).Run(sess)
 	if err != nil {
 		return &p, err
 	}
 
-	if row.IsNil() {
+	if res.IsNil() {
 		return nil, nil
 	}
 
-	row.Scan(&p)
+	res.One(&p)
 	return &p, nil
 }

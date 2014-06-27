@@ -29,7 +29,7 @@ func NewUserStore() UserStore {
 }
 
 func userExist(email string) bool {
-	row, _ := r.Table("users").Filter(r.Row.Field("email").Eq(email)).RunRow(sess)
+	row, _ := r.Table("users").Filter(r.Row.Field("email").Eq(email)).Run(sess)
 
 	return !row.IsNil()
 }
@@ -81,12 +81,12 @@ func (us *UserStore) Store(u *m.User) error {
 func (us *UserStore) FindByEmail(email string) (m.User, error) {
 	var u m.User
 
-	row, err := r.Table("users").Filter(r.Row.Field("email").Eq(email)).RunRow(sess)
+	res, err := r.Table("users").Filter(r.Row.Field("email").Eq(email)).Run(sess)
 	if err != nil {
 		return u, err
 	}
 
-	err = row.Scan(&u)
+	err = res.One(&u)
 	return u, nil
 
 }
@@ -95,14 +95,14 @@ func (us *UserStore) FindByEmail(email string) (m.User, error) {
 func (us *UserStore) FindAll() ([]m.User, error) {
 	users := []m.User{}
 
-	rows, err := r.Table("users").Run(sess)
+	res, err := r.Table("users").Run(sess)
 	if err != nil {
 		// Check to make sure this error is okay. (Not a connection error)
 		log.Println(err)
 		return nil, err
 	}
 
-	err = rows.ScanAll(&users)
+	err = res.All(&users)
 	if err != nil {
 		// Check to make sure this error is okay. (Not a connection error)
 		log.Println(err)
@@ -115,12 +115,12 @@ func (us *UserStore) FindAll() ([]m.User, error) {
 func GetUserByID(id string) (m.User, error) {
 	u := m.User{}
 
-	row, err := r.Table("users").Get(id).Run(sess)
+	res, err := r.Table("users").Get(id).Run(sess)
 	if err != nil {
 		return u, err
 	}
 
-	err = row.Scan(&u)
+	err = res.All(&u)
 	if err != nil {
 		return u, err
 	}

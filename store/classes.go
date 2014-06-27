@@ -24,12 +24,12 @@ func (sr *ClassStore) Store(c *m.Class) error {
 func (sr *ClassStore) FindAll() ([]*m.Class, error) {
 	var c []*m.Class
 
-	rows, err := r.Table("classes").Run(sess)
+	res, err := r.Table("classes").Run(sess)
 	if err != nil {
 		return nil, err
 	}
 
-	err = rows.ScanAll(&c)
+	err = res.All(&c)
 	return c, nil
 }
 
