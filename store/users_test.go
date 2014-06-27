@@ -1,7 +1,7 @@
 package store
 
 import (
-	// m "github.com/Lanciv/GoGradeAPI/model"
+	m "github.com/Lanciv/GoGradeAPI/model"
 	// "log"
 	"testing"
 )
@@ -36,7 +36,8 @@ func TestUserDatabase(t *testing.T) {
 	}
 
 	for i, user := range userTests {
-		_, err := CreateUser(user.email, user.password, user.role)
+		u, err := m.NewUser(user.email, user.password, user.role)
+		err = Users.Store(u)
 		if user.checkErr == nil {
 			if err != nil {
 				t.Errorf("Expected: nil error for user %v. Got: %s", i, err)

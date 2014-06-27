@@ -75,38 +75,41 @@ func createDatabase() {
 
 func createTables() {
 	log.Println("CreateTables")
-	r.Db(dbName).TableCreate("users", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("classes", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("classTerms", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("assignments", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("people", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("students", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("teachers", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("parents", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
-	r.Db(dbName).TableCreate("sessions", r.TableCreateOpts{Durability: "soft"}).Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).TableCreate("users").Run(sess)
+	r.Db(dbName).TableCreate("classes").Run(sess)
+	r.Db(dbName).TableCreate("classTerms").Run(sess)
+	r.Db(dbName).TableCreate("assignments").Run(sess)
+	r.Db(dbName).TableCreate("people").Run(sess)
+	r.Db(dbName).TableCreate("students").Run(sess)
+	r.Db(dbName).TableCreate("teachers").Run(sess)
+	r.Db(dbName).TableCreate("parents").Run(sess)
+	r.Db(dbName).TableCreate("sessions").Run(sess)
 	log.Println("CreateTablesDone")
 	return
 }
 
 func createIndexes() {
 	log.Println("CreateIndexes")
-	r.Db(dbName).Table("users").IndexCreate("email").Run(sess, r.RunOpts{NoReply: true})
+	r.Db(dbName).Table("users").IndexCreate("email").Run(sess)
 	log.Println("CreateIndexesDone")
 	return
 }
 
 func insertTestData() {
 	log.Println("InsertTestData")
-	log.Println("Create User")
-	CreateUser("test@test.com", "somePassword", "Admin")
-	log.Println("Create People")
-	createTestPeople()
+	insertTestUsers()
+	insertTestPeople()
 	log.Println("TestDataDone")
 	return
 }
+func insertTestUsers() {
+	log.Println("insertTestUsers")
+	u, _ := m.NewUser("test@test.com", "somePassword", "Admin")
+	Users.Store(u)
+}
 
-func createTestPeople() {
-	log.Println("CreatePeople")
+func insertTestPeople() {
+	log.Println("insertTestPeople")
 	CreatePeople([]m.Person{
 		m.Person{
 			FirstName:  "Jon",

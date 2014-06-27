@@ -34,7 +34,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.GetUserEmail(lf.Email)
+	user, err := s.Users.FindByEmail(lf.Email)
 	if err != nil {
 		writeError(w, ErrLoginFailed, http.StatusUnauthorized, err)
 		return
