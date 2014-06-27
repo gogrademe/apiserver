@@ -1,15 +1,16 @@
 package handlers
 
 import (
-	d "github.com/Lanciv/GoGradeAPI/store"
+	s "github.com/Lanciv/GoGradeAPI/store"
 	// "github.com/Lanciv/GoGradeAPI/model"
 
 	"net/http"
 )
 
+// GetAllUsers http endpoint to return all users.
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
-	users, err := d.GetAllUsers()
+	users, err := s.Users.FindAll()
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return

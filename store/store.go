@@ -21,12 +21,16 @@ var (
 	Students StudentsStore
 	Classes  ClassStore
 	People   PersonStore
+	Sessions SessionStore
+	Users    UserStore
 )
 
 func InitStores() {
 	Students = NewStudentsStore()
 	Classes = NewClassStore()
 	People = NewPersonStore()
+	Sessions = NewSessionStore()
+	Users = NewUserStore()
 }
 
 // Connect establishes connection with rethinkDB

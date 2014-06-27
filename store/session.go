@@ -5,8 +5,15 @@ import (
 	r "github.com/dancannon/gorethink"
 )
 
+type SessionStore struct {
+}
+
+func NewSessionStore() SessionStore {
+	return SessionStore{}
+}
+
 // CreateSession will create a session for a user.
-func SaveSession(s *m.Session) error {
+func (ss *SessionStore) Store(s *m.Session) error {
 	s.UpdateTime()
 
 	res, err := r.Table("sessions").Insert(s).RunWrite(sess)

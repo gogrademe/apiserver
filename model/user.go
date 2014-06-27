@@ -21,7 +21,7 @@ type User struct {
 	TimeStamp
 }
 
-func NewUser(email, role string) *User {
+func NewUser(email, password, role string) (*User, error) {
 
 	emailLower := strings.ToLower(email)
 
@@ -31,7 +31,12 @@ func NewUser(email, role string) *User {
 		Role:       role,
 	}
 
-	return &user
+	err := user.SetPassword(password)
+	if err != nil {
+		return nil, err
+	}
+	user.UpdateTime()
+	return &user, nil
 }
 
 func (u *User) SetPassword(password string) error {

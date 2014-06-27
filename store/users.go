@@ -13,7 +13,20 @@ var (
 
 	//ErrUserAlreadyExists err for duplicate user
 	ErrUserAlreadyExists = errors.New("User with email already exists.")
+
+	//ErrUserPasswordRequired err for trying to save without a password.
+	// TODO: Remove this after refactoring.
+	ErrUserPasswordRequired = errors.New("Password is required")
 )
+
+// UserStore used to interact with db users
+type UserStore struct {
+}
+
+// NewUserStore returns a UserStore.
+func NewUserStore() UserStore {
+	return UserStore{}
+}
 
 func userExist(email string) bool {
 	row, _ := r.Table("users").Filter(r.Row.Field("email").Eq(email)).RunRow(sess)
@@ -22,33 +35,50 @@ func userExist(email string) bool {
 }
 
 // CreateUser will create a user with a email, password and role.
-func CreateUser(email string, password string, role string) (*m.User, error) {
-	log.Println("1")
-	u := m.NewUser(email, role)
+// func CreateUser(email string, password string, role string) (*m.User, error) {
+// 	log.Println("1")
+// 	u := m.NewUser(email, role)
+//
+// 	err := u.SetPassword(password)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	log.Println("2")
+// 	u.UpdateTime()
+//
+// 	if userExist(email) {
+// 		return nil, ErrUserAlreadyExists
+// 	}
+// 	log.Println("3")
+// 	res, err := r.Table("users").Insert(u).RunWrite(sess)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	log.Println("4")
+// 	u.ID = res.GeneratedKeys[0]
+//
+// 	return u, nil
+// }
 
-	err := u.SetPassword(password)
-	if err != nil {
-		return nil, err
+// Store saves a user into the db
+func (us *UserStore) Store(u *m.User) error {
+	if u.HashedPassword == "" {
+		return ErrUserPasswordRequired
 	}
-	log.Println("2")
-	u.UpdateTime()
-
-	if userExist(email) {
-		return nil, ErrUserAlreadyExists
+	if userExist(u.Email) {
+		return ErrUserAlreadyExists
 	}
-	log.Println("3")
 	res, err := r.Table("users").Insert(u).RunWrite(sess)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	log.Println("4")
 	u.ID = res.GeneratedKeys[0]
 
-	return u, nil
+	return nil
 }
 
-// GetUserEmail return a single user that matches an email.
-func GetUserEmail(email string) (m.User, error) {
+// FindByEmail finds a single user that matches an email.
+func (us *UserStore) FindByEmail(email string) (m.User, error) {
 	var u m.User
 
 	row, err := r.Table("users").Filter(r.Row.Field("email").Eq(email)).RunRow(sess)
@@ -61,8 +91,8 @@ func GetUserEmail(email string) (m.User, error) {
 
 }
 
-// GetAllUsers return every user in the DB.
-func GetAllUsers() ([]m.User, error) {
+// FindAll return every user in the DB.
+func (us *UserStore) FindAll() ([]m.User, error) {
 	users := []m.User{}
 
 	rows, err := r.Table("users").Run(sess)

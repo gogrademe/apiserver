@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"errors"
-	d "github.com/Lanciv/GoGradeAPI/store"
 	m "github.com/Lanciv/GoGradeAPI/model"
+	s "github.com/Lanciv/GoGradeAPI/store"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/mholt/binding"
 	"net/http"
@@ -34,7 +34,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := d.GetUserEmail(lf.Email)
+	user, err := s.GetUserEmail(lf.Email)
 	if err != nil {
 		writeError(w, ErrLoginFailed, http.StatusUnauthorized, err)
 		return
@@ -52,7 +52,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	d.SaveSession(&session)
+	s.Sessions.Store(&session)
 	// Send token to the user so they can use it to to authenticate all further requests.
 	writeJSON(w, &APIRes{"session": []m.Session{session}})
 	return
