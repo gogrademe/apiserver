@@ -1,15 +1,15 @@
 package handlers
 
 import (
-	"errors"
+	"net/http"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	s "github.com/Lanciv/GoGradeAPI/store"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/mholt/binding"
-	"net/http"
 )
 
-var ErrLoginFailed = errors.New("Login Failed! Email and/or password incorrect.")
+var ErrLoginFailed = "Login Failed! Email and/or password incorrect."
 
 type LoginForm struct {
 	Email    string

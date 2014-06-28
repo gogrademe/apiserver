@@ -4,7 +4,6 @@ import (
 	"errors"
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
-	"log"
 )
 
 var (
@@ -34,37 +33,8 @@ func userExist(email string) bool {
 	return !row.IsNil()
 }
 
-// CreateUser will create a user with a email, password and role.
-// func CreateUser(email string, password string, role string) (*m.User, error) {
-// 	log.Println("1")
-// 	u := m.NewUser(email, role)
-//
-// 	err := u.SetPassword(password)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	log.Println("2")
-// 	u.UpdateTime()
-//
-// 	if userExist(email) {
-// 		return nil, ErrUserAlreadyExists
-// 	}
-// 	log.Println("3")
-// 	res, err := r.Table("users").Insert(u).RunWrite(sess)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	log.Println("4")
-// 	u.ID = res.GeneratedKeys[0]
-//
-// 	return u, nil
-// }
-
 // Store saves a user into the db
 func (us *UserStore) Store(u *m.User) error {
-	if u.HashedPassword == "" {
-		return ErrUserPasswordRequired
-	}
 	if userExist(u.Email) {
 		return ErrUserAlreadyExists
 	}
@@ -98,14 +68,12 @@ func (us *UserStore) FindAll() ([]m.User, error) {
 	res, err := r.Table("users").Run(sess)
 	if err != nil {
 		// Check to make sure this error is okay. (Not a connection error)
-		log.Println(err)
 		return nil, err
 	}
 
 	err = res.All(&users)
 	if err != nil {
 		// Check to make sure this error is okay. (Not a connection error)
-		log.Println(err)
 		return nil, err
 	}
 	return users, nil

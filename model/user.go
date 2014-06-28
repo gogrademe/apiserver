@@ -1,10 +1,10 @@
 package model
 
 import (
-	"code.google.com/p/go.crypto/bcrypt"
-
 	"errors"
 	"strings"
+
+	"code.google.com/p/go.crypto/bcrypt"
 )
 
 var (

@@ -2,13 +2,16 @@ package main
 
 import (
 	"flag"
+
 	h "github.com/Lanciv/GoGradeAPI/handlers"
 	"github.com/Lanciv/GoGradeAPI/store"
+	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/meatballhat/negroni-logrus"
-	"log"
 )
+
+var log = logrus.New()
 
 var (
 	apiPort  string
@@ -16,6 +19,11 @@ var (
 	dbName   string
 	testData bool
 )
+
+func init() {
+	log.Formatter = new(logrus.JSONFormatter)
+	log.Formatter = new(logrus.TextFormatter) // default
+}
 
 func main() {
 	flag.StringVar(&apiPort, "apiPort", ":5000", "")
@@ -25,7 +33,7 @@ func main() {
 	flag.Parse()
 
 	if err := store.Connect(address, dbName); err != nil {
-		log.Fatalln("Error setting up database: ", err)
+		log.Fatal("Error setting up database: ", err)
 	}
 
 	store.SetupDB(testData)
@@ -41,7 +49,7 @@ func main() {
 // setupHandlers loads all routes into gorillaMux.
 func setupHandlers() *mux.Router {
 	r := mux.NewRouter()
-	r.StrictSlash(true)
+	// r.StrictSlash(true)
 	m := r.PathPrefix("/api").Subrouter()
 
 	// Auth
@@ -58,6 +66,7 @@ func setupHandlers() *mux.Router {
 	m.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
 	m.HandleFunc("/person", h.AuthRequired(h.CreatePerson)).Methods("POST")
 	m.HandleFunc("/person/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
+	m.HandleFunc("/person/{id}", h.AuthRequired(h.UpdatePerson)).Methods("PUT")
 
 	// Students
 	m.HandleFunc("/student", h.AuthRequired(h.CreateStudent)).Methods("POST")

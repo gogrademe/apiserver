@@ -2,12 +2,14 @@ package store
 
 import (
 	"errors"
+	"time"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 	"log"
-	"time"
 )
 
+// var log = logrus.New()
 var (
 	sess        *r.Session
 	dbName      string
@@ -60,6 +62,7 @@ func SetupDB(testData bool) {
 	createIndexes()
 
 	if testData {
+		cleanTables()
 		insertTestData()
 	}
 	return
@@ -67,10 +70,12 @@ func SetupDB(testData bool) {
 
 func createDatabase() {
 	log.Println("DropDB")
-	r.DbDrop(dbName).RunWrite(sess)
+
+	// r.DbDrop(dbName).RunWrite(sess)
+
+	// log.Println(r.DbList().Run(sess))
 	log.Println("CreateDB")
 	r.DbCreate(dbName).RunWrite(sess)
-	return
 }
 
 func createTables() {
@@ -85,14 +90,24 @@ func createTables() {
 	r.Db(dbName).TableCreate("parents").Run(sess)
 	r.Db(dbName).TableCreate("sessions").Run(sess)
 	log.Println("CreateTablesDone")
-	return
+}
+
+func cleanTables() {
+	r.Table("users").Delete().Run(sess)
+	r.Table("classes").Delete().Run(sess)
+	r.Table("classTerms").Delete().Run(sess)
+	r.Table("assignments").Delete().Run(sess)
+	r.Table("people").Delete().Run(sess)
+	r.Table("students").Delete().Run(sess)
+	r.Table("teachers").Delete().Run(sess)
+	r.Table("parents").Delete().Run(sess)
+	r.Table("sessions").Delete().Run(sess)
 }
 
 func createIndexes() {
 	log.Println("CreateIndexes")
 	r.Db(dbName).Table("users").IndexCreate("email").Run(sess)
 	log.Println("CreateIndexesDone")
-	return
 }
 
 func insertTestData() {
@@ -100,7 +115,6 @@ func insertTestData() {
 	insertTestUsers()
 	insertTestPeople()
 	log.Println("TestDataDone")
-	return
 }
 func insertTestUsers() {
 	log.Println("insertTestUsers")

@@ -1,9 +1,9 @@
 package model
 
 import (
-	"github.com/mholt/binding"
-
 	"time"
+
+	"github.com/mholt/binding"
 )
 
 type TimeStamp struct {

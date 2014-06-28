@@ -1,8 +1,9 @@
 package model
 
 import (
-	jwt "github.com/dgrijalva/jwt-go"
 	"time"
+
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 type Session struct {

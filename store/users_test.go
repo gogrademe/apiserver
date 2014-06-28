@@ -2,13 +2,27 @@ package store
 
 import (
 	m "github.com/Lanciv/GoGradeAPI/model"
+	. "gopkg.in/check.v1"
 	// "log"
-	"testing"
 )
 
+// func (s *RethinkSuite) TestAggregationReduce(c *test.C) {
+// 	var response int
+// 	query := Expr(arr).Reduce(func(acc, val Term) Term {
+// 		return acc.Add(val)
+// 	})
+// 	res, err := query.Run(sess)
+// 	c.Assert(err, test.IsNil)
+//
+// 	err = res.One(&response)
+// 	c.Assert(err, test.IsNil)
+// 	c.Assert(response, test.Equals, 45)
+// }
+
 // TestUserDatabase verifies that a User can be saved and loaded from the database
-func TestUserDatabase(t *testing.T) {
-	var userTests = []struct {
+func (s *StoreSuite) TestUserStore(c *C) {
+	for i, t := range []struct {
+		summary    string
 		email      string
 		password   string
 		role       string
@@ -16,36 +30,29 @@ func TestUserDatabase(t *testing.T) {
 		checkErr   error
 	}{
 		{
+			summary:  "valid user",
 			email:    "test@test.com",
 			password: "somePassword",
 			role:     "Admin",
 		},
+		// {
+		// 	password: "somePassword",
+		// 	role:     "Admin",
+		// },
+		// {
+		// 	role: "Admin",
+		// },
 		{
-			password: "somePassword",
-			role:     "Admin",
-		},
-		{
-			role: "Admin",
-		},
-		{
+			summary:  "duplicate user",
 			email:    "test@test.com",
 			password: "somePassword",
 			role:     "Admin",
 			checkErr: ErrUserAlreadyExists,
 		},
-	}
-
-	for i, user := range userTests {
-		u, err := m.NewUser(user.email, user.password, user.role)
+	} {
+		u, err := m.NewUser(t.email, t.password, t.role)
 		err = Users.Store(u)
-		if user.checkErr == nil {
-			if err != nil {
-				t.Errorf("Expected: nil error for user %v. Got: %s", i, err)
-			}
-		} else {
-			if err != user.checkErr {
-				t.Errorf("Expected: %s for user %v. Got: %s", user.checkErr, i, err)
-			}
-		}
+		c.Logf("test %d: %s", i, t.summary)
+		c.Assert(err, Equals, t.checkErr)
 	}
 }

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -10,9 +9,17 @@ import (
 // APIError represents an error produced by the API
 type APIError struct {
 	Code    int         `json:"code"`
+	Type    string      `json:"type"`
 	Message interface{} `json:"message"`
+	Raw     string      `json:"-"`
 }
 
+// NotFoundErr should be used if a resource could not be found.
+var NotFoundErr = &APIError{
+	Code: 404,
+}
+
+// APIRes response from the API.
 type APIRes map[string]interface{}
 
 const serverError = "server error"
@@ -29,18 +36,30 @@ func writeError(w http.ResponseWriter, message interface{}, code int, errorToLog
 			},
 		},
 	}
-	data, err := json.MarshalIndent(e, "", "  ")
-	if err != nil {
-		log.Println(err.Error())
-		w.WriteHeader(500)
-		return
+	writeJSONWithHeader(w, e, code)
+	return
+}
+
+// writeAPIError will write a JSON error to the client.
+func writeAPIError(w http.ResponseWriter, apiErr *APIError) {
+	if apiErr.Code == 0 {
+		log.Println("ERROR CODE NOT SET USING 500", apiErr.Message, " Raw Error: ", apiErr.Raw)
+		apiErr.Code = 500
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(data)
+	log.Println("Friendly Message: ", apiErr.Message, " Raw Error: ", apiErr.Raw)
+	e := &APIRes{
+		"error": []APIError{
+			*apiErr,
+		},
+	}
+	writeJSONWithHeader(w, e, apiErr.Code)
 	return
 }
 func writeJSON(w http.ResponseWriter, v *APIRes) {
+	writeJSONWithHeader(w, v, 200)
+	return
+}
+func writeJSONWithHeader(w http.ResponseWriter, v *APIRes, code int) {
 	data, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		log.Printf("Error marshalling json: %v", err)
@@ -48,32 +67,7 @@ func writeJSON(w http.ResponseWriter, v *APIRes) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
 	w.Write(data)
 	return
-}
-
-/* https://github.com/DenverGophers/talks/blob/master/2013-04/mgo/example_6/read_json.go */
-
-// readJson will parses the JSON-encoded data in the http request and store the result in v
-func readJSON(r *http.Request, v interface{}) bool {
-	defer r.Body.Close()
-
-	var (
-		body []byte
-		err  error
-	)
-
-	body, err = ioutil.ReadAll(r.Body)
-
-	if err != nil {
-		log.Printf("ReadJson couldn't read request body %v", err)
-		return false
-	}
-
-	if err = json.Unmarshal(body, v); err != nil {
-		log.Printf("ReadJson couldn't parse request body %v", err)
-		return false
-	}
-
-	return true
 }

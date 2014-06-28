@@ -29,6 +29,31 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// UpdatePerson allows you to create a Person.
+func UpdatePerson(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	pID, _ := vars["id"]
+
+	p := new(m.Person)
+
+	errs := binding.Bind(r, p)
+	if errs != nil {
+		writeError(w, errs, 400, nil)
+		return
+	}
+
+	p.ID = pID
+	err := store.People.Update(p)
+
+	if err != nil {
+		writeError(w, "Error updating Person", 500, err)
+		return
+	}
+
+	writeJSON(w, &APIRes{"person": p})
+	return
+}
+
 // GetPerson will return a Person with all of their Profiles.
 func GetPerson(w http.ResponseWriter, r *http.Request) {
 

@@ -1,15 +1,15 @@
 package model
 
 import (
-	"github.com/mholt/binding"
-
 	"time"
+
+	"github.com/mholt/binding"
 )
 
 type Assignment struct {
 	ID        string    `gorethink:"id,omitempty"json:"id"`
 	Name      string    `gorethink:"name"json:"name"`
-	Type      string    `gorethink:"type"json:"tpe"`
+	Type      string    `gorethink:"type"json:"type"`
 	DueDate   time.Time `gorethink:"dueDate"json:"dueDate"`
 	ClassTerm string    `gorethink:"classTerm"json:"classTerm"`
 	TimeStamp
