@@ -21,7 +21,9 @@ func (ss *SessionStore) Store(s *m.Session) error {
 		return err
 	}
 
-	s.ID = res.GeneratedKeys[0]
+	if s.ID == "" && len(res.GeneratedKeys) == 1 {
+		s.ID = res.GeneratedKeys[0]
+	}
 
 	return nil
 }

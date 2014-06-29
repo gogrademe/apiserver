@@ -55,10 +55,12 @@ func writeAPIError(w http.ResponseWriter, apiErr *APIError) {
 	writeJSONWithHeader(w, e, apiErr.Code)
 	return
 }
+
 func writeJSON(w http.ResponseWriter, v *APIRes) {
 	writeJSONWithHeader(w, v, 200)
 	return
 }
+
 func writeJSONWithHeader(w http.ResponseWriter, v *APIRes, code int) {
 	data, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {

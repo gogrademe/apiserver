@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"net/http"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
+
+	"github.com/gorilla/mux"
 	"github.com/mholt/binding"
-	"net/http"
 )
 
 // CreateStudent allows you to create a Student.
@@ -28,40 +31,21 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetStudent will return a Student with all of their Profiles.
-// func GetStudent(w http.ResponseWriter, r *http.Request) {
-//
-// 	vars := mux.Vars(r)
-// 	pID, _ := vars["id"]
-// 	// if !ok {
-// 	// 	writeError(w, "Invalid Student ID", 400)
-// 	// 	return
-// 	// }
-// 	log.Println(pID)
-//
-// 	s, err := d.GetStudent(pID)
-// 	if err != nil {
-// 		writeError(w, serverError, 400)
-// 		return
-// 	}
-//
-// 	if s == nil {
-// 		writeError(w, notFoundError, 404)
-// 		return
-// 	}
-//
-// 	writeJSON(w, &APIRes{"person": s})
-// 	return
-// }
+func GetStudent(w http.ResponseWriter, r *http.Request) {
 
-// GetAllPeople returns all students without their profiles.
-// func GetAllPeople(w http.ResponseWriter, r *http.Request) {
-//
-// 	students, err := d.GetAllStudents()
-// 	if err != nil {
-// 		writeError(w, serverError, 500)
-// 		return
-// 	}
-//
-// 	writeJSON(w, &APIRes{"student": students})
-// 	return
-// }
+	vars := mux.Vars(r)
+	sID, _ := vars["id"]
+
+	p, err := store.Students.FindByID(sID)
+	if err != nil {
+		writeError(w, serverError, 500, nil)
+		return
+	}
+	if p == nil {
+		writeError(w, notFoundError, 404, nil)
+		return
+	}
+
+	writeJSON(w, &APIRes{"student": p})
+	return
+}

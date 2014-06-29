@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	"net/http"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 	"github.com/gorilla/mux"
 	"github.com/mholt/binding"
-
-	"net/http"
 )
 
 // CreatePerson allows you to create a Person.
@@ -15,15 +15,17 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 
 	errs := binding.Bind(r, p)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(w, errs, 500, nil)
 		return
 	}
-	err := store.People.Store(p)
 
+	id, err := store.People.Store(p)
 	if err != nil {
 		writeError(w, "Error creating Person", 500, err)
 		return
 	}
+
+	p.ID = id
 
 	writeJSON(w, &APIRes{"person": p})
 	return
@@ -60,9 +62,9 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
 
-	p, err := store.People.FindById(pID)
+	p, err := store.People.FindByID(pID)
 	if err != nil {
-		writeError(w, serverError, 400, nil)
+		writeError(w, serverError, 500, nil)
 		return
 	}
 	if p == nil {

@@ -26,7 +26,7 @@ func init() {
 }
 
 func main() {
-	flag.StringVar(&apiPort, "apiPort", ":5000", "")
+	flag.StringVar(&apiPort, "apiPort", ":5005", "")
 	flag.StringVar(&address, "dbAddress", "localhost:28015", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
 	flag.BoolVar(&testData, "testData", true, "")
@@ -37,6 +37,7 @@ func main() {
 	}
 
 	store.SetupDB(testData)
+
 	n := negroni.New()
 	n.Use(negronilogrus.NewMiddleware())
 	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
@@ -61,6 +62,7 @@ func setupHandlers() *mux.Router {
 	// Classes
 	m.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
 	m.HandleFunc("/class", h.AuthRequired(h.CreateClass)).Methods("POST")
+	m.HandleFunc("/class/{id}", h.AuthRequired(h.GetClass)).Methods("GET")
 
 	// People
 	m.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")

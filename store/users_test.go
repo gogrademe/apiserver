@@ -6,19 +6,6 @@ import (
 	// "log"
 )
 
-// func (s *RethinkSuite) TestAggregationReduce(c *test.C) {
-// 	var response int
-// 	query := Expr(arr).Reduce(func(acc, val Term) Term {
-// 		return acc.Add(val)
-// 	})
-// 	res, err := query.Run(sess)
-// 	c.Assert(err, test.IsNil)
-//
-// 	err = res.One(&response)
-// 	c.Assert(err, test.IsNil)
-// 	c.Assert(response, test.Equals, 45)
-// }
-
 // TestUserDatabase verifies that a User can be saved and loaded from the database
 func (s *StoreSuite) TestUserStore(c *C) {
 	for i, t := range []struct {
@@ -35,13 +22,6 @@ func (s *StoreSuite) TestUserStore(c *C) {
 			password: "somePassword",
 			role:     "Admin",
 		},
-		// {
-		// 	password: "somePassword",
-		// 	role:     "Admin",
-		// },
-		// {
-		// 	role: "Admin",
-		// },
 		{
 			summary:  "duplicate user",
 			email:    "test@test.com",

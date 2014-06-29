@@ -2,6 +2,7 @@ package store
 
 import (
 	"errors"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 )
@@ -42,7 +43,9 @@ func (us *UserStore) Store(u *m.User) error {
 	if err != nil {
 		return err
 	}
-	u.ID = res.GeneratedKeys[0]
+	if u.ID == "" && len(res.GeneratedKeys) == 1 {
+		u.ID = res.GeneratedKeys[0]
+	}
 
 	return nil
 }

@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	s "github.com/Lanciv/GoGradeAPI/store"
-	// "github.com/Lanciv/GoGradeAPI/model"
-
 	"net/http"
+
+	s "github.com/Lanciv/GoGradeAPI/store"
 )
 
 // GetAllUsers http endpoint to return all users.

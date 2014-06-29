@@ -2,33 +2,36 @@ package store
 
 import (
 	"errors"
+	"log"
 	"time"
 
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
-	"log"
 )
 
-// var log = logrus.New()
 var (
-	sess        *r.Session
-	dbName      string
-	errNotFound = errors.New("record not found")
+	sess   *r.Session
+	dbName string
 )
 
 const testAddress = "localhost:28015"
 const testDBName = "test_goGrade"
 
+//Errors
 var (
-	Students StudentsStore
+	ErrNotFound = errors.New("record not found")
+)
+
+var (
+	Students StudentStore
 	Classes  ClassStore
 	People   PersonStore
 	Sessions SessionStore
 	Users    UserStore
 )
 
-func InitStores() {
-	Students = NewStudentsStore()
+func init() {
+	Students = NewStudentStore()
 	Classes = NewClassStore()
 	People = NewPersonStore()
 	Sessions = NewSessionStore()
@@ -69,11 +72,6 @@ func SetupDB(testData bool) {
 }
 
 func createDatabase() {
-	log.Println("DropDB")
-
-	// r.DbDrop(dbName).RunWrite(sess)
-
-	// log.Println(r.DbList().Run(sess))
 	log.Println("CreateDB")
 	r.DbCreate(dbName).RunWrite(sess)
 }
@@ -124,7 +122,7 @@ func insertTestUsers() {
 
 func insertTestPeople() {
 	log.Println("insertTestPeople")
-	CreatePeople([]m.Person{
+	People.StoreMany([]m.Person{
 		m.Person{
 			FirstName:  "Jon",
 			MiddleName: "David",

@@ -29,3 +29,20 @@ func field(form string, required bool) binding.Field {
 		Required: required,
 	}
 }
+
+// type Model interface{}
+
+type Model interface {
+	// ID string
+	// Validate() error
+}
+
+// type Person struct {
+// 	// Some other fields.
+// 	FirstName string
+// 	LastName  string
+// }
+
+// func (p *Person) Validate() error {
+// 	return nil
+// }

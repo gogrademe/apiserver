@@ -6,42 +6,37 @@ import (
 	r "github.com/dancannon/gorethink"
 )
 
-type StudentsStore struct {
+type StudentStore struct {
 }
 
-func NewStudentsStore() StudentsStore {
-	return StudentsStore{}
+func NewStudentStore() StudentStore {
+	return StudentStore{}
 }
 
-func (sr *StudentsStore) Store(s *m.Student) error {
+func (sr *StudentStore) Store(s *m.Student) error {
 	res, err := r.Table("students").Insert(s).RunWrite(sess)
 	if err != nil {
 		return err
 	}
-	s.ID = res.GeneratedKeys[0]
+	if s.ID == "" && len(res.GeneratedKeys) == 1 {
+		s.ID = res.GeneratedKeys[0]
+	}
 	return nil
 }
 
-// func CreateStudent(s *m.Student) error {
-// 	var p *m.Person
-// 	p, err := GetPerson(s.PersonID)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	if p == nil {
-// 		return errors.New("person doesn't exist")
-// 	}
-// 	if p.Profiles["Student"] != "" {
-// 		return errors.New("student for person already exists.")
-// 	}
-// 	res, err := r.Table("students").Insert(s).RunWrite(sess)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	s.ID = res.GeneratedKeys[0]
-//
-// 	p.Profiles["Student"] = s.ID
-// 	err = UpdatePerson(p)
-//
-// 	return nil
-// }
+// FindByID get's a single student with it's profile(s)
+func (pr *StudentStore) FindByID(id string) (*m.Student, error) {
+	var p m.Student
+
+	res, err := r.Table("student").Get(id).Run(sess)
+	if err != nil {
+		return &p, err
+	}
+
+	if res.IsNil() {
+		return nil, nil
+	}
+
+	res.One(&p)
+	return &p, nil
+}
