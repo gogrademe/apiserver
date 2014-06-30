@@ -6,9 +6,18 @@ import (
 
 type Student struct {
 	ID         string `gorethink:"id,omitempty"json:"id"`
-	PersonID   string `gorethink:"personId"json:"personId"`
-	GradeLevel string `gorethink:"gradeLevel"json:"gradeLevel"`
+	PersonID   string `gorethink:"personId,omitempty"json:"personId"`
+	GradeLevel string `gorethink:"gradeLevel,omitempty"json:"gradeLevel"`
 	TimeStamp
+}
+
+func (s *Student) Validate() *ValErrors {
+	var v *ValErrors
+
+	v.RequiredString(s.PersonID, "personId")
+	v.RequiredString(s.GradeLevel, "gradeLevel")
+
+	return v
 }
 
 func (s *Student) FieldMap() binding.FieldMap {

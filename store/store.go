@@ -2,45 +2,56 @@ package store
 
 import (
 	"errors"
-	"log"
 	"time"
 
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
 )
 
-var (
-	sess   *r.Session
-	dbName string
-)
-
 const testAddress = "localhost:28015"
 const testDBName = "test_goGrade"
 
-//Errors
 var (
-	ErrNotFound = errors.New("record not found")
-)
+	// DB
+	sess   *r.Session
+	dbName string
 
-var (
+	// Tables
+	Parents  ParentStore
+	Teachers TeacherStore
 	Students StudentStore
-	Classes  ClassStore
-	People   PersonStore
+
+	Classes    ClassStore
+	ClassTerms ClassTermStore
+	People     PersonStore
+
 	Sessions SessionStore
 	Users    UserStore
+
+	// Errors
+	ErrNotFound   = errors.New("record not found")
+	ErrValidation = errors.New("validation error")
 )
 
 func init() {
-	Students = NewStudentStore()
-	Classes = NewClassStore()
+	// People
 	People = NewPersonStore()
+	Teachers = NewTeacherStore()
+	Parents = NewParentStore()
+	Students = NewStudentStore()
+
+	// Classes
+	Classes = NewClassStore()
+	ClassTerms = NewClassTermStore()
+
+	// Users/Auth
 	Sessions = NewSessionStore()
 	Users = NewUserStore()
 }
 
 // Connect establishes connection with rethinkDB
 func Connect(address, database string) error {
-	log.Println("Connecting")
+
 	dbName = database
 	var err error
 	sess, err = r.Connect(r.ConnectOpts{
@@ -52,14 +63,13 @@ func Connect(address, database string) error {
 	if err != nil {
 		return err
 	}
-	// createTables()
-	log.Println("Connected")
+
 	return nil
 }
 
 // SetupDB will be used to bootstrap the DB
 func SetupDB(testData bool) {
-	log.Println("SetupDB")
+
 	createDatabase()
 	createTables()
 	createIndexes()
@@ -68,16 +78,14 @@ func SetupDB(testData bool) {
 		cleanTables()
 		insertTestData()
 	}
-	return
 }
 
 func createDatabase() {
-	log.Println("CreateDB")
+
 	r.DbCreate(dbName).RunWrite(sess)
 }
 
 func createTables() {
-	log.Println("CreateTables")
 	r.Db(dbName).TableCreate("users").Run(sess)
 	r.Db(dbName).TableCreate("classes").Run(sess)
 	r.Db(dbName).TableCreate("classTerms").Run(sess)
@@ -87,7 +95,7 @@ func createTables() {
 	r.Db(dbName).TableCreate("teachers").Run(sess)
 	r.Db(dbName).TableCreate("parents").Run(sess)
 	r.Db(dbName).TableCreate("sessions").Run(sess)
-	log.Println("CreateTablesDone")
+
 }
 
 func cleanTables() {
@@ -103,26 +111,77 @@ func cleanTables() {
 }
 
 func createIndexes() {
-	log.Println("CreateIndexes")
+
 	r.Db(dbName).Table("users").IndexCreate("email").Run(sess)
-	log.Println("CreateIndexesDone")
+
 }
 
 func insertTestData() {
-	log.Println("InsertTestData")
+
 	insertTestUsers()
-	insertTestPeople()
-	log.Println("TestDataDone")
+	peopleIds := insertTestPeople()
+	insertTestStudents(peopleIds)
+	insertTestTeachers(peopleIds)
+	insertTestClasses()
+
 }
 func insertTestUsers() {
-	log.Println("insertTestUsers")
+
 	u, _ := m.NewUser("test@test.com", "somePassword", "Admin")
 	Users.Store(u)
 }
 
-func insertTestPeople() {
-	log.Println("insertTestPeople")
-	People.StoreMany([]m.Person{
+func insertTestClasses() {
+	for _, c := range []m.Class{
+		m.Class{
+			Name:       "Algebra II",
+			Subject:    "Math",
+			GradeLevel: "12th",
+		},
+		m.Class{
+			Name:       "Geography",
+			Subject:    "Social Studies",
+			GradeLevel: "12th",
+		},
+		m.Class{
+			Name:       "Economics",
+			Subject:    "Social Studies",
+			GradeLevel: "12th",
+		},
+		m.Class{
+			Name:       "Writing",
+			Subject:    "Language Arts",
+			GradeLevel: "8th",
+		},
+		m.Class{
+			Name:       "Reading",
+			Subject:    "Language Arts",
+			GradeLevel: "9th",
+		},
+	} {
+		Classes.Store(&c)
+	}
+}
+
+func insertTestStudents(peopleIds []string) {
+	for _, id := range peopleIds {
+		Students.Store(&m.Student{
+			PersonID:   id,
+			GradeLevel: "12th",
+		})
+	}
+}
+func insertTestTeachers(peopleIds []string) {
+	for _, id := range peopleIds {
+		Teachers.Store(&m.Teacher{
+			PersonID: id,
+			Email:    "test@test.com",
+		})
+	}
+}
+func insertTestPeople() []string {
+
+	ids, _ := People.StoreMany([]m.Person{
 		m.Person{
 			FirstName:  "Jon",
 			MiddleName: "David",
@@ -158,6 +217,6 @@ func insertTestPeople() {
 			LastName:  "Heredia",
 		},
 	})
-	log.Println("CreatePeopleDone")
-	return
+
+	return ids
 }

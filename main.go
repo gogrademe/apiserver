@@ -7,7 +7,6 @@ import (
 	"github.com/Lanciv/GoGradeAPI/store"
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
-	"github.com/gorilla/mux"
 	"github.com/meatballhat/negroni-logrus"
 )
 
@@ -41,36 +40,8 @@ func main() {
 	n := negroni.New()
 	n.Use(negronilogrus.NewMiddleware())
 	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
-	n.UseHandler(setupHandlers())
+	n.UseHandler(h.SetupHandlers())
 
 	n.Run(apiPort)
 
-}
-
-// setupHandlers loads all routes into gorillaMux.
-func setupHandlers() *mux.Router {
-	r := mux.NewRouter()
-	// r.StrictSlash(true)
-	m := r.PathPrefix("/api").Subrouter()
-
-	// Auth
-	m.HandleFunc("/session", h.Login).Methods("POST")
-
-	// Users
-	m.HandleFunc("/user", h.AuthRequired(h.GetAllUsers)).Methods("GET")
-
-	// Classes
-	m.HandleFunc("/class", h.AuthRequired(h.GetAllClasses)).Methods("GET")
-	m.HandleFunc("/class", h.AuthRequired(h.CreateClass)).Methods("POST")
-	m.HandleFunc("/class/{id}", h.AuthRequired(h.GetClass)).Methods("GET")
-
-	// People
-	m.HandleFunc("/person", h.AuthRequired(h.GetAllPeople)).Methods("GET")
-	m.HandleFunc("/person", h.AuthRequired(h.CreatePerson)).Methods("POST")
-	m.HandleFunc("/person/{id}", h.AuthRequired(h.GetPerson)).Methods("GET")
-	m.HandleFunc("/person/{id}", h.AuthRequired(h.UpdatePerson)).Methods("PUT")
-
-	// Students
-	m.HandleFunc("/student", h.AuthRequired(h.CreateStudent)).Methods("POST")
-	return r
 }

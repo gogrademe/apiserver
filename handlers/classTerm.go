@@ -10,25 +10,25 @@ import (
 	"github.com/mholt/binding"
 )
 
-// GetAllClasses returns all classes, doesn't take in any params
-func GetAllClasses(w http.ResponseWriter, r *http.Request) {
-	classes := []m.Class{}
-	err := store.Classes.FindAll(&classes)
+// GetAllClassTerms returns all terms, doesn't take in any params
+func GetAllClassTerms(w http.ResponseWriter, r *http.Request) {
+	terms := []m.ClassTerm{}
+	err := store.ClassTerms.FindAll(&terms)
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"class": classes})
+	writeJSON(w, &APIRes{"classTerm": terms})
 	return
 }
 
-func GetClass(w http.ResponseWriter, r *http.Request) {
+func GetClassTerm(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
-	c := m.Class{}
-	err := store.Classes.FindByID(&c, pID)
+	c := m.ClassTerm{}
+	err := store.ClassTerms.FindByID(&c, pID)
 	if err == store.ErrNotFound {
 		writeError(w, notFoundError, 404, nil)
 		return
@@ -38,12 +38,12 @@ func GetClass(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, &APIRes{"class": []m.Class{c}})
+	writeJSON(w, &APIRes{"classTerm": []m.ClassTerm{c}})
 	return
 }
 
-func CreateClass(w http.ResponseWriter, r *http.Request) {
-	c := new(m.Class)
+func CreateClassTerm(w http.ResponseWriter, r *http.Request) {
+	c := new(m.ClassTerm)
 
 	errs := binding.Bind(r, c)
 	if errs != nil {
@@ -51,7 +51,7 @@ func CreateClass(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := store.Classes.Store(c)
+	id, err := store.ClassTerms.Store(c)
 
 	if err != nil {
 		writeError(w, serverError, 500, err)
@@ -59,15 +59,15 @@ func CreateClass(w http.ResponseWriter, r *http.Request) {
 	}
 	c.ID = id
 
-	writeJSON(w, &APIRes{"class": []m.Class{*c}})
+	writeJSON(w, &APIRes{"classTerm": []m.ClassTerm{*c}})
 	return
 }
 
-func UpdateClass(w http.ResponseWriter, r *http.Request) {
+func UpdateClassTerm(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
 
-	c := new(m.Class)
+	c := new(m.ClassTerm)
 
 	errs := binding.Bind(r, c)
 	if errs != nil {
@@ -76,12 +76,12 @@ func UpdateClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c.ID = pID
-	err := store.Classes.Update(c, pID)
+	err := store.ClassTerms.Update(c, pID)
 	if err != nil {
 		writeError(w, serverError, 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"class": []m.Class{*c}})
+	writeJSON(w, &APIRes{"classTerm": []m.ClassTerm{*c}})
 	return
 }

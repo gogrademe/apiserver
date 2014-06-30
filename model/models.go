@@ -6,6 +6,12 @@ import (
 	"github.com/mholt/binding"
 )
 
+type Model interface {
+	// ID string
+	Validate() *ValErrors
+	UpdateTime()
+}
+
 type TimeStamp struct {
 	CreatedAt time.Time `gorethink:"createdAt"json:"createdAt"`
 	UpdatedAt time.Time `gorethink:"updatedAt"json:"updatedAt"`
@@ -29,20 +35,3 @@ func field(form string, required bool) binding.Field {
 		Required: required,
 	}
 }
-
-// type Model interface{}
-
-type Model interface {
-	// ID string
-	// Validate() error
-}
-
-// type Person struct {
-// 	// Some other fields.
-// 	FirstName string
-// 	LastName  string
-// }
-
-// func (p *Person) Validate() error {
-// 	return nil
-// }

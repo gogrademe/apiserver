@@ -13,11 +13,11 @@ var (
 
 type User struct {
 	ID             string `gorethink:"id,omitempty"json:"id"`
-	Email          string `gorethink:"email"json:"email"`
-	EmailLower     string `gorethink:"emailLower"json:"emailLower"`
-	HashedPassword string `gorethink:"hashedPassword"json:"-"`
-	Role           string `gorethink:"role"json:"role"`
-	Disabled       bool   `gorethink:"disabled"json:"disabled"`
+	Email          string `gorethink:"email,omitempty"json:"email"`
+	EmailLower     string `gorethink:"emailLower,omitempty"json:"emailLower"`
+	HashedPassword string `gorethink:"hashedPassword,omitempty"json:"-"`
+	Role           string `gorethink:"role,omitempty"json:"role"`
+	Disabled       bool   `gorethink:"disabled,omitempty"json:"disabled"`
 	TimeStamp
 }
 

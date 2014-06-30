@@ -27,7 +27,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 
 	p.ID = id
 
-	writeJSON(w, &APIRes{"person": p})
+	writeJSON(w, &APIRes{"person": []m.Person{*p}})
 	return
 }
 
@@ -45,14 +45,14 @@ func UpdatePerson(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p.ID = pID
-	err := store.People.Update(p)
+	err := store.People.Update(p, pID)
 
 	if err != nil {
 		writeError(w, "Error updating Person", 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"person": p})
+	writeJSON(w, &APIRes{"person": []m.Person{*p}})
 	return
 }
 
@@ -62,17 +62,18 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
 
-	p, err := store.People.FindByID(pID)
+	p := m.Person{}
+	err := store.People.FindByID(&p, pID)
+	if err == store.ErrNotFound {
+		writeError(w, notFoundError, 404, nil)
+		return
+	}
 	if err != nil {
 		writeError(w, serverError, 500, nil)
 		return
 	}
-	if p == nil {
-		writeError(w, notFoundError, 404, nil)
-		return
-	}
 
-	writeJSON(w, &APIRes{"person": p})
+	writeJSON(w, &APIRes{"person": []m.Person{p}})
 	return
 }
 
