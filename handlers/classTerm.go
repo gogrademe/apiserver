@@ -10,7 +10,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-// GetAllClassTerms returns all terms, doesn't take in any params
+// GetAllClassTerms ...
 func GetAllClassTerms(w http.ResponseWriter, r *http.Request) {
 	terms := []m.ClassTerm{}
 	err := store.ClassTerms.FindAll(&terms)
@@ -23,6 +23,7 @@ func GetAllClassTerms(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+//GetClassTerm ...
 func GetClassTerm(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -42,6 +43,7 @@ func GetClassTerm(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+//CreateClassTerm ...
 func CreateClassTerm(w http.ResponseWriter, r *http.Request) {
 	c := new(m.ClassTerm)
 
@@ -63,6 +65,7 @@ func CreateClassTerm(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+//UpdateClassTerm ...
 func UpdateClassTerm(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]

@@ -9,14 +9,16 @@ import (
 	"github.com/mholt/binding"
 )
 
+// ErrLoginFailed ...
 var ErrLoginFailed = "Login Failed! Email and/or password incorrect."
 
+// LoginForm ...
 type LoginForm struct {
 	Email    string
 	Password string
 }
 
-// Then provide a field mapping (pointer receiver is vital)
+// FieldMap ...
 func (lf *LoginForm) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&lf.Email:    binding.Field{Form: "email", Required: true},
@@ -24,6 +26,7 @@ func (lf *LoginForm) FieldMap() binding.FieldMap {
 	}
 }
 
+// Login ...
 func Login(w http.ResponseWriter, r *http.Request) {
 	// Get username and password
 	lf := new(LoginForm)
@@ -58,6 +61,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// AuthRequired ...
 func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {

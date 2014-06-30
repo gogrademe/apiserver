@@ -10,7 +10,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-// GetAllClasses returns all classes, doesn't take in any params
+// GetAllClasses ...
 func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 	classes := []m.Class{}
 	err := store.Classes.FindAll(&classes)
@@ -23,6 +23,7 @@ func GetAllClasses(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// GetClass ...
 func GetClass(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -42,6 +43,7 @@ func GetClass(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+//CreateClass ...
 func CreateClass(w http.ResponseWriter, r *http.Request) {
 	c := new(m.Class)
 
@@ -63,6 +65,7 @@ func CreateClass(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+//UpdateClass ...
 func UpdateClass(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]

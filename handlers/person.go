@@ -9,7 +9,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-// CreatePerson allows you to create a Person.
+// CreatePerson ...
 func CreatePerson(w http.ResponseWriter, r *http.Request) {
 	p := new(m.Person)
 
@@ -31,7 +31,7 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// UpdatePerson allows you to create a Person.
+// UpdatePerson ...
 func UpdatePerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
@@ -56,7 +56,7 @@ func UpdatePerson(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// GetPerson will return a Person with all of their Profiles.
+// GetPerson ...
 func GetPerson(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -77,7 +77,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// GetAllPeople returns all people without their profiles.
+// GetAllPeople ...
 func GetAllPeople(w http.ResponseWriter, r *http.Request) {
 
 	people, err := store.People.FindAll()

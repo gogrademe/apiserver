@@ -10,7 +10,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-// CreateStudent allows you to create a Student.
+// CreateStudent ...
 func CreateStudent(w http.ResponseWriter, r *http.Request) {
 	s := new(m.Student)
 
@@ -31,7 +31,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// GetStudent will return a Student with all of their Profiles.
+// GetStudent ...
 func GetStudent(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -52,7 +52,7 @@ func GetStudent(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// UpdateStudent allows you to create a Student.
+// UpdateStudent ...
 func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
@@ -77,7 +77,7 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// GetAllStudents returns all people without their profiles.
+// GetAllStudents ...
 func GetAllStudents(w http.ResponseWriter, r *http.Request) {
 	students := []m.Student{}
 	err := store.Classes.FindAll(&students)

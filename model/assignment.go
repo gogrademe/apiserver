@@ -6,6 +6,7 @@ import (
 	"github.com/mholt/binding"
 )
 
+//Assignment ...
 type Assignment struct {
 	ID      string    `gorethink:"id,omitempty"json:"id"`
 	TermID  string    `gorethink:"termId,omitempty"json:"termId"`
@@ -15,6 +16,7 @@ type Assignment struct {
 	TimeStamp
 }
 
+// FieldMap ...
 func (a *Assignment) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&a.ID:      field("id", false),
@@ -25,6 +27,7 @@ func (a *Assignment) FieldMap() binding.FieldMap {
 	}
 }
 
+// Validate ...
 func (a *Assignment) Validate() *ValErrors {
 	var v *ValErrors
 

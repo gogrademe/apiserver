@@ -10,7 +10,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-// CreateTeacher allows you to create a Teacher.
+// CreateTeacher ...
 func CreateTeacher(w http.ResponseWriter, r *http.Request) {
 	t := new(m.Teacher)
 
@@ -31,7 +31,7 @@ func CreateTeacher(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// GetTeacher will return a Teacher with all of their Profiles.
+// GetTeacher ...
 func GetTeacher(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -52,7 +52,7 @@ func GetTeacher(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// UpdateTeacher allows you to create a Teacher.
+// UpdateTeacher ...
 func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pID, _ := vars["id"]
@@ -77,7 +77,7 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// GetAllTeachers returns all people without their profiles.
+// GetAllTeachers ...
 func GetAllTeachers(w http.ResponseWriter, r *http.Request) {
 	teachers := []m.Teacher{}
 	err := store.Classes.FindAll(&teachers)
