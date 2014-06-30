@@ -34,6 +34,12 @@ func SetupHandlers() *mux.Router {
 	m.HandleFunc("assignment/{id}", AuthRequired(GetAssignment)).Methods("GET")
 	m.HandleFunc("assignment/{id}", AuthRequired(UpdateAssignment)).Methods("PUT")
 
+	// AssignmentGrades
+	m.HandleFunc("grade", AuthRequired(GetAllAssignmentGrades)).Methods("GET")
+	m.HandleFunc("grade", AuthRequired(CreateAssignmentGrade)).Methods("POST")
+	m.HandleFunc("grade/{id}", AuthRequired(GetAssignmentGrade)).Methods("GET")
+	m.HandleFunc("grade/{id}", AuthRequired(UpdateAssignmentGrade)).Methods("PUT")
+
 	// People
 	m.HandleFunc("/person", AuthRequired(GetAllPeople)).Methods("GET")
 	m.HandleFunc("/person", AuthRequired(CreatePerson)).Methods("POST")
