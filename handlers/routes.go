@@ -28,6 +28,12 @@ func SetupHandlers() *mux.Router {
 	m.HandleFunc("term/{id}", AuthRequired(GetClassTerm)).Methods("GET")
 	m.HandleFunc("term/{id}", AuthRequired(UpdateClassTerm)).Methods("PUT")
 
+	// Assignments
+	m.HandleFunc("assignment", AuthRequired(GetAllAssignments)).Methods("GET")
+	m.HandleFunc("assignment", AuthRequired(CreateAssignment)).Methods("POST")
+	m.HandleFunc("assignment/{id}", AuthRequired(GetAssignment)).Methods("GET")
+	m.HandleFunc("assignment/{id}", AuthRequired(UpdateAssignment)).Methods("PUT")
+
 	// People
 	m.HandleFunc("/person", AuthRequired(GetAllPeople)).Methods("GET")
 	m.HandleFunc("/person", AuthRequired(CreatePerson)).Methods("POST")

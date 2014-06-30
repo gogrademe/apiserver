@@ -25,6 +25,8 @@ var (
 	ClassTerms ClassTermStore
 	People     PersonStore
 
+	Assignments AssignmentStore
+
 	Sessions SessionStore
 	Users    UserStore
 
@@ -39,6 +41,8 @@ func init() {
 	Teachers = NewTeacherStore()
 	Parents = NewParentStore()
 	Students = NewStudentStore()
+
+	Assignments = NewAssignmentStore()
 
 	// Classes
 	Classes = NewClassStore()
