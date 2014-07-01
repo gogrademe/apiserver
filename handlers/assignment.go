@@ -1,91 +1,87 @@
 package handlers
 
 import (
-	"net/http"
-
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
 
 // CreateAssignment ...
-func CreateAssignment(w http.ResponseWriter, r *http.Request) {
+func CreateAssignment(c *gin.Context) {
 	a := new(m.Assignment)
 
-	errs := binding.Bind(r, a)
+	errs := binding.Bind(c.Req, a)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
 	id, err := store.Assignments.Store(a)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 	a.ID = id
 
-	writeJSON(w, &APIRes{"assignment": []m.Assignment{*a}})
+	writeJSON(c.Writer, &APIRes{"assignment": []m.Assignment{*a}})
 	return
 }
 
 // GetAssignment ...
-func GetAssignment(w http.ResponseWriter, r *http.Request) {
+func GetAssignment(c *gin.Context) {
 
-	vars := mux.Vars(r)
-	sID, _ := vars["id"]
+	id := c.Params.ByName("id")
 
 	a := m.Assignment{}
-	err := store.Assignments.FindByID(&a, sID)
+	err := store.Assignments.FindByID(&a, id)
 	if err == store.ErrNotFound {
-		writeError(w, notFoundError, 404, nil)
+		writeError(c.Writer, notFoundError, 404, nil)
 		return
 	}
 	if err != nil {
-		writeError(w, serverError, 500, nil)
+		writeError(c.Writer, serverError, 500, nil)
 		return
 	}
 
-	writeJSON(w, &APIRes{"assignment": []m.Assignment{a}})
+	writeJSON(c.Writer, &APIRes{"assignment": []m.Assignment{a}})
 	return
 }
 
 // UpdateAssignment ...
-func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	pID, _ := vars["id"]
+func UpdateAssignment(c *gin.Context) {
+	id := c.Params.ByName("id")
 
 	a := new(m.Assignment)
 
-	errs := binding.Bind(r, a)
+	errs := binding.Bind(c.Req, a)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
-	a.ID = pID
-	err := store.Assignments.Update(a, pID)
+	a.ID = id
+	err := store.Assignments.Update(a, id)
 
 	if err != nil {
-		writeError(w, "Error updating Assignment", 500, err)
+		writeError(c.Writer, "Error updating Assignment", 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"assignment": []m.Assignment{*a}})
+	writeJSON(c.Writer, &APIRes{"assignment": []m.Assignment{*a}})
 	return
 }
 
 // GetAllAssignments ...
-func GetAllAssignments(w http.ResponseWriter, r *http.Request) {
+func GetAllAssignments(c *gin.Context) {
 	assignment := []m.Assignment{}
 	err := store.Classes.FindAll(&assignment)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"assignment": assignment})
+	writeJSON(c.Writer, &APIRes{"assignment": assignment})
 	return
 }

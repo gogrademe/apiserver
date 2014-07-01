@@ -1,91 +1,88 @@
 package handlers
 
 import (
-	"net/http"
-
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
 
 // CreateTeacher ...
-func CreateTeacher(w http.ResponseWriter, r *http.Request) {
+func CreateTeacher(c *gin.Context) {
 	t := new(m.Teacher)
 
-	errs := binding.Bind(r, t)
+	errs := binding.Bind(c.Req, t)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
 	id, err := store.Teachers.Store(t)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 	t.ID = id
 
-	writeJSON(w, &APIRes{"teacher": []m.Teacher{*t}})
+	writeJSON(c.Writer, &APIRes{"teacher": []m.Teacher{*t}})
 	return
 }
 
 // GetTeacher ...
-func GetTeacher(w http.ResponseWriter, r *http.Request) {
+func GetTeacher(c *gin.Context) {
 
-	vars := mux.Vars(r)
-	sID, _ := vars["id"]
+	id := c.Params.ByName("id")
 
 	t := m.Teacher{}
-	err := store.Teachers.FindByID(&t, sID)
+	err := store.Teachers.FindByID(&t, id)
 	if err == store.ErrNotFound {
-		writeError(w, notFoundError, 404, nil)
+		writeError(c.Writer, notFoundError, 404, nil)
 		return
 	}
 	if err != nil {
-		writeError(w, serverError, 500, nil)
+		writeError(c.Writer, serverError, 500, nil)
 		return
 	}
 
-	writeJSON(w, &APIRes{"teacher": []m.Teacher{t}})
+	writeJSON(c.Writer, &APIRes{"teacher": []m.Teacher{t}})
 	return
 }
 
 // UpdateTeacher ...
-func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	pID, _ := vars["id"]
+func UpdateTeacher(c *gin.Context) {
+
+	id := c.Params.ByName("id")
 
 	t := new(m.Teacher)
 
-	errs := binding.Bind(r, t)
+	errs := binding.Bind(c.Req, t)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
-	t.ID = pID
-	err := store.Teachers.Update(t, pID)
+	t.ID = id
+	err := store.Teachers.Update(t, id)
 
 	if err != nil {
-		writeError(w, "Error updating Teacher", 500, err)
+		writeError(c.Writer, "Error updating Teacher", 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"teacher": []m.Teacher{*t}})
+	writeJSON(c.Writer, &APIRes{"teacher": []m.Teacher{*t}})
 	return
 }
 
 // GetAllTeachers ...
-func GetAllTeachers(w http.ResponseWriter, r *http.Request) {
+func GetAllTeachers(c *gin.Context) {
 	teachers := []m.Teacher{}
 	err := store.Classes.FindAll(&teachers)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"teacher": teachers})
+	writeJSON(c.Writer, &APIRes{"teacher": teachers})
 	return
 }

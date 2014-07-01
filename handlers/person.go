@@ -1,91 +1,88 @@
 package handlers
 
 import (
-	"net/http"
-
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
 
 // CreatePerson ...
-func CreatePerson(w http.ResponseWriter, r *http.Request) {
+func CreatePerson(c *gin.Context) {
 	p := new(m.Person)
 
-	errs := binding.Bind(r, p)
+	errs := binding.Bind(c.Req, p)
 	if errs != nil {
-		writeError(w, errs, 500, nil)
+		writeError(c.Writer, errs, 500, nil)
 		return
 	}
 
 	id, err := store.People.Store(p)
 	if err != nil {
-		writeError(w, "Error creating Person", 500, err)
+		writeError(c.Writer, "Error creating Person", 500, err)
 		return
 	}
 
 	p.ID = id
 
-	writeJSON(w, &APIRes{"person": []m.Person{*p}})
+	writeJSON(c.Writer, &APIRes{"person": []m.Person{*p}})
 	return
 }
 
 // UpdatePerson ...
-func UpdatePerson(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	pID, _ := vars["id"]
+func UpdatePerson(c *gin.Context) {
+
+	id := c.Params.ByName("id")
 
 	p := new(m.Person)
 
-	errs := binding.Bind(r, p)
+	errs := binding.Bind(c.Req, p)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
-	p.ID = pID
-	err := store.People.Update(p, pID)
+	p.ID = id
+	err := store.People.Update(p, id)
 
 	if err != nil {
-		writeError(w, "Error updating Person", 500, err)
+		writeError(c.Writer, "Error updating Person", 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"person": []m.Person{*p}})
+	writeJSON(c.Writer, &APIRes{"person": []m.Person{*p}})
 	return
 }
 
 // GetPerson ...
-func GetPerson(w http.ResponseWriter, r *http.Request) {
+func GetPerson(c *gin.Context) {
 
-	vars := mux.Vars(r)
-	pID, _ := vars["id"]
+	id := c.Params.ByName("id")
 
 	p := m.Person{}
-	err := store.People.FindByID(&p, pID)
+	err := store.People.FindByID(&p, id)
 	if err == store.ErrNotFound {
-		writeError(w, notFoundError, 404, nil)
+		writeError(c.Writer, notFoundError, 404, nil)
 		return
 	}
 	if err != nil {
-		writeError(w, serverError, 500, nil)
+		writeError(c.Writer, serverError, 500, nil)
 		return
 	}
 
-	writeJSON(w, &APIRes{"person": []m.Person{p}})
+	writeJSON(c.Writer, &APIRes{"person": []m.Person{p}})
 	return
 }
 
 // GetAllPeople ...
-func GetAllPeople(w http.ResponseWriter, r *http.Request) {
+func GetAllPeople(c *gin.Context) {
 
 	people, err := store.People.FindAll()
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"person": people})
+	writeJSON(c.Writer, &APIRes{"person": people})
 	return
 }

@@ -1,91 +1,87 @@
 package handlers
 
 import (
-	"net/http"
-
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
 
 // CreateAssignmentGrade ...
-func CreateAssignmentGrade(w http.ResponseWriter, r *http.Request) {
+func CreateAssignmentGrade(c *gin.Context) {
 	a := new(m.AssignmentGrade)
 
-	errs := binding.Bind(r, a)
+	errs := binding.Bind(c.Req, a)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
 	id, err := store.AssignmentGrades.Store(a)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 	a.ID = id
 
-	writeJSON(w, &APIRes{"grade": []m.AssignmentGrade{*a}})
+	writeJSON(c.Writer, &APIRes{"grade": []m.AssignmentGrade{*a}})
 	return
 }
 
 // GetAssignmentGrade ...
-func GetAssignmentGrade(w http.ResponseWriter, r *http.Request) {
+func GetAssignmentGrade(c *gin.Context) {
 
-	vars := mux.Vars(r)
-	sID, _ := vars["id"]
+	id := c.Params.ByName("id")
 
 	a := m.AssignmentGrade{}
-	err := store.AssignmentGrades.FindByID(&a, sID)
+	err := store.AssignmentGrades.FindByID(&a, id)
 	if err == store.ErrNotFound {
-		writeError(w, notFoundError, 404, nil)
+		writeError(c.Writer, notFoundError, 404, nil)
 		return
 	}
 	if err != nil {
-		writeError(w, serverError, 500, nil)
+		writeError(c.Writer, serverError, 500, nil)
 		return
 	}
 
-	writeJSON(w, &APIRes{"grade": []m.AssignmentGrade{a}})
+	writeJSON(c.Writer, &APIRes{"grade": []m.AssignmentGrade{a}})
 	return
 }
 
 // UpdateAssignmentGrade ...
-func UpdateAssignmentGrade(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	pID, _ := vars["id"]
+func UpdateAssignmentGrade(c *gin.Context) {
+	id := c.Params.ByName("id")
 
 	a := new(m.AssignmentGrade)
 
-	errs := binding.Bind(r, a)
+	errs := binding.Bind(c.Req, a)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
-	a.ID = pID
-	err := store.AssignmentGrades.Update(a, pID)
+	a.ID = id
+	err := store.AssignmentGrades.Update(a, id)
 
 	if err != nil {
-		writeError(w, "Error updating AssignmentGrade", 500, err)
+		writeError(c.Writer, "Error updating AssignmentGrade", 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"grade": []m.AssignmentGrade{*a}})
+	writeJSON(c.Writer, &APIRes{"grade": []m.AssignmentGrade{*a}})
 	return
 }
 
 // GetAllAssignmentGrades ...
-func GetAllAssignmentGrades(w http.ResponseWriter, r *http.Request) {
+func GetAllAssignmentGrades(c *gin.Context) {
 	grades := []m.AssignmentGrade{}
 	err := store.Classes.FindAll(&grades)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	writeJSON(w, &APIRes{"grade": grades})
+	writeJSON(c.Writer, &APIRes{"grade": grades})
 	return
 }
