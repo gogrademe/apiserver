@@ -1,6 +1,7 @@
 package model
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/mholt/binding"
@@ -26,14 +27,26 @@ func (a *Assignment) FieldMap() binding.FieldMap {
 		&a.DueDate: field("dueDate", true),
 	}
 }
+func (a Assignment) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if a.Name == "" {
+		errs = append(errs, RequiredErr("name"))
+	}
+	if a.Type == "" {
+		errs = append(errs, RequiredErr("type"))
+	}
+	if a.TermID == "" {
+		errs = append(errs, RequiredErr("termId"))
+	}
+	return errs
+}
 
 // Validate ...
-func (a *Assignment) Validate() *ValErrors {
-	var v *ValErrors
-
-	v.RequiredString(a.Name, "name")
-	v.RequiredString(a.Type, "type")
-	// v.RequiredString(a.DueDate, "id")
-
-	return v
-}
+// func (a *Assignment) Validate() *ValErrors {
+// 	var v *ValErrors
+//
+// 	v.RequiredString(a.Name, "name")
+// 	v.RequiredString(a.Type, "type")
+// 	// v.RequiredString(a.DueDate, "id")
+//
+// 	return v
+// }

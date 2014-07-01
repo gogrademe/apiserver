@@ -1,7 +1,7 @@
 package model
 
 import (
-	// "net/http"
+	"net/http"
 
 	"github.com/mholt/binding"
 )
@@ -13,14 +13,24 @@ type Student struct {
 	TimeStamp
 }
 
-func (s *Student) Validate() *ValErrors {
-	var v *ValErrors
-
-	v.RequiredString(s.PersonID, "personId")
-	v.RequiredString(s.GradeLevel, "gradeLevel")
-
-	return v
+func (s Student) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if s.PersonID == "" {
+		errs = append(errs, RequiredErr("personId"))
+	}
+	if s.GradeLevel == "" {
+		errs = append(errs, RequiredErr("gradeLevel"))
+	}
+	return errs
 }
+
+// func (s *Student) Validate() *ValErrors {
+// 	var v *ValErrors
+//
+// 	v.RequiredString(s.PersonID, "personId")
+// 	v.RequiredString(s.GradeLevel, "gradeLevel")
+//
+// 	return v
+// }
 
 // func (s Student) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 // 	if s.Message == "Go needs generics" {

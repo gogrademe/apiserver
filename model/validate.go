@@ -1,14 +1,9 @@
 package model
 
 import (
-	"strings"
-)
+	// "strings"
 
-const (
-	RequiredError = "RequiredError"
-	// ContentTypeError     = "ContentTypeError"
-	// DeserializationError = "DeserializationError"
-	// TypeError            = "TypeError"
+	"github.com/mholt/binding"
 )
 
 type (
@@ -34,10 +29,26 @@ func (v *ValErrors) Add(fieldNames []string, message string) {
 	})
 }
 
-func (v *ValErrors) RequiredString(field, name string) {
-	field = strings.TrimSpace(field)
-	if field == "" {
-		v.Add([]string{name}, RequiredError)
-		return
+// func (v *ValErrors) RequiredString(field, name string) {
+// 	field = strings.TrimSpace(field)
+// 	if field == "" {
+// 		v.Add([]string{name}, RequiredError)
+// 		return
+// 	}
+// }
+func RequiredErr(fieldName string) binding.Error {
+	return binding.Error{
+		FieldNames: []string{fieldName},
+		Message:    "missing required field",
 	}
 }
+
+// func RequiredString(errs binding.Errors, fieldName string, value string) {
+// 	value = strings.TrimSpace(value)
+// 	if value == "" {
+// 		errs = append(errs, binding.Error{
+// 			FieldNames: []string{fieldName},
+// 			Message:    "missing required field",
+// 		})
+// 	}
+// }

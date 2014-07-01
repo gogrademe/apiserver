@@ -18,14 +18,6 @@ type (
 		Message interface{} `json:"message"`
 		Raw     string      `json:"-"`
 	}
-
-	// Context ...
-	Context struct {
-		Req    *http.Request
-		Writer http.ResponseWriter
-		Keys   map[string]interface{}
-		index  int8
-	}
 )
 
 // NotFoundErr should be used if a resource could not be found.
@@ -54,25 +46,25 @@ func writeError(w http.ResponseWriter, message interface{}, code int, errorToLog
 }
 
 // writeAPIError will write a JSON error to the client.
-func writeAPIError(w http.ResponseWriter, apiErr *APIError) {
-	if apiErr.Code == 0 {
-		log.Println("ERROR CODE NOT SET USING 500", apiErr.Message, " Raw Error: ", apiErr.Raw)
-		apiErr.Code = 500
-	}
-	log.Println("Friendly Message: ", apiErr.Message, " Raw Error: ", apiErr.Raw)
-	e := &APIRes{
-		"error": []APIError{
-			*apiErr,
-		},
-	}
-	writeJSONWithHeader(w, e, apiErr.Code)
-	return
-}
+// func writeAPIError(w http.ResponseWriter, apiErr *APIError) {
+// 	if apiErr.Code == 0 {
+// 		log.Println("ERROR CODE NOT SET USING 500", apiErr.Message, " Raw Error: ", apiErr.Raw)
+// 		apiErr.Code = 500
+// 	}
+// 	log.Println("Friendly Message: ", apiErr.Message, " Raw Error: ", apiErr.Raw)
+// 	e := &APIRes{
+// 		"error": []APIError{
+// 			*apiErr,
+// 		},
+// 	}
+// 	writeJSONWithHeader(w, e, apiErr.Code)
+// 	return
+// }
 
-func writeJSON(w http.ResponseWriter, v *APIRes) {
-	writeJSONWithHeader(w, v, 200)
-	return
-}
+// func writeJSON(w http.ResponseWriter, v *APIRes) {
+// 	writeJSONWithHeader(w, v, 200)
+// 	return
+// }
 
 func writeJSONWithHeader(w http.ResponseWriter, v *APIRes, code int) {
 	data, err := json.MarshalIndent(v, "", "  ")

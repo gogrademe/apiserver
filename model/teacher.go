@@ -1,6 +1,8 @@
 package model
 
 import (
+	"net/http"
+
 	"github.com/mholt/binding"
 )
 
@@ -12,13 +14,14 @@ type Teacher struct {
 	TimeStamp
 }
 
-func (s *Teacher) Validate() *ValErrors {
-	var v *ValErrors
+func (t Teacher) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if t.PersonID == "" {
+		errs = append(errs, RequiredErr("personId"))
+	}
 
-	v.RequiredString(s.PersonID, "personId")
-
-	return v
+	return errs
 }
+
 func (t *Teacher) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&t.ID:          field("id", false),

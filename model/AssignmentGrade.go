@@ -1,6 +1,8 @@
 package model
 
 import (
+	"net/http"
+
 	"github.com/mholt/binding"
 )
 
@@ -22,14 +24,26 @@ func (a *AssignmentGrade) FieldMap() binding.FieldMap {
 		&a.Grade:        field("grade", true),
 	}
 }
+func (a AssignmentGrade) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if a.AssignmentID == "" {
+		errs = append(errs, RequiredErr("assignmentId"))
+	}
+	if a.StudentID == "" {
+		errs = append(errs, RequiredErr("studentId"))
+	}
+	if a.Grade == "" {
+		errs = append(errs, RequiredErr("grade"))
+	}
+	return errs
+}
 
 // Validate ...
-func (a *AssignmentGrade) Validate() *ValErrors {
-	var v *ValErrors
-
-	v.RequiredString(a.AssignmentID, "assignmentId")
-	v.RequiredString(a.StudentID, "studentId")
-	v.RequiredString(a.Grade, "grade")
-
-	return v
-}
+// func (a *AssignmentGrade) Validate() *ValErrors {
+// 	var v *ValErrors
+//
+// 	v.RequiredString(a.AssignmentID, "assignmentId")
+// 	v.RequiredString(a.StudentID, "studentId")
+// 	v.RequiredString(a.Grade, "grade")
+//
+// 	return v
+// }

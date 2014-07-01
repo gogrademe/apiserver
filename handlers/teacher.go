@@ -46,7 +46,6 @@ func GetTeacher(c *gin.Context) {
 	}
 
 	c.JSON(200, &APIRes{"teacher": []m.Teacher{t}})
-	return
 }
 
 // UpdateTeacher ...

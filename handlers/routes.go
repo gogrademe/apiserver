@@ -6,6 +6,7 @@ import (
 
 // SetupHandlers loads all routes
 func SetupHandlers(r *gin.Engine) {
+	r.Use(CORSMiddleware())
 	m := r.Group("/api")
 
 	// Auth

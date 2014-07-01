@@ -1,6 +1,8 @@
 package model
 
 import (
+	"net/http"
+
 	"github.com/mholt/binding"
 )
 
@@ -20,13 +22,14 @@ type (
 	}
 )
 
-func (p *Person) Validate() *ValErrors {
-	var v *ValErrors
-
-	v.RequiredString(p.FirstName, "firstName")
-	v.RequiredString(p.LastName, "lastName")
-
-	return v
+func (p Person) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if p.FirstName == "" {
+		errs = append(errs, RequiredErr("firstName"))
+	}
+	if p.LastName == "" {
+		errs = append(errs, RequiredErr("lastName"))
+	}
+	return errs
 }
 
 func (p *Person) FieldMap() binding.FieldMap {

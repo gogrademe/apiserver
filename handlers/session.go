@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"log"
+	// "log"
 
 	m "github.com/Lanciv/GoGradeAPI/model"
 	s "github.com/Lanciv/GoGradeAPI/store"
@@ -77,6 +77,5 @@ func AuthRequired() gin.HandlerFunc {
 		}
 
 		c.Set("user", res.Claims)
-		log.Println(res)
 	}
 }

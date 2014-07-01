@@ -68,7 +68,7 @@ func UpdateAssignment(c *gin.Context) {
 	err := store.Assignments.Update(a, id)
 
 	if err != nil {
-		writeError(c.Writer, "Error updating Assignment", 500, err)
+		writeError(c.Writer, "error updating Assignment", 500, err)
 		return
 	}
 

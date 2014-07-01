@@ -1,6 +1,7 @@
 package model
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/mholt/binding"
@@ -28,18 +29,37 @@ type (
 	}
 )
 
-func (c *Class) Validate() *ValErrors {
-	var v *ValErrors
-	v.RequiredString(c.Name, "name")
-	v.RequiredString(c.Subject, "subject")
+func (c Class) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if c.Name == "" {
+		errs = append(errs, RequiredErr("name"))
+	}
+	if c.Subject == "" {
+		errs = append(errs, RequiredErr("subject"))
+	}
+	return errs
+}
+func (c ClassTerm) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	if c.ClassID == "" {
+		errs = append(errs, RequiredErr("classId"))
+	}
+	if c.Name == "" {
+		errs = append(errs, RequiredErr("name"))
+	}
+	return errs
+}
 
-	return v
-}
-func (c *ClassTerm) Validate() *ValErrors {
-	var v *ValErrors
-	v.RequiredString(c.ClassID, "classId")
-	return v
-}
+// func (c *Class) Validate() *ValErrors {
+// 	var v *ValErrors
+// 	v.RequiredString(c.Name, "name")
+// 	v.RequiredString(c.Subject, "subject")
+//
+// 	return v
+// }
+// func (c *ClassTerm) Validate() *ValErrors {
+// 	var v *ValErrors
+// 	v.RequiredString(c.ClassID, "classId")
+// 	return v
+// }
 
 func (c *Class) FieldMap() binding.FieldMap {
 	return binding.FieldMap{

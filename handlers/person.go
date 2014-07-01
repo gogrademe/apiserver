@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"errors"
-	"log"
-
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
@@ -17,7 +14,7 @@ func CreatePerson(c *gin.Context) {
 
 	errs := binding.Bind(c.Req, p)
 	if errs != nil {
-		writeError(c.Writer, errs, 500, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
@@ -80,14 +77,11 @@ func GetPerson(c *gin.Context) {
 
 // GetAllPeople ...
 func GetAllPeople(c *gin.Context) {
-	log.Println(c.Req.URL.Query())
-	log.Println(c.Get("user"))
-	people, err := store.People.FindAll()
+	p, err := store.People.FindAll()
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
-	c.Error(errors.New("test"), "a")
-	c.JSON(200, &APIRes{"person": people})
+	c.JSON(200, &APIRes{"person": p})
 	return
 }
