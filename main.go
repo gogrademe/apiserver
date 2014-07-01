@@ -5,18 +5,18 @@ import (
 
 	h "github.com/Lanciv/GoGradeAPI/handlers"
 	"github.com/Lanciv/GoGradeAPI/store"
+
 	"github.com/Sirupsen/logrus"
-	"github.com/codegangsta/negroni"
-	"github.com/meatballhat/negroni-logrus"
+	"github.com/gin-gonic/gin"
 )
 
 var log = logrus.New()
 
 var (
-	apiPort  string
-	address  string
-	dbName   string
-	testData bool
+	listenAddr     string
+	address        string
+	dbName         string
+	insertTestData bool
 )
 
 func init() {
@@ -25,23 +25,23 @@ func init() {
 }
 
 func main() {
-	flag.StringVar(&apiPort, "apiPort", ":5005", "")
+	flag.StringVar(&listenAddr, "listenAddr", ":5005", "")
 	flag.StringVar(&address, "dbAddress", "localhost:28015", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
-	flag.BoolVar(&testData, "testData", true, "")
+	flag.BoolVar(&insertTestData, "insertTestData", true, "")
 	flag.Parse()
 
 	if err := store.Connect(address, dbName); err != nil {
 		log.Fatal("Error setting up database: ", err)
 	}
 
-	store.SetupDB(testData)
+	store.SetupDB(insertTestData)
 
-	n := negroni.New()
-	n.Use(negronilogrus.NewMiddleware())
-	n.Use(negroni.HandlerFunc(h.CORSMiddleware))
-	n.UseHandler(h.SetupHandlers())
+	r := gin.Default()
+	// r.Use(negroni.HandlerFunc(h.CORSMiddleware))
 
-	n.Run(apiPort)
+	h.SetupHandlers(r)
+
+	r.Run(listenAddr)
 
 }

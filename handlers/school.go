@@ -3,7 +3,7 @@ package handlers
 // import (
 // 	"github.com/Lanciv/GoGradeAPI/model"
 // 	"github.com/martini-contrib/render"
-// 	"net/http"
+//
 // )
 
 // func CreateSchool(r render.Render, req *http.Request) {

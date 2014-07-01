@@ -1,61 +1,68 @@
 package handlers
 
 import (
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-// SetupHandlers loads all routes into gorillaMux.
-func SetupHandlers() *mux.Router {
-	r := mux.NewRouter()
-	// r.StrictSlash(true)
-	m := r.PathPrefix("/api").Subrouter()
+// SetupHandlers loads all routes
+func SetupHandlers(r *gin.Engine) {
+	m := r.Group("/api")
 
 	// Auth
-	m.HandleFunc("/session", Login).Methods("POST")
+	m.POST("/session", Login)
+
+	auth := m.Group("/", AuthRequired())
 
 	// Users
-	m.HandleFunc("/user", AuthRequired(GetAllUsers)).Methods("GET")
+	auth.GET("/user", GetAllUsers)
 
 	// Classes
-	m.HandleFunc("/class", AuthRequired(GetAllClasses)).Methods("GET")
-	m.HandleFunc("/class", AuthRequired(CreateClass)).Methods("POST")
-	m.HandleFunc("/class/{id}", AuthRequired(GetClass)).Methods("GET")
-	m.HandleFunc("/class/{id}", AuthRequired(UpdateClass)).Methods("PUT")
+	g := auth.Group("/class")
+	g.GET("/", GetAllClasses)
+	g.POST("/", CreateClass)
+	g.GET("/:id", GetClass)
+	g.PUT("/:id", UpdateClass)
 
 	// ClassTerms
-	m.HandleFunc("term", AuthRequired(GetAllClassTerms)).Methods("GET")
-	m.HandleFunc("term", AuthRequired(CreateClassTerm)).Methods("POST")
-	m.HandleFunc("term/{id}", AuthRequired(GetClassTerm)).Methods("GET")
-	m.HandleFunc("term/{id}", AuthRequired(UpdateClassTerm)).Methods("PUT")
+	g = auth.Group("/term")
+	g.GET("/", GetAllClassTerms)
+	g.POST("/", CreateClassTerm)
+	g.GET("/:id", GetClassTerm)
+	g.PUT("/:id", UpdateClassTerm)
 
 	// Assignments
-	m.HandleFunc("assignment", AuthRequired(GetAllAssignments)).Methods("GET")
-	m.HandleFunc("assignment", AuthRequired(CreateAssignment)).Methods("POST")
-	m.HandleFunc("assignment/{id}", AuthRequired(GetAssignment)).Methods("GET")
-	m.HandleFunc("assignment/{id}", AuthRequired(UpdateAssignment)).Methods("PUT")
+	g = auth.Group("/assignment")
+	g.GET("/", GetAllAssignments)
+	g.POST("/", CreateAssignment)
+	g.GET("/:id", GetAssignment)
+	g.PUT("/:id", UpdateAssignment)
 
 	// AssignmentGrades
-	m.HandleFunc("grade", AuthRequired(GetAllAssignmentGrades)).Methods("GET")
-	m.HandleFunc("grade", AuthRequired(CreateAssignmentGrade)).Methods("POST")
-	m.HandleFunc("grade/{id}", AuthRequired(GetAssignmentGrade)).Methods("GET")
-	m.HandleFunc("grade/{id}", AuthRequired(UpdateAssignmentGrade)).Methods("PUT")
+	g = auth.Group("/grade")
+	g.GET("/", GetAllAssignmentGrades)
+	g.POST("/", CreateAssignmentGrade)
+	g.GET("/:id", GetAssignmentGrade)
+	g.PUT("/:id", UpdateAssignmentGrade)
 
 	// People
-	m.HandleFunc("/person", AuthRequired(GetAllPeople)).Methods("GET")
-	m.HandleFunc("/person", AuthRequired(CreatePerson)).Methods("POST")
-	m.HandleFunc("/person/{id}", AuthRequired(GetPerson)).Methods("GET")
-	m.HandleFunc("/person/{id}", AuthRequired(UpdatePerson)).Methods("PUT")
+	g = auth.Group("/person")
+	g.GET("/", GetAllPeople)
+	g.POST("/", CreatePerson)
+	g.GET("/:id", GetPerson)
+	g.PUT("/:id", UpdatePerson)
 
 	// Students
-	m.HandleFunc("/student", AuthRequired(GetAllStudents)).Methods("GET")
-	m.HandleFunc("/student", AuthRequired(CreateStudent)).Methods("POST")
-	m.HandleFunc("/student/{id}", AuthRequired(GetStudent)).Methods("GET")
-	m.HandleFunc("/student/{id}", AuthRequired(UpdateStudent)).Methods("PUT")
+	g = auth.Group("/student")
+	g.GET("/", GetAllStudents)
+	g.POST("/", CreateStudent)
+	g.GET("/:id", GetStudent)
+	g.PUT("/:id", UpdateStudent)
 
 	// Teachers
-	m.HandleFunc("/teacher", AuthRequired(GetAllTeachers)).Methods("GET")
-	m.HandleFunc("/teacher", AuthRequired(CreateTeacher)).Methods("POST")
-	m.HandleFunc("/teacher/{id}", AuthRequired(GetTeacher)).Methods("GET")
-	m.HandleFunc("/teacher/{id}", AuthRequired(UpdateTeacher)).Methods("PUT")
-	return r
+	g = auth.Group("/teacher")
+	g.GET("/", GetAllTeachers)
+	g.POST("/", CreateTeacher)
+	g.GET("/:id", GetTeacher)
+	g.PUT("/:id", UpdateTeacher)
+
 }

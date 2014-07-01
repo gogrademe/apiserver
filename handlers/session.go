@@ -1,11 +1,13 @@
 package handlers
 
 import (
-	"net/http"
+	"log"
 
 	m "github.com/Lanciv/GoGradeAPI/model"
 	s "github.com/Lanciv/GoGradeAPI/store"
+
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
 
@@ -27,50 +29,54 @@ func (lf *LoginForm) FieldMap() binding.FieldMap {
 }
 
 // Login ...
-func Login(w http.ResponseWriter, r *http.Request) {
+func Login(c *gin.Context) {
 	// Get username and password
 	lf := new(LoginForm)
 
-	errs := binding.Bind(r, lf)
+	errs := binding.Bind(c.Req, lf)
 	if errs != nil {
-		writeError(w, errs, 400, nil)
+		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
 	user, err := s.Users.FindByEmail(lf.Email)
 	if err != nil {
-		writeError(w, ErrLoginFailed, http.StatusUnauthorized, err)
+		writeError(c.Writer, ErrLoginFailed, 401, err)
 		return
 	}
 
 	if err := user.ComparePassword(lf.Password); err != nil {
-		writeError(w, ErrLoginFailed, http.StatusUnauthorized, nil)
+		writeError(c.Writer, ErrLoginFailed, 401, nil)
 		return
 	}
 
 	// Create a session for the user.
 	session, err := m.NewSession(user)
 	if err != nil {
-		writeError(w, serverError, 500, err)
+		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
 	s.Sessions.Store(&session)
 	// Send token to the user so they can use it to to authenticate all further requests.
-	writeJSON(w, &APIRes{"session": []m.Session{session}})
+	c.JSON(200, &APIRes{"session": []m.Session{session}})
 	return
 }
 
 // AuthRequired ...
-func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		_, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {
+func AuthRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		res, err := jwt.ParseFromRequest(c.Req, func(t *jwt.Token) ([]byte, error) {
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {
-			writeError(w, "Access denied.", http.StatusUnauthorized, nil)
+			// c.JSON(200,http.StatusUnauthorized, "Access denied.")
+			writeError(c.Writer, "Unauthorized", 401, nil)
+			c.Fail(401, err)
 			return
 		}
-		handler(w, r)
+
+		c.Set("user", res.Claims)
+		log.Println(res)
 	}
 }
