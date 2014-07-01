@@ -25,7 +25,7 @@ func CreateStudent(c *gin.Context) {
 	}
 	s.ID = id
 
-	writeJSON(c.Writer, &APIRes{"student": []m.Student{*s}})
+	c.JSON(200, &APIRes{"student": []m.Student{*s}})
 	return
 }
 
@@ -45,7 +45,7 @@ func GetStudent(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"student": []m.Student{s}})
+	c.JSON(200, &APIRes{"student": []m.Student{s}})
 	return
 }
 
@@ -70,7 +70,7 @@ func UpdateStudent(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"student": []m.Student{*s}})
+	c.JSON(200, &APIRes{"student": []m.Student{*s}})
 	return
 }
 
@@ -83,6 +83,6 @@ func GetAllStudents(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"student": students})
+	c.JSON(200, &APIRes{"student": students})
 	return
 }

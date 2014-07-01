@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"net/http"
+	"log"
 
 	m "github.com/Lanciv/GoGradeAPI/model"
 	s "github.com/Lanciv/GoGradeAPI/store"
@@ -41,12 +41,12 @@ func Login(c *gin.Context) {
 
 	user, err := s.Users.FindByEmail(lf.Email)
 	if err != nil {
-		writeError(c.Writer, ErrLoginFailed, http.StatusUnauthorized, err)
+		writeError(c.Writer, ErrLoginFailed, 401, err)
 		return
 	}
 
 	if err := user.ComparePassword(lf.Password); err != nil {
-		writeError(c.Writer, ErrLoginFailed, http.StatusUnauthorized, nil)
+		writeError(c.Writer, ErrLoginFailed, 401, nil)
 		return
 	}
 
@@ -59,19 +59,24 @@ func Login(c *gin.Context) {
 
 	s.Sessions.Store(&session)
 	// Send token to the user so they can use it to to authenticate all further requests.
-	writeJSON(c.Writer, &APIRes{"session": []m.Session{session}})
+	c.JSON(200, &APIRes{"session": []m.Session{session}})
 	return
 }
 
 // AuthRequired ...
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, err := jwt.ParseFromRequest(c.Req, func(t *jwt.Token) ([]byte, error) {
+		res, err := jwt.ParseFromRequest(c.Req, func(t *jwt.Token) ([]byte, error) {
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {
-			writeError(c.Writer, "Access denied.", http.StatusUnauthorized, nil)
+			// c.JSON(200,http.StatusUnauthorized, "Access denied.")
+			writeError(c.Writer, "Unauthorized", 401, nil)
+			c.Fail(401, err)
 			return
 		}
+
+		c.Set("user", res.Claims)
+		log.Println(res)
 	}
 }

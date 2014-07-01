@@ -17,7 +17,7 @@ func GetAllClasses(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"class": classes})
+	c.JSON(200, &APIRes{"class": classes})
 	return
 }
 
@@ -36,7 +36,7 @@ func GetClass(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"class": []m.Class{class}})
+	c.JSON(200, &APIRes{"class": []m.Class{class}})
 	return
 }
 
@@ -58,7 +58,7 @@ func CreateClass(c *gin.Context) {
 	}
 	class.ID = id
 
-	writeJSON(c.Writer, &APIRes{"class": []m.Class{*class}})
+	c.JSON(200, &APIRes{"class": []m.Class{*class}})
 	return
 }
 
@@ -82,6 +82,6 @@ func UpdateClass(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"class": []m.Class{*class}})
+	c.JSON(200, &APIRes{"class": []m.Class{*class}})
 	return
 }

@@ -17,7 +17,7 @@ func GetAllClassTerms(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"classTerm": terms})
+	c.JSON(200, &APIRes{"classTerm": terms})
 	return
 }
 
@@ -36,7 +36,7 @@ func GetClassTerm(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"classTerm": []m.ClassTerm{term}})
+	c.JSON(200, &APIRes{"classTerm": []m.ClassTerm{term}})
 	return
 }
 
@@ -58,7 +58,7 @@ func CreateClassTerm(c *gin.Context) {
 	}
 	term.ID = id
 
-	writeJSON(c.Writer, &APIRes{"classTerm": []m.ClassTerm{*term}})
+	c.JSON(200, &APIRes{"classTerm": []m.ClassTerm{*term}})
 	return
 }
 
@@ -82,6 +82,6 @@ func UpdateClassTerm(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"classTerm": []m.ClassTerm{*term}})
+	c.JSON(200, &APIRes{"classTerm": []m.ClassTerm{*term}})
 	return
 }

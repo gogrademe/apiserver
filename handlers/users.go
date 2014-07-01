@@ -16,6 +16,6 @@ func GetAllUsers(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"user": u})
+	c.JSON(200, &APIRes{"user": u})
 	return
 }

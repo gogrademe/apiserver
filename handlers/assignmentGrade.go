@@ -25,7 +25,7 @@ func CreateAssignmentGrade(c *gin.Context) {
 	}
 	a.ID = id
 
-	writeJSON(c.Writer, &APIRes{"grade": []m.AssignmentGrade{*a}})
+	c.JSON(200, &APIRes{"grade": []m.AssignmentGrade{*a}})
 	return
 }
 
@@ -45,7 +45,7 @@ func GetAssignmentGrade(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"grade": []m.AssignmentGrade{a}})
+	c.JSON(200, &APIRes{"grade": []m.AssignmentGrade{a}})
 	return
 }
 
@@ -69,7 +69,7 @@ func UpdateAssignmentGrade(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"grade": []m.AssignmentGrade{*a}})
+	c.JSON(200, &APIRes{"grade": []m.AssignmentGrade{*a}})
 	return
 }
 
@@ -82,6 +82,6 @@ func GetAllAssignmentGrades(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"grade": grades})
+	c.JSON(200, &APIRes{"grade": grades})
 	return
 }

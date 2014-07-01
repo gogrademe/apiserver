@@ -25,7 +25,7 @@ func CreateTeacher(c *gin.Context) {
 	}
 	t.ID = id
 
-	writeJSON(c.Writer, &APIRes{"teacher": []m.Teacher{*t}})
+	c.JSON(200, &APIRes{"teacher": []m.Teacher{*t}})
 	return
 }
 
@@ -45,7 +45,7 @@ func GetTeacher(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"teacher": []m.Teacher{t}})
+	c.JSON(200, &APIRes{"teacher": []m.Teacher{t}})
 	return
 }
 
@@ -70,7 +70,7 @@ func UpdateTeacher(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"teacher": []m.Teacher{*t}})
+	c.JSON(200, &APIRes{"teacher": []m.Teacher{*t}})
 	return
 }
 
@@ -83,6 +83,6 @@ func GetAllTeachers(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"teacher": teachers})
+	c.JSON(200, &APIRes{"teacher": teachers})
 	return
 }

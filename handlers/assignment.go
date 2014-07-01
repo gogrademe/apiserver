@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
@@ -14,7 +16,8 @@ func CreateAssignment(c *gin.Context) {
 
 	errs := binding.Bind(c.Req, a)
 	if errs != nil {
-		writeError(c.Writer, errs, 400, nil)
+		c.Error(errors.New("validation"), errs)
+		c.JSON(400, errs)
 		return
 	}
 
@@ -24,8 +27,8 @@ func CreateAssignment(c *gin.Context) {
 		return
 	}
 	a.ID = id
-
-	writeJSON(c.Writer, &APIRes{"assignment": []m.Assignment{*a}})
+	c.Error(errors.New("test"), "a")
+	c.JSON(200, &APIRes{"assignment": []m.Assignment{*a}})
 	return
 }
 
@@ -45,7 +48,7 @@ func GetAssignment(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"assignment": []m.Assignment{a}})
+	c.JSON(200, &APIRes{"assignment": []m.Assignment{a}})
 	return
 }
 
@@ -69,7 +72,7 @@ func UpdateAssignment(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"assignment": []m.Assignment{*a}})
+	c.JSON(200, &APIRes{"assignment": []m.Assignment{*a}})
 	return
 }
 
@@ -82,6 +85,6 @@ func GetAllAssignments(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"assignment": assignment})
+	c.JSON(200, &APIRes{"assignment": assignment})
 	return
 }

@@ -1,8 +1,12 @@
 package handlers
 
 import (
+	"errors"
+	"log"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
@@ -25,7 +29,7 @@ func CreatePerson(c *gin.Context) {
 
 	p.ID = id
 
-	writeJSON(c.Writer, &APIRes{"person": []m.Person{*p}})
+	c.JSON(200, &APIRes{"person": []m.Person{*p}})
 	return
 }
 
@@ -50,7 +54,7 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"person": []m.Person{*p}})
+	c.JSON(200, &APIRes{"person": []m.Person{*p}})
 	return
 }
 
@@ -70,19 +74,20 @@ func GetPerson(c *gin.Context) {
 		return
 	}
 
-	writeJSON(c.Writer, &APIRes{"person": []m.Person{p}})
+	c.JSON(200, &APIRes{"person": []m.Person{p}})
 	return
 }
 
 // GetAllPeople ...
 func GetAllPeople(c *gin.Context) {
-
+	log.Println(c.Req.URL.Query())
+	log.Println(c.Get("user"))
 	people, err := store.People.FindAll()
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
-
-	writeJSON(c.Writer, &APIRes{"person": people})
+	c.Error(errors.New("test"), "a")
+	c.JSON(200, &APIRes{"person": people})
 	return
 }
