@@ -1,6 +1,8 @@
 package model
 
 import (
+	// "net/http"
+
 	"github.com/mholt/binding"
 )
 
@@ -19,6 +21,17 @@ func (s *Student) Validate() *ValErrors {
 
 	return v
 }
+
+// func (s Student) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+// 	if s.Message == "Go needs generics" {
+// 		errs = append(errs, binding.Error{
+// 			FieldNames:     []string{"message"},
+// 			Classification: "ComplaintError",
+// 			Message:        "Go has generics. They're called interfaces.",
+// 		})
+// 	}
+// 	return errs
+// }
 
 func (s *Student) FieldMap() binding.FieldMap {
 	return binding.FieldMap{

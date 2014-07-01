@@ -6,24 +6,37 @@ import (
 	"net/http"
 )
 
-// APIError represents an error produced by the API
-type APIError struct {
-	Code    int         `json:"code"`
-	Type    string      `json:"type"`
-	Message interface{} `json:"message"`
-	Raw     string      `json:"-"`
-}
+type (
+
+	// APIRes response from the API.
+	APIRes map[string]interface{}
+
+	// APIError represents an error produced by the API
+	APIError struct {
+		Code    int         `json:"code"`
+		Type    string      `json:"type"`
+		Message interface{} `json:"message"`
+		Raw     string      `json:"-"`
+	}
+
+	// Context ...
+	Context struct {
+		Req    *http.Request
+		Writer http.ResponseWriter
+		Keys   map[string]interface{}
+		index  int8
+	}
+)
 
 // NotFoundErr should be used if a resource could not be found.
 var NotFoundErr = &APIError{
 	Code: 404,
 }
 
-// APIRes response from the API.
-type APIRes map[string]interface{}
-
-const serverError = "server error"
-const notFoundError = "not found"
+const (
+	serverError   = "server error"
+	notFoundError = "not found"
+)
 
 // writeError will write a JSON error to the client.
 func writeError(w http.ResponseWriter, message interface{}, code int, errorToLog error) {
