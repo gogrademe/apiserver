@@ -4,10 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SetupHandlers loads all routes into gorillaMux.
+// SetupHandlers loads all routes
 func SetupHandlers(r *gin.Engine) {
-
-	// r.StrictSlash(true)
 	m := r.Group("/api")
 
 	// Auth
@@ -17,44 +15,66 @@ func SetupHandlers(r *gin.Engine) {
 	m.GET("/user", GetAllUsers)
 
 	// Classes
-	m.GET("/class", GetAllClasses)
-	m.POST("/class", CreateClass)
-	m.GET("/class/:id", GetClass)
-	m.PUT("/class/:id", UpdateClass)
+	{
+		g := m.Group("/class")
+		g.GET("/", GetAllClasses)
+		g.POST("/", CreateClass)
+		g.GET("/:id", GetClass)
+		g.PUT("/:id", UpdateClass)
+	}
 
 	// ClassTerms
-	m.GET("term", GetAllClassTerms)
-	m.POST("term", CreateClassTerm)
-	m.GET("term/:id", GetClassTerm)
-	m.PUT("term/:id", UpdateClassTerm)
+	{
+		g := m.Group("/term")
+		g.GET("/", GetAllClassTerms)
+		g.POST("/", CreateClassTerm)
+		g.GET("/:id", GetClassTerm)
+		g.PUT("/:id", UpdateClassTerm)
+	}
 
 	// Assignments
-	m.GET("assignment", GetAllAssignments)
-	m.POST("assignment", CreateAssignment)
-	m.GET("assignment/:id", GetAssignment)
-	m.PUT("assignment/:id", UpdateAssignment)
+	{
+		g := m.Group("/assignment")
+		g.GET("/", GetAllAssignments)
+		g.POST("/", CreateAssignment)
+		g.GET("/:id", GetAssignment)
+		g.PUT("/:id", UpdateAssignment)
+	}
 
 	// AssignmentGrades
-	m.GET("grade", GetAllAssignmentGrades)
-	m.POST("grade", CreateAssignmentGrade)
-	m.GET("grade/:id", GetAssignmentGrade)
-	m.PUT("grade/:id", UpdateAssignmentGrade)
+	{
+		g := m.Group("/grade")
+		g.GET("/", GetAllAssignmentGrades)
+		g.POST("/", CreateAssignmentGrade)
+		g.GET("/:id", GetAssignmentGrade)
+		g.PUT("/:id", UpdateAssignmentGrade)
+	}
 
 	// People
-	m.GET("/person", GetAllPeople)
-	m.POST("/person", CreatePerson)
-	m.GET("/person/:id", GetPerson)
-	m.PUT("/person/:id", UpdatePerson)
+	{
+		g := m.Group("/person")
+		g.GET("/", GetAllPeople)
+		g.POST("/", CreatePerson)
+		g.GET("/:id", GetPerson)
+		g.PUT("/:id", UpdatePerson)
+	}
 
 	// Students
-	m.GET("/student", GetAllStudents)
-	m.POST("/student", CreateStudent)
-	m.GET("/student/:id", GetStudent)
-	m.PUT("/student/:id", UpdateStudent)
+	{
+		g := m.Group("/student")
+		g.GET("/", GetAllStudents)
+		g.POST("/", CreateStudent)
+		g.GET("/:id", GetStudent)
+		g.PUT("/:id", UpdateStudent)
+	}
 
 	// Teachers
-	m.GET("/teacher", GetAllTeachers)
-	m.POST("/teacher", CreateTeacher)
-	m.GET("/teacher/:id", GetTeacher)
-	m.PUT("/teacher/:id", UpdateTeacher)
+	{
+		g := m.Group("/teacher")
+		g.GET("/", GetAllTeachers)
+		g.POST("/", CreateTeacher)
+		g.GET("/:id", GetTeacher)
+		g.PUT("/:id", UpdateTeacher)
+	}
+
 }

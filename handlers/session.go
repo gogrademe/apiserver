@@ -6,7 +6,7 @@ import (
 	m "github.com/Lanciv/GoGradeAPI/model"
 	s "github.com/Lanciv/GoGradeAPI/store"
 
-	// jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
@@ -64,15 +64,14 @@ func Login(c *gin.Context) {
 }
 
 // AuthRequired ...
-// func AuthRequired(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
-// 	return func(c *gin.Context) {
-// 		_, err := jwt.ParseFromRequest(r, func(t *jwt.Token) ([]byte, error) {
-// 			return []byte("someRandomSigningKey"), nil
-// 		})
-// 		if err != nil {
-// 			writeError(c.Writer, "Access denied.", http.StatusUnauthorized, nil)
-// 			return
-// 		}
-// 		handler(w, r)
-// 	}
-// }
+func AuthRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_, err := jwt.ParseFromRequest(c.Req, func(t *jwt.Token) ([]byte, error) {
+			return []byte("someRandomSigningKey"), nil
+		})
+		if err != nil {
+			writeError(c.Writer, "Access denied.", http.StatusUnauthorized, nil)
+			return
+		}
+	}
+}
