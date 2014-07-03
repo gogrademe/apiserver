@@ -27,8 +27,8 @@ func CreateAssignment(c *gin.Context) {
 		return
 	}
 	a.ID = id
-	c.Error(errors.New("test"), "a")
-	c.JSON(200, &APIRes{"assignment": []m.Assignment{*a}})
+
+	c.JSON(201, &APIRes{"assignment": []m.Assignment{*a}})
 	return
 }
 
@@ -79,7 +79,7 @@ func UpdateAssignment(c *gin.Context) {
 // GetAllAssignments ...
 func GetAllAssignments(c *gin.Context) {
 	assignment := []m.Assignment{}
-	err := store.Classes.FindAll(&assignment)
+	err := store.Assignments.FindAll(&assignment)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

@@ -26,7 +26,7 @@ func CreatePerson(c *gin.Context) {
 
 	p.ID = id
 
-	c.JSON(200, &APIRes{"person": []m.Person{*p}})
+	c.JSON(201, &APIRes{"person": []m.Person{*p}})
 	return
 }
 

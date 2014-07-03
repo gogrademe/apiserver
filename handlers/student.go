@@ -25,7 +25,7 @@ func CreateStudent(c *gin.Context) {
 	}
 	s.ID = id
 
-	c.JSON(200, &APIRes{"student": []m.Student{*s}})
+	c.JSON(201, &APIRes{"student": []m.Student{*s}})
 	return
 }
 
@@ -77,7 +77,7 @@ func UpdateStudent(c *gin.Context) {
 // GetAllStudents ...
 func GetAllStudents(c *gin.Context) {
 	students := []m.Student{}
-	err := store.Classes.FindAll(&students)
+	err := store.Students.FindAll(&students)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

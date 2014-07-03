@@ -8,25 +8,25 @@ import (
 	"github.com/mholt/binding"
 )
 
-// GetAllClassTerms ...
-func GetAllClassTerms(c *gin.Context) {
-	terms := []m.ClassTerm{}
-	err := store.ClassTerms.FindAll(&terms)
+// GetAllTerms ...
+func GetAllTerms(c *gin.Context) {
+	terms := []m.Term{}
+	err := store.Terms.FindAll(&terms)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"classTerm": terms})
+	c.JSON(200, &APIRes{"term": terms})
 	return
 }
 
-//GetClassTerm ...
-func GetClassTerm(c *gin.Context) {
+//GetTerm ...
+func GetTerm(c *gin.Context) {
 
 	id := c.Params.ByName("id")
-	term := m.ClassTerm{}
-	err := store.ClassTerms.FindByID(&term, id)
+	term := m.Term{}
+	err := store.Terms.FindByID(&term, id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -36,13 +36,13 @@ func GetClassTerm(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &APIRes{"classTerm": []m.ClassTerm{term}})
+	c.JSON(200, &APIRes{"term": []m.Term{term}})
 	return
 }
 
-//CreateClassTerm ...
-func CreateClassTerm(c *gin.Context) {
-	term := new(m.ClassTerm)
+//CreateTerm ...
+func CreateTerm(c *gin.Context) {
+	term := new(m.Term)
 
 	errs := binding.Bind(c.Req, term)
 	if errs != nil {
@@ -50,24 +50,25 @@ func CreateClassTerm(c *gin.Context) {
 		return
 	}
 
-	id, err := store.ClassTerms.Store(term)
+	id, err := store.Terms.Store(term)
 
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
+
 	term.ID = id
 
-	c.JSON(200, &APIRes{"classTerm": []m.ClassTerm{*term}})
+	c.JSON(201, &APIRes{"term": []m.Term{*term}})
 	return
 }
 
-//UpdateClassTerm ...
-func UpdateClassTerm(c *gin.Context) {
+//UpdateTerm ...
+func UpdateTerm(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
-	term := new(m.ClassTerm)
+	term := new(m.Term)
 
 	errs := binding.Bind(c.Req, term)
 	if errs != nil {
@@ -76,12 +77,12 @@ func UpdateClassTerm(c *gin.Context) {
 	}
 
 	term.ID = id
-	err := store.ClassTerms.Update(term, id)
+	err := store.Terms.Update(term, id)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"classTerm": []m.ClassTerm{*term}})
+	c.JSON(200, &APIRes{"term": []m.Term{*term}})
 	return
 }

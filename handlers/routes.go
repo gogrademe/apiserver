@@ -24,12 +24,12 @@ func SetupHandlers(r *gin.Engine) {
 	g.GET("/:id", GetClass)
 	g.PUT("/:id", UpdateClass)
 
-	// ClassTerms
+	// Terms
 	g = auth.Group("/term")
-	g.GET("/", GetAllClassTerms)
-	g.POST("/", CreateClassTerm)
-	g.GET("/:id", GetClassTerm)
-	g.PUT("/:id", UpdateClassTerm)
+	g.GET("/", GetAllTerms)
+	g.POST("/", CreateTerm)
+	g.GET("/:id", GetTerm)
+	g.PUT("/:id", UpdateTerm)
 
 	// Assignments
 	g = auth.Group("/assignment")
@@ -37,6 +37,13 @@ func SetupHandlers(r *gin.Engine) {
 	g.POST("/", CreateAssignment)
 	g.GET("/:id", GetAssignment)
 	g.PUT("/:id", UpdateAssignment)
+
+	// AssignmentTypes
+	g = auth.Group("/type")
+	g.GET("/", GetAllAssignmentTypes)
+	g.POST("/", CreateAssignmentType)
+	g.GET("/:id", GetAssignmentType)
+	g.PUT("/:id", UpdateAssignmentType)
 
 	// AssignmentGrades
 	g = auth.Group("/grade")

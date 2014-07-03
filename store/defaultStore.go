@@ -13,16 +13,20 @@ import (
 // 	FindByID(string) (interface{}, error)
 // }
 
+// DefaultStore ...
 type DefaultStore struct {
 	TableName string
 }
 
+// NewDefaultStore ...
 func NewDefaultStore(tableName string) DefaultStore {
 	return DefaultStore{TableName: tableName}
 }
 
+// Store ...
 func (d *DefaultStore) Store(v m.Model) (string, error) {
 	v.UpdateTime()
+
 	res, err := r.Table(d.TableName).Insert(v).RunWrite(sess)
 	if err != nil {
 		return "", err
@@ -33,6 +37,7 @@ func (d *DefaultStore) Store(v m.Model) (string, error) {
 	return "", nil
 }
 
+// Update ...
 func (d *DefaultStore) Update(v m.Model, id string) error {
 	v.UpdateTime()
 	res, err := r.Table(d.TableName).Get(id).Update(v).RunWrite(sess)
@@ -46,6 +51,7 @@ func (d *DefaultStore) Update(v m.Model, id string) error {
 	return nil
 }
 
+// FindAll ...
 func (d *DefaultStore) FindAll(data interface{}) error {
 
 	res, err := r.Table(d.TableName).Run(sess)
@@ -55,6 +61,7 @@ func (d *DefaultStore) FindAll(data interface{}) error {
 	return res.All(data)
 }
 
+// FindByID ...
 func (d *DefaultStore) FindByID(data m.Model, id string) error {
 
 	res, err := r.Table(d.TableName).Get(id).Run(sess)

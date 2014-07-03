@@ -58,7 +58,7 @@ func CreateClass(c *gin.Context) {
 	}
 	class.ID = id
 
-	c.JSON(200, &APIRes{"class": []m.Class{*class}})
+	c.JSON(201, &APIRes{"class": []m.Class{*class}})
 	return
 }
 

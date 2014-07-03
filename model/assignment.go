@@ -9,44 +9,50 @@ import (
 
 //Assignment ...
 type Assignment struct {
-	ID      string    `gorethink:"id,omitempty"json:"id"`
-	TermID  string    `gorethink:"termId,omitempty"json:"termId"`
-	Name    string    `gorethink:"name,omitempty"json:"name"`
-	Type    string    `gorethink:"type,omitempty"json:"type"`
-	DueDate time.Time `gorethink:"dueDate,omitempty"json:"dueDate"`
+	ID      string         `gorethink:"id,omitempty"json:"id"`
+	ClassID string         `gorethink:"classId,omitempty"json:"classId"`
+	TermID  string         `gorethink:"termId,omitempty"json:"termId"`
+	TypeID  string         `gorethink:"typeId,omitempty"json:"typeId"`
+	Name    string         `gorethink:"name,omitempty"json:"name"`
+	Type    AssignmentType `gorethink:"type,omitempty"json:"type"`
+	DueDate time.Time      `gorethink:"dueDate,omitempty"json:"dueDate"`
 	TimeStamp
 }
 
 // FieldMap ...
 func (a *Assignment) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
-		&a.ID:      field("id", false),
-		&a.TermID:  field("termId", true),
-		&a.Name:    field("name", true),
-		&a.Type:    field("type", true),
-		&a.DueDate: field("dueDate", true),
+		&a.ID:      "id",
+		&a.Name:    "name",
+		&a.TypeID:  "typeId",
+		&a.ClassID: "classId",
+		&a.TermID:  "termId",
+		&a.DueDate: "dueDate",
 	}
 }
 func (a Assignment) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if a.Name == "" {
 		errs = append(errs, RequiredErr("name"))
 	}
-	if a.Type == "" {
-		errs = append(errs, RequiredErr("type"))
+	if a.ClassID == "" {
+		errs = append(errs, RequiredErr("classId"))
 	}
 	if a.TermID == "" {
 		errs = append(errs, RequiredErr("termId"))
 	}
+	if a.TypeID == "" {
+		errs = append(errs, RequiredErr("typeId"))
+	}
+	// if a.Type == (AssignmentType{}) {
+	// 	errs = append(errs, binding.Error{
+	// 		FieldNames: []string{"type"},
+	// 		Message:    "required",
+	// 	})
+	// } else {
+	// 	typeErrs := a.Type.Validate(req, errs)
+	// 	if typeErrs.Len() > 0 {
+	// 		errs = append(errs, typeErrs)
+	// 	}
+	// }
 	return errs
 }
-
-// Validate ...
-// func (a *Assignment) Validate() *ValErrors {
-// 	var v *ValErrors
-//
-// 	v.RequiredString(a.Name, "name")
-// 	v.RequiredString(a.Type, "type")
-// 	// v.RequiredString(a.DueDate, "id")
-//
-// 	return v
-// }

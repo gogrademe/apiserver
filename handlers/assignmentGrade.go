@@ -25,7 +25,7 @@ func CreateAssignmentGrade(c *gin.Context) {
 	}
 	a.ID = id
 
-	c.JSON(200, &APIRes{"grade": []m.AssignmentGrade{*a}})
+	c.JSON(201, &APIRes{"grade": []m.AssignmentGrade{*a}})
 	return
 }
 
@@ -76,7 +76,7 @@ func UpdateAssignmentGrade(c *gin.Context) {
 // GetAllAssignmentGrades ...
 func GetAllAssignmentGrades(c *gin.Context) {
 	grades := []m.AssignmentGrade{}
-	err := store.Classes.FindAll(&grades)
+	err := store.AssignmentGrades.FindAll(&grades)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
