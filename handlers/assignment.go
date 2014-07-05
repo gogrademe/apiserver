@@ -78,8 +78,19 @@ func UpdateAssignment(c *gin.Context) {
 
 // GetAllAssignments ...
 func GetAllAssignments(c *gin.Context) {
+	filter := map[string]string{}
+	if c.Req.URL.Query().Get("classId") != "" {
+		filter["classId"] = c.Req.URL.Query().Get("classId")
+	}
+	if c.Req.URL.Query().Get("termId") != "" {
+		filter["termId"] = c.Req.URL.Query().Get("termId")
+	}
+	if c.Req.URL.Query().Get("typeId") != "" {
+		filter["typeId"] = c.Req.URL.Query().Get("typeId")
+	}
+
 	assignment := []m.Assignment{}
-	err := store.Assignments.FindAll(&assignment)
+	err := store.Assignments.Filter(&assignment, filter)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

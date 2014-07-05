@@ -6,12 +6,12 @@ import (
 )
 
 // Storer interface
-// type Storer interface {
-// 	Store(interface{}) (string, error)
-// 	Update(string, interface{}) error
-// 	FindAll(interface{}) error
-// 	FindByID(string) (interface{}, error)
-// }
+type Storer interface {
+	Store(m.Model) (string, error)
+	Update(m.Model, string) error
+	FindAll(interface{}) error
+	FindByID(m.Model, string) error
+}
 
 // DefaultStore ...
 type DefaultStore struct {
@@ -50,9 +50,16 @@ func (d *DefaultStore) Update(v m.Model, id string) error {
 	}
 	return nil
 }
+func (d *DefaultStore) Filter(data interface{}, filter interface{}) error {
+	res, err := r.Table(d.TableName).Filter(filter).Run(sess)
+	if err != nil {
+		return err
+	}
+	return res.All(data)
+}
 
 // FindAll ...
-func (d *DefaultStore) FindAll(data interface{}) error {
+func (d DefaultStore) FindAll(data interface{}) error {
 
 	res, err := r.Table(d.TableName).Run(sess)
 	if err != nil {
@@ -62,7 +69,7 @@ func (d *DefaultStore) FindAll(data interface{}) error {
 }
 
 // FindByID ...
-func (d *DefaultStore) FindByID(data m.Model, id string) error {
+func (d DefaultStore) FindByID(data m.Model, id string) error {
 
 	res, err := r.Table(d.TableName).Get(id).Run(sess)
 	if err != nil {

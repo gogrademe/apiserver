@@ -6,6 +6,7 @@ import (
 
 // SetupHandlers loads all routes
 func SetupHandlers(r *gin.Engine) {
+	// r.Handle("OPTIONS", "/*cors", []gin.HandlerFunc{CORSMiddleware()})
 	r.Use(CORSMiddleware())
 	m := r.Group("/api")
 
@@ -35,6 +36,7 @@ func SetupHandlers(r *gin.Engine) {
 	g = auth.Group("/assignment")
 	g.GET("/", GetAllAssignments)
 	g.POST("/", CreateAssignment)
+	// g.POST("/", Create(store.Assignments))
 	g.GET("/:id", GetAssignment)
 	g.PUT("/:id", UpdateAssignment)
 

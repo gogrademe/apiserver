@@ -21,9 +21,10 @@ var (
 	Teachers TeacherStore
 	Students StudentStore
 
-	Classes ClassStore
-	Terms   TermStore
-	People  PersonStore
+	Classes     ClassStore
+	ClassPeople ClassPersonStore
+	Terms       TermStore
+	People      PersonStore
 
 	Assignments      AssignmentStore
 	AssignmentTypes  AssignmentTypeStore
@@ -36,7 +37,7 @@ var (
 	ErrNotFound   = errors.New("record not found")
 	ErrValidation = errors.New("validation error")
 
-	tables = []string{"users", "classes", "terms", "assignments",
+	tables = []string{"users", "classes", "classPeople", "terms", "assignments",
 		"assignmentGrades", "assignmentTypes", "people", "students",
 		"teachers", "parents", "sessions"}
 )
@@ -54,6 +55,7 @@ func init() {
 
 	// Classes
 	Classes = NewClassStore()
+	ClassPeople = NewClassPersonStore()
 	Terms = NewTermStore()
 
 	// Users/Auth

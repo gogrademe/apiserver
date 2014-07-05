@@ -23,6 +23,26 @@ var (
 	class5 m.Class
 	class6 m.Class
 	class7 m.Class
+
+	person1  m.Person
+	person2  m.Person
+	person3  m.Person
+	person4  m.Person
+	person5  m.Person
+	person6  m.Person
+	person7  m.Person
+	person8  m.Person
+	person9  m.Person
+	person10 m.Person
+
+	student1 m.Student
+	student2 m.Student
+	student3 m.Student
+	student4 m.Student
+	student5 m.Student
+	student6 m.Student
+	student7 m.Student
+	student8 m.Student
 )
 
 func createDatabase() {
@@ -60,12 +80,16 @@ func insertTestData() {
 
 	insertTestAssignments()
 
+	insertTestClassPeople()
+
 }
+
 func insertTestUsers() {
 
 	u, _ := m.NewUser("test@test.com", "somePassword", "Admin")
 	Users.Store(u)
 }
+
 func insertTestTerms() {
 	term1 = m.Term{
 		Name: "Term 1",
@@ -81,6 +105,7 @@ func insertTestTerms() {
 	term2.ID, _ = Terms.Store(&term2)
 	term3.ID, _ = Terms.Store(&term3)
 }
+
 func insertTestClasses() {
 
 	class1 = m.Class{
@@ -240,6 +265,24 @@ func insertTestAssignments() {
 		TypeID:  type5.ID,
 		Name:    "Cell Model",
 	}
+	a9 := m.Assignment{
+		ClassID: class2.ID,
+		TermID:  term1.ID,
+		TypeID:  type5.ID,
+		Name:    "Cell Model",
+	}
+	a10 := m.Assignment{
+		ClassID: class2.ID,
+		TermID:  term1.ID,
+		TypeID:  type5.ID,
+		Name:    "Cell Model",
+	}
+	a11 := m.Assignment{
+		ClassID: class2.ID,
+		TermID:  term2.ID,
+		TypeID:  type5.ID,
+		Name:    "Cell Model",
+	}
 
 	Assignments.Store(&a1)
 	Assignments.Store(&a2)
@@ -249,117 +292,129 @@ func insertTestAssignments() {
 	Assignments.Store(&a6)
 	Assignments.Store(&a7)
 	Assignments.Store(&a8)
+	Assignments.Store(&a9)
+	Assignments.Store(&a10)
+	Assignments.Store(&a11)
 }
 func insertTestPeople() {
 
-	p1 := m.Person{
+	person1 = m.Person{
 		FirstName:  "Jon",
 		MiddleName: "David",
 		LastName:   "Bush",
 	}
-	p2 := m.Person{
+	person2 = m.Person{
 		FirstName: "Angel",
 		LastName:  "Heredia",
 	}
-	p3 := m.Person{
+	person3 = m.Person{
 		FirstName: "Nicole",
 		LastName:  "Aitchison",
 	}
-	p4 := m.Person{
+	person4 = m.Person{
 		FirstName: "Frankie",
 		LastName:  "Bagnardi",
 	}
-	p5 := m.Person{
+	person5 = m.Person{
 		FirstName: "Adam",
 		LastName:  "Price",
 	}
-	p6 := m.Person{
+	person6 = m.Person{
 		FirstName:  "Jake",
 		MiddleName: "Matthew",
 		LastName:   "Price",
 	}
-	p7 := m.Person{
+	person7 = m.Person{
 		FirstName: "Matthew",
 		LastName:  "Aitchison",
 	}
-	p8 := m.Person{
+	person8 = m.Person{
 		FirstName: "Natalie",
 		LastName:  "Aitchison",
 	}
-	p9 := m.Person{
+	person9 = m.Person{
 
 		FirstName: "Susan",
 		LastName:  "Feathers",
 	}
-	p10 := m.Person{
+	person10 = m.Person{
 
 		FirstName: "Karen",
 		LastName:  "Portman",
 	}
 
-	p1.ID, _ = People.Store(&p1)
-	p2.ID, _ = People.Store(&p2)
-	p3.ID, _ = People.Store(&p3)
-	p4.ID, _ = People.Store(&p4)
-	p5.ID, _ = People.Store(&p5)
-	p6.ID, _ = People.Store(&p6)
-	p7.ID, _ = People.Store(&p7)
-	p8.ID, _ = People.Store(&p8)
-	p9.ID, _ = People.Store(&p9)
-	p10.ID, _ = People.Store(&p10)
+	person1.ID, _ = People.Store(&person1)
+	person2.ID, _ = People.Store(&person2)
+	person3.ID, _ = People.Store(&person3)
+	person4.ID, _ = People.Store(&person4)
+	person5.ID, _ = People.Store(&person5)
+	person6.ID, _ = People.Store(&person6)
+	person7.ID, _ = People.Store(&person7)
+	person8.ID, _ = People.Store(&person8)
+	person9.ID, _ = People.Store(&person9)
+	person10.ID, _ = People.Store(&person10)
 
-	s1 := m.Student{
-		PersonID:   p1.ID,
+	student1 = m.Student{
+		PersonID:   person1.ID,
 		GradeLevel: "Year 1",
 	}
-	s2 := m.Student{
-		PersonID:   p2.ID,
+	student2 = m.Student{
+		PersonID:   person2.ID,
 		GradeLevel: "Year 9",
 	}
-	s3 := m.Student{
-		PersonID:   p3.ID,
+	student3 = m.Student{
+		PersonID:   person3.ID,
 		GradeLevel: "Year 12",
 	}
-	s4 := m.Student{
-		PersonID:   p4.ID,
+	student4 = m.Student{
+		PersonID:   person4.ID,
 		GradeLevel: "Year 9",
 	}
-	s5 := m.Student{
-		PersonID:   p5.ID,
+	student5 = m.Student{
+		PersonID:   person5.ID,
 		GradeLevel: "Year 12",
 	}
-	s6 := m.Student{
-		PersonID:   p6.ID,
+	student6 = m.Student{
+		PersonID:   person6.ID,
 		GradeLevel: "Year 12",
 	}
-	s7 := m.Student{
-		PersonID:   p7.ID,
+	student7 = m.Student{
+		PersonID:   person7.ID,
 		GradeLevel: "Year 12",
 	}
-	s8 := m.Student{
-		PersonID:   p8.ID,
+	student8 = m.Student{
+		PersonID:   person8.ID,
 		GradeLevel: "Year 12",
 	}
 
-	Students.Store(&s1)
-	Students.Store(&s2)
-	Students.Store(&s3)
-	Students.Store(&s4)
-	Students.Store(&s5)
-	Students.Store(&s6)
-	Students.Store(&s7)
-	Students.Store(&s8)
+	Students.Store(&student1)
+	Students.Store(&student2)
+	Students.Store(&student3)
+	Students.Store(&student4)
+	Students.Store(&student5)
+	Students.Store(&student6)
+	Students.Store(&student7)
+	Students.Store(&student8)
 
 	t1 := m.Teacher{
-		PersonID: p9.ID,
+		PersonID: person9.ID,
 		Email:    "Susan.Feathers@test.com",
 	}
 	t2 := m.Teacher{
-		PersonID: p10.ID,
+		PersonID: person10.ID,
 		Email:    "Karen.Portman@test.com",
 	}
 
 	Teachers.Store(&t1)
 	Teachers.Store(&t2)
 
+}
+
+func insertTestClassPeople() {
+	p := m.ClassPerson{
+		PersonID: person1.ID,
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+	}
+	ClassPeople.Store(&p)
 }

@@ -26,7 +26,7 @@ func (a *AssignmentStore) BeforeSave(v *m.Assignment) error {
 	return nil
 }
 
-func (a *AssignmentStore) Store(v *m.Assignment) (string, error) {
+func (a AssignmentStore) Store(v *m.Assignment) (string, error) {
 	err := a.BeforeSave(v)
 	if err != nil {
 		return "", err
