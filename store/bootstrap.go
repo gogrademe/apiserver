@@ -80,7 +80,7 @@ func insertTestData() {
 
 	insertTestAssignments()
 
-	insertTestClassPeople()
+	insertTestEnrollments()
 
 }
 
@@ -410,11 +410,29 @@ func insertTestPeople() {
 
 }
 
-func insertTestClassPeople() {
-	p := m.ClassPerson{
-		PersonID: person1.ID,
-		ClassID:  class1.ID,
-		TermID:   term1.ID,
+func insertTestEnrollments() {
+	p1 := m.Enrollment{
+		StudentID: student1.ID,
+		ClassID:   class1.ID,
+		TermID:    term1.ID,
 	}
-	ClassPeople.Store(&p)
+	p2 := m.Enrollment{
+		StudentID: student2.ID,
+		ClassID:   class1.ID,
+		TermID:    term1.ID,
+	}
+	p3 := m.Enrollment{
+		StudentID: student3.ID,
+		ClassID:   class1.ID,
+		TermID:    term1.ID,
+	}
+	p4 := m.Enrollment{
+		StudentID: student4.ID,
+		ClassID:   class1.ID,
+		TermID:    term1.ID,
+	}
+	Enrollments.Store(&p1)
+	Enrollments.Store(&p2)
+	Enrollments.Store(&p3)
+	Enrollments.Store(&p4)
 }
