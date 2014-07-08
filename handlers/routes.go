@@ -25,6 +25,14 @@ func SetupHandlers(r *gin.Engine) {
 	g.GET("/:id", GetClass)
 	g.PUT("/:id", UpdateClass)
 
+	// Enrollments
+	g = auth.Group("/enrollment")
+	g.GET("/", GetAllEnrollments)
+	g.POST("/", CreateEnrollment)
+	g.GET("/:id", GetEnrollment)
+	g.PUT("/:id", UpdateEnrollment)
+	g.DELETE("/:id", DeleteEnrollment)
+
 	// Terms
 	g = auth.Group("/term")
 	g.GET("/", GetAllTerms)

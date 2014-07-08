@@ -65,6 +65,22 @@ func cleanTables() {
 func createIndexes() {
 
 	r.Db(dbName).Table("users").IndexCreate("email").Run(sess)
+	r.Db(dbName).Table("users").IndexCreate("emailLower").Run(sess)
+
+	r.Db(dbName).Table("assignments").IndexCreate("classId").Run(sess)
+	r.Db(dbName).Table("assignments").IndexCreate("termId").Run(sess)
+	r.Db(dbName).Table("assignments").IndexCreate("typeId").Run(sess)
+
+	r.Db(dbName).Table("assignmentGrades").IndexCreate("assignmentId").Run(sess)
+	r.Db(dbName).Table("assignmentGrades").IndexCreate("studentId").Run(sess)
+
+	r.Db(dbName).Table("enrollments").IndexCreate("studentId").Run(sess)
+	r.Db(dbName).Table("enrollments").IndexCreate("classId").Run(sess)
+	r.Db(dbName).Table("enrollments").IndexCreate("termId").Run(sess)
+
+	r.Db(dbName).Table("students").IndexCreate("personId").Run(sess)
+
+	r.Db(dbName).Table("teachers").IndexCreate("personId").Run(sess)
 
 }
 
@@ -387,14 +403,14 @@ func insertTestPeople() {
 		GradeLevel: "Year 12",
 	}
 
-	Students.Store(&student1)
-	Students.Store(&student2)
-	Students.Store(&student3)
-	Students.Store(&student4)
-	Students.Store(&student5)
-	Students.Store(&student6)
-	Students.Store(&student7)
-	Students.Store(&student8)
+	student1.ID, _ = Students.Store(&student1)
+	student2.ID, _ = Students.Store(&student2)
+	student3.ID, _ = Students.Store(&student3)
+	student4.ID, _ = Students.Store(&student4)
+	student5.ID, _ = Students.Store(&student5)
+	student6.ID, _ = Students.Store(&student6)
+	student7.ID, _ = Students.Store(&student7)
+	student8.ID, _ = Students.Store(&student8)
 
 	t1 := m.Teacher{
 		PersonID: person9.ID,
@@ -431,8 +447,38 @@ func insertTestEnrollments() {
 		ClassID:   class1.ID,
 		TermID:    term1.ID,
 	}
+	p5 := m.Enrollment{
+		StudentID: student4.ID,
+		ClassID:   class2.ID,
+		TermID:    term1.ID,
+	}
+	p6 := m.Enrollment{
+		StudentID: student4.ID,
+		ClassID:   class3.ID,
+		TermID:    term1.ID,
+	}
+	p7 := m.Enrollment{
+		StudentID: student4.ID,
+		ClassID:   class5.ID,
+		TermID:    term1.ID,
+	}
+	p8 := m.Enrollment{
+		StudentID: student4.ID,
+		ClassID:   class6.ID,
+		TermID:    term1.ID,
+	}
+	p9 := m.Enrollment{
+		StudentID: student4.ID,
+		ClassID:   class7.ID,
+		TermID:    term1.ID,
+	}
 	Enrollments.Store(&p1)
 	Enrollments.Store(&p2)
 	Enrollments.Store(&p3)
 	Enrollments.Store(&p4)
+	Enrollments.Store(&p5)
+	Enrollments.Store(&p6)
+	Enrollments.Store(&p7)
+	Enrollments.Store(&p8)
+	Enrollments.Store(&p9)
 }

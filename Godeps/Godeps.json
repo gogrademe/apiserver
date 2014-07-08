@@ -1,0 +1,49 @@
+{
+	"ImportPath": "github.com/Lanciv/GoGradeAPI",
+	"GoVersion": "go1.3",
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go.crypto/bcrypt",
+			"Comment": "null-212",
+			"Rev": "1064b89a6fb591df0dd65422295b8498916b092f"
+		},
+		{
+			"ImportPath": "code.google.com/p/go.crypto/blowfish",
+			"Comment": "null-212",
+			"Rev": "1064b89a6fb591df0dd65422295b8498916b092f"
+		},
+		{
+			"ImportPath": "code.google.com/p/goprotobuf/proto",
+			"Comment": "go.r60-146",
+			"Rev": "f5ac12b15e49095c60ae0acc6da0e28d47e2a29f"
+		},
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.2.0-9-g97978e5",
+			"Rev": "97978e5e5483a3f926c2bb6e19f9e2ff344e81f0"
+		},
+		{
+			"ImportPath": "github.com/dancannon/gorethink",
+			"Comment": "v0.3",
+			"Rev": "916b03142cf131fae1584693a68f0d4b52feea18"
+		},
+		{
+			"ImportPath": "github.com/dgrijalva/jwt-go",
+			"Comment": "v1.0.0-2-gf7a9d2e",
+			"Rev": "f7a9d2e66ed71a4e3bfaa24380e84bf465d665a8"
+		},
+		{
+			"ImportPath": "github.com/gin-gonic/gin",
+			"Comment": "v0.1-76-g493008e",
+			"Rev": "493008ea3c72b8588f5f3a87bcb32274f49837d3"
+		},
+		{
+			"ImportPath": "github.com/julienschmidt/httprouter",
+			"Rev": "c5247d1e3f4859f0ad3ec04311a872702fb86209"
+		},
+		{
+			"ImportPath": "github.com/mholt/binding",
+			"Rev": "495a5e4b7e8461e29dc0c976cdd36c2251319e2d"
+		}
+	]
+}

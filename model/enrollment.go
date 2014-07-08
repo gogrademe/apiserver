@@ -14,6 +14,16 @@ type Enrollment struct {
 	TimeStamp
 }
 
+type EnrollmentAPIRes struct {
+	ID        string  `gorethink:"id,omitempty"json:"id"`
+	StudentID string  `gorethink:"studentId,omitempty"json:"studentId"`
+	ClassID   string  `gorethink:"classId,omitempty"json:"classId"`
+	TermID    string  `gorethink:"termId,omitempty"json:"termId"`
+	Student   Student `gorethink:"student,omitempty"json:"student"`
+	Person    Person  `gorethink:"person,omitempty"json:"person"`
+	TimeStamp
+}
+
 func (e Enrollment) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if e.StudentID == "" {
 		errs = append(errs, RequiredErr("studentId"))

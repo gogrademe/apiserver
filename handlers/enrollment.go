@@ -28,7 +28,7 @@ func CreateEnrollment(c *gin.Context) {
 	}
 	a.ID = id
 
-	c.JSON(201, &APIRes{"assignment": []m.Enrollment{*a}})
+	c.JSON(201, &APIRes{"enrollment": []m.Enrollment{*a}})
 	return
 }
 
@@ -48,7 +48,26 @@ func GetEnrollment(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &APIRes{"assignment": []m.Enrollment{a}})
+	c.JSON(200, &APIRes{"enrollment": []m.Enrollment{a}})
+	return
+}
+
+// DeleteEnrollment ...
+func DeleteEnrollment(c *gin.Context) {
+
+	id := c.Params.ByName("id")
+
+	err := store.Enrollments.Delete(id)
+	if err == store.ErrNotFound {
+		writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
+	if err != nil {
+		writeError(c.Writer, serverError, 500, nil)
+		return
+	}
+
+	c.JSON(200, &APIRes{"enrollment": []m.Enrollment{}})
 	return
 }
 
@@ -72,30 +91,30 @@ func UpdateEnrollment(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &APIRes{"assignment": []m.Enrollment{*a}})
+	c.JSON(200, &APIRes{"enrollment": []m.Enrollment{*a}})
 	return
 }
 
-// GetAllAssignments ...
-func GetAllAssignments(c *gin.Context) {
+// GetAllEnrollments ...
+func GetAllEnrollments(c *gin.Context) {
 	filter := map[string]string{}
 	if c.Req.URL.Query().Get("classId") != "" {
 		filter["classId"] = c.Req.URL.Query().Get("classId")
 	}
+	if c.Req.URL.Query().Get("studentId") != "" {
+		filter["studentId"] = c.Req.URL.Query().Get("studentId")
+	}
 	if c.Req.URL.Query().Get("termId") != "" {
 		filter["termId"] = c.Req.URL.Query().Get("termId")
 	}
-	if c.Req.URL.Query().Get("typeId") != "" {
-		filter["typeId"] = c.Req.URL.Query().Get("typeId")
-	}
 
-	assignment := []m.Enrollment{}
-	err := store.Enrollments.Filter(&assignment, filter)
+	enrollments := []m.EnrollmentAPIRes{}
+	err := store.Enrollments.Filter(&enrollments, filter)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"assignment": assignment})
+	c.JSON(200, &APIRes{"enrollment": enrollments})
 	return
 }

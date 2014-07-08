@@ -3,6 +3,8 @@ package store
 import (
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
+
+	"errors"
 )
 
 // Storer interface
@@ -66,6 +68,18 @@ func (d DefaultStore) FindAll(data interface{}) error {
 		return err
 	}
 	return res.All(data)
+}
+
+// Delete ...
+func (d DefaultStore) Delete(id string) error {
+	if id == "" {
+		return errors.New("ID required")
+	}
+	_, err := r.Table(d.TableName).Get(id).Delete().Run(sess)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // FindByID ...
