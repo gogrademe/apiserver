@@ -44,7 +44,7 @@ func GetTerm(c *gin.Context) {
 func CreateTerm(c *gin.Context) {
 	term := new(m.Term)
 
-	errs := binding.Bind(c.Req, term)
+	errs := binding.Bind(c.Request, term)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -70,7 +70,7 @@ func UpdateTerm(c *gin.Context) {
 
 	term := new(m.Term)
 
-	errs := binding.Bind(c.Req, term)
+	errs := binding.Bind(c.Request, term)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

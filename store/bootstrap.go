@@ -3,6 +3,7 @@ package store
 import (
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
+	"time"
 
 	//"github.com/Pallinder/go-randomdata"
 )
@@ -110,13 +111,19 @@ func insertTestUsers() {
 
 func insertTestTerms() {
 	term1 = m.Term{
-		Name: "Term 1",
+		Name:       "Term 1",
+		SchoolYear: "2014-2015",
+		StartDate:  time.Date(2014, time.September, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term2 = m.Term{
-		Name: "Term 2",
+		Name:       "Term 2",
+		SchoolYear: "2014-2015",
+		StartDate:  time.Date(2015, time.January, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term3 = m.Term{
-		Name: "Term 3",
+		Name:       "Term 3",
+		SchoolYear: "2014-2015",
+		StartDate:  time.Date(2015, time.May, 10, 8, 0, 0, 0, time.UTC),
 	}
 
 	term1.ID, _ = Terms.Store(&term1)

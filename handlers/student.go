@@ -12,7 +12,7 @@ import (
 func CreateStudent(c *gin.Context) {
 	s := new(m.Student)
 
-	errs := binding.Bind(c.Req, s)
+	errs := binding.Bind(c.Request, s)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -56,7 +56,7 @@ func UpdateStudent(c *gin.Context) {
 
 	s := new(m.Student)
 
-	errs := binding.Bind(c.Req, s)
+	errs := binding.Bind(c.Request, s)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

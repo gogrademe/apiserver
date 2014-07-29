@@ -14,7 +14,7 @@ import (
 func CreateEnrollment(c *gin.Context) {
 	a := new(m.Enrollment)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		c.Error(errors.New("validation"), errs)
 		c.JSON(400, errs)
@@ -77,7 +77,7 @@ func UpdateEnrollment(c *gin.Context) {
 
 	a := new(m.Enrollment)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -98,14 +98,14 @@ func UpdateEnrollment(c *gin.Context) {
 // GetAllEnrollments ...
 func GetAllEnrollments(c *gin.Context) {
 	filter := map[string]string{}
-	if c.Req.URL.Query().Get("classId") != "" {
-		filter["classId"] = c.Req.URL.Query().Get("classId")
+	if c.Request.URL.Query().Get("classId") != "" {
+		filter["classId"] = c.Request.URL.Query().Get("classId")
 	}
-	if c.Req.URL.Query().Get("studentId") != "" {
-		filter["studentId"] = c.Req.URL.Query().Get("studentId")
+	if c.Request.URL.Query().Get("studentId") != "" {
+		filter["studentId"] = c.Request.URL.Query().Get("studentId")
 	}
-	if c.Req.URL.Query().Get("termId") != "" {
-		filter["termId"] = c.Req.URL.Query().Get("termId")
+	if c.Request.URL.Query().Get("termId") != "" {
+		filter["termId"] = c.Request.URL.Query().Get("termId")
 	}
 
 	enrollments := []m.EnrollmentAPIRes{}

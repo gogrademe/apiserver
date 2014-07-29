@@ -44,7 +44,7 @@ func GetClass(c *gin.Context) {
 func CreateClass(c *gin.Context) {
 	class := new(m.Class)
 
-	errs := binding.Bind(c.Req, class)
+	errs := binding.Bind(c.Request, class)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -69,7 +69,7 @@ func UpdateClass(c *gin.Context) {
 
 	class := new(m.Class)
 
-	errs := binding.Bind(c.Req, class)
+	errs := binding.Bind(c.Request, class)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

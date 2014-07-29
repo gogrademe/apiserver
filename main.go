@@ -16,6 +16,7 @@ var (
 	listenAddr     string
 	address        string
 	dbName         string
+	staticDir      string
 	insertTestData bool
 )
 
@@ -28,7 +29,9 @@ func main() {
 	flag.StringVar(&listenAddr, "listenAddr", ":5005", "")
 	flag.StringVar(&address, "dbAddress", "localhost:28015", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
+	flag.StringVar(&staticDir, "staticDir", "public", "")
 	flag.BoolVar(&insertTestData, "insertTestData", true, "")
+
 	flag.Parse()
 
 	if err := store.Connect(address, dbName); err != nil {
@@ -38,9 +41,12 @@ func main() {
 	store.SetupDB(insertTestData)
 
 	r := gin.Default()
+	r.Static("/app", staticDir)
 	// r.Use(negroni.HandlerFunc(h.CORSMiddleware))
 
 	h.SetupHandlers(r)
+
+
 
 	r.Run(listenAddr)
 

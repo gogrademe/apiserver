@@ -33,7 +33,7 @@ func Login(c *gin.Context) {
 	// Get username and password
 	lf := new(LoginForm)
 
-	errs := binding.Bind(c.Req, lf)
+	errs := binding.Bind(c.Request, lf)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -66,7 +66,7 @@ func Login(c *gin.Context) {
 // AuthRequired ...
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		res, err := jwt.ParseFromRequest(c.Req, func(t *jwt.Token) ([]byte, error) {
+		res, err := jwt.ParseFromRequest(c.Request, func(t *jwt.Token) ([]byte, error) {
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {

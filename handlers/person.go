@@ -12,7 +12,7 @@ import (
 func CreatePerson(c *gin.Context) {
 	p := new(m.Person)
 
-	errs := binding.Bind(c.Req, p)
+	errs := binding.Bind(c.Request, p)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -37,7 +37,7 @@ func UpdatePerson(c *gin.Context) {
 
 	p := new(m.Person)
 
-	errs := binding.Bind(c.Req, p)
+	errs := binding.Bind(c.Request, p)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

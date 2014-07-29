@@ -8,12 +8,11 @@ import (
 )
 
 type Term struct {
-	ID        string    `gorethink:"id,omitempty"json:"id"`
-	Name      string    `gorethink:"name,omitempty"json:"name"`
-	StartDate time.Time `gorethink:"startDate,omitempty"json:"startDate"`
-	EndDate   time.Time `gorethink:"endDate,omitempty"json:"endDate"`
-	// Assignments []Assignment `gorethink:"-"json:"assignments"`
-	// People      []Person     `gorethink:"-"json:"people"`
+	ID         string    `gorethink:"id,omitempty"json:"id"`
+	Name       string    `gorethink:"name,omitempty"json:"name"`
+	SchoolYear string    `gorethink:"schoolYear,omitempty"json:"schoolYear"`
+	StartDate  time.Time `gorethink:"startDate,omitempty"json:"startDate"`
+	EndDate    time.Time `gorethink:"endDate,omitempty"json:"endDate"`
 	TimeStamp
 }
 
@@ -26,7 +25,10 @@ func (t Term) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 
 func (t *Term) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
-		&t.ID:   "id",
-		&t.Name: "name",
+		&t.ID:         "id",
+		&t.Name:       "name",
+		&t.SchoolYear: "schoolYear",
+		&t.StartDate:  "startDate",
+		&t.EndDate:    "endDate",
 	}
 }

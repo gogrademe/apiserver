@@ -14,7 +14,7 @@ import (
 func CreateAssignment(c *gin.Context) {
 	a := new(m.Assignment)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		c.Error(errors.New("validation"), errs)
 		c.JSON(400, errs)
@@ -58,7 +58,7 @@ func UpdateAssignment(c *gin.Context) {
 
 	a := new(m.Assignment)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -79,14 +79,14 @@ func UpdateAssignment(c *gin.Context) {
 // GetAllAssignments ...
 func GetAllAssignments(c *gin.Context) {
 	filter := map[string]string{}
-	if c.Req.URL.Query().Get("classId") != "" {
-		filter["classId"] = c.Req.URL.Query().Get("classId")
+	if c.Request.URL.Query().Get("classId") != "" {
+		filter["classId"] = c.Request.URL.Query().Get("classId")
 	}
-	if c.Req.URL.Query().Get("termId") != "" {
-		filter["termId"] = c.Req.URL.Query().Get("termId")
+	if c.Request.URL.Query().Get("termId") != "" {
+		filter["termId"] = c.Request.URL.Query().Get("termId")
 	}
-	if c.Req.URL.Query().Get("typeId") != "" {
-		filter["typeId"] = c.Req.URL.Query().Get("typeId")
+	if c.Request.URL.Query().Get("typeId") != "" {
+		filter["typeId"] = c.Request.URL.Query().Get("typeId")
 	}
 
 	assignment := []m.Assignment{}

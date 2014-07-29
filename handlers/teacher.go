@@ -12,7 +12,7 @@ import (
 func CreateTeacher(c *gin.Context) {
 	t := new(m.Teacher)
 
-	errs := binding.Bind(c.Req, t)
+	errs := binding.Bind(c.Request, t)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -55,7 +55,7 @@ func UpdateTeacher(c *gin.Context) {
 
 	t := new(m.Teacher)
 
-	errs := binding.Bind(c.Req, t)
+	errs := binding.Bind(c.Request, t)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

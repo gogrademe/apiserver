@@ -10,7 +10,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		if c.Req.Method == "OPTIONS" {
+		if c.Request.Method == "OPTIONS" {
 			// fmt.Println("options")
 			c.Abort(200)
 		}
@@ -20,7 +20,7 @@ func CORSMiddleware() gin.HandlerFunc {
 //
 // func AuthRequired() gin.HandlerFunc {
 // 	return func(c *gin.Context) {
-// 		res, err := jwt.ParseFromRequest(c.Req, func(t *jwt.Token) ([]byte, error) {
+// 		res, err := jwt.ParseFromRequest(c.Request, func(t *jwt.Token) ([]byte, error) {
 // 			return []byte("someRandomSigningKey"), nil
 // 		})
 // 		if err != nil {

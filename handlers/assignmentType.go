@@ -12,7 +12,7 @@ import (
 func CreateAssignmentType(c *gin.Context) {
 	a := new(m.AssignmentType)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -55,7 +55,7 @@ func UpdateAssignmentType(c *gin.Context) {
 
 	a := new(m.AssignmentType)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

@@ -12,7 +12,7 @@ import (
 func CreateAssignmentGrade(c *gin.Context) {
 	a := new(m.AssignmentGrade)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
@@ -55,7 +55,7 @@ func UpdateAssignmentGrade(c *gin.Context) {
 
 	a := new(m.AssignmentGrade)
 
-	errs := binding.Bind(c.Req, a)
+	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return

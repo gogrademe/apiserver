@@ -16,7 +16,7 @@ package handlers
 // 	return func(c *gin.Context) {
 // 		a := new(m.Assignment)
 //
-// 		errs := binding.Bind(c.Req, a)
+// 		errs := binding.Bind(c.Request, a)
 // 		if errs != nil {
 // 			c.Error(errors.New("validation"), errs)
 // 			c.JSON(400, errs)
@@ -61,7 +61,7 @@ package handlers
 //
 // 	a := new(m.Assignment)
 //
-// 	errs := binding.Bind(c.Req, a)
+// 	errs := binding.Bind(c.Request, a)
 // 	if errs != nil {
 // 		writeError(c.Writer, errs, 400, nil)
 // 		return
@@ -82,7 +82,7 @@ package handlers
 // // GetAll ...
 // func GetAll(c *gin.Context) {
 // 	a := new(m.Assignment)
-// 	_ = binding.Bind(c.Req, a)
+// 	_ = binding.Bind(c.Request, a)
 // 	fmt.Println(a)
 //
 // 	assignment := []m.Assignment{}
