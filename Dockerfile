@@ -4,13 +4,14 @@ ADD . /go/src/github.com/Lanciv/GoGradeAPI
 
 WORKDIR /go/src/github.com/Lanciv/GoGradeAPI
 
-RUN go get -u github.com/tools/godep
-
 RUN go env
 
-RUN godep restore ./...
-RUN godep go clean ./...
-RUN godep go build -o /usr/bin/GoGradeAPI main.go
+# RUN godep restore ./...
+# RUN godep go clean ./...
+# RUN godep go build -o /usr/bin/GoGradeAPI main.go
+
+RUN go get ./...
+RUN go build -o /usr/bin/GoGradeAPI main.go
 
 # Clean all the unused packages
 
