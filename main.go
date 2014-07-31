@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	h "github.com/Lanciv/GoGradeAPI/handlers"
 	"github.com/Lanciv/GoGradeAPI/store"
