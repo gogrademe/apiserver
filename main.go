@@ -27,10 +27,16 @@ func init() {
 
 func main() {
 	flag.StringVar(&listenAddr, "listenAddr", ":5005", "")
-	flag.StringVar(&address, "dbAddress", "localhost:28015", "")
+	//flag.StringVar(&address, "dbAddress", "localhost:28015", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
 	flag.StringVar(&staticDir, "staticDir", "public", "")
 	flag.BoolVar(&insertTestData, "insertTestData", true, "")
+
+	address = os.Getenv("RETHINKDB_PORT")
+
+	if address == "" {
+		address = "localhost:28015"
+	}
 
 	flag.Parse()
 
