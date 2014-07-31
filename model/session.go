@@ -14,15 +14,6 @@ type Session struct {
 	TimeStamp
 }
 
-// func (s *Session) Validate() *ValErrors {
-// 	var v *ValErrors
-//
-// 	v.RequiredString(s.Token, "token")
-// 	v.RequiredString(s.UserID, "userId")
-//
-// 	return v
-// }
-
 // Create a token for the user after we verified their password.
 func NewSession(u User) (Session, error) {
 	var s Session

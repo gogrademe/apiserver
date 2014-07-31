@@ -89,13 +89,14 @@ func GetAllAssignments(c *gin.Context) {
 		filter["typeId"] = c.Request.URL.Query().Get("typeId")
 	}
 
-	assignment := []m.Assignment{}
-	err := store.Assignments.Filter(&assignment, filter)
+	assignments := []m.Assignment{}
+	query := store.AssignmentH.Filter(filter).OrderBy("dueDate", "name")
+	err := store.DB.All(&assignments, query)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"assignment": assignment})
+	c.JSON(200, &APIRes{"assignment": assignments})
 	return
 }

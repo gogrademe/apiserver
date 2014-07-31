@@ -1,9 +1,10 @@
 package store
 
 import (
+	"time"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	r "github.com/dancannon/gorethink"
-	"time"
 
 	//"github.com/Pallinder/go-randomdata"
 )
@@ -12,6 +13,9 @@ var (
 	term1 m.Term
 	term2 m.Term
 	term3 m.Term
+	term4 m.Term
+	term5 m.Term
+	term6 m.Term
 
 	type1 m.AssignmentType
 	type2 m.AssignmentType
@@ -46,6 +50,18 @@ var (
 	student6 m.Student
 	student7 m.Student
 	student8 m.Student
+
+	assignment1  m.Assignment
+	assignment2  m.Assignment
+	assignment3  m.Assignment
+	assignment4  m.Assignment
+	assignment5  m.Assignment
+	assignment6  m.Assignment
+	assignment7  m.Assignment
+	assignment8  m.Assignment
+	assignment9  m.Assignment
+	assignment10 m.Assignment
+	assignment11 m.Assignment
 )
 
 func createDatabase() {
@@ -74,12 +90,16 @@ func createIndexes() {
 	r.Db(dbName).Table("assignments").IndexCreate("termId").Run(sess)
 	r.Db(dbName).Table("assignments").IndexCreate("typeId").Run(sess)
 
-	r.Db(dbName).Table("assignmentGrades").IndexCreate("assignmentId").Run(sess)
-	r.Db(dbName).Table("assignmentGrades").IndexCreate("studentId").Run(sess)
+	r.Db(dbName).Table("grades").IndexCreate("assignmentId").Run(sess)
+	r.Db(dbName).Table("grades").IndexCreate("studentId").Run(sess)
 
 	r.Db(dbName).Table("enrollments").IndexCreate("studentId").Run(sess)
 	r.Db(dbName).Table("enrollments").IndexCreate("classId").Run(sess)
 	r.Db(dbName).Table("enrollments").IndexCreate("termId").Run(sess)
+
+	r.Db(dbName).Table("person").IndexCreate("firstName").Run(sess)
+	r.Db(dbName).Table("person").IndexCreate("middleName").Run(sess)
+	r.Db(dbName).Table("person").IndexCreate("lastName").Run(sess)
 
 	r.Db(dbName).Table("students").IndexCreate("personId").Run(sess)
 
@@ -100,6 +120,8 @@ func insertTestData() {
 	insertTestAssignments()
 
 	insertTestEnrollments()
+
+	insertTestGrades()
 
 }
 
@@ -125,10 +147,29 @@ func insertTestTerms() {
 		SchoolYear: "2014-2015",
 		StartDate:  time.Date(2015, time.May, 10, 8, 0, 0, 0, time.UTC),
 	}
+	term4 = m.Term{
+		Name:       "Term 1",
+		SchoolYear: "2012-2013",
+		StartDate:  time.Date(2012, time.September, 10, 8, 0, 0, 0, time.UTC),
+	}
+	term5 = m.Term{
+		Name:       "Term 2",
+		SchoolYear: "2012-2013",
+		StartDate:  time.Date(2013, time.January, 10, 8, 0, 0, 0, time.UTC),
+	}
+	term6 = m.Term{
+		Name:       "Term 3",
+		SchoolYear: "2012-2013",
+		StartDate:  time.Date(2013, time.May, 10, 8, 0, 0, 0, time.UTC),
+	}
 
-	term1.ID, _ = Terms.Store(&term1)
-	term2.ID, _ = Terms.Store(&term2)
-	term3.ID, _ = Terms.Store(&term3)
+	keys, _ := Terms.Insert(&term1, &term2, &term3, &term4, &term5, &term6)
+	term1.ID = keys[0]
+	term2.ID = keys[1]
+	term3.ID = keys[2]
+	term4.ID = keys[3]
+	term5.ID = keys[4]
+	term6.ID = keys[5]
 }
 
 func insertTestClasses() {
@@ -197,13 +238,14 @@ func insertTestClasses() {
 		},
 	}
 
-	class1.ID, _ = Classes.Store(&class1)
-	class2.ID, _ = Classes.Store(&class2)
-	class3.ID, _ = Classes.Store(&class3)
-	class4.ID, _ = Classes.Store(&class4)
-	class5.ID, _ = Classes.Store(&class5)
-	class6.ID, _ = Classes.Store(&class6)
-	class7.ID, _ = Classes.Store(&class7)
+	keys, _ := Classes.Insert(&class1, &class2, &class3, &class4, &class5, &class6, &class7)
+	class1.ID = keys[0]
+	class2.ID = keys[1]
+	class3.ID = keys[2]
+	class4.ID = keys[3]
+	class5.ID = keys[4]
+	class6.ID = keys[5]
+	class7.ID = keys[6]
 
 }
 func insertTestTypes() {
@@ -242,84 +284,84 @@ func insertTestTypes() {
 }
 
 func insertTestAssignments() {
-	a1 := m.Assignment{
+	assignment1 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type1.ID,
 		Name:    "Notebook Check",
 	}
-	a2 := m.Assignment{
+	assignment2 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type1.ID,
 		Name:    "Formula Quiz",
 	}
-	a3 := m.Assignment{
+	assignment3 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type1.ID,
 		Name:    "Solar Model",
 	}
-	a4 := m.Assignment{
+	assignment4 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type1.ID,
 		Name:    "Cell Model",
 	}
-	a5 := m.Assignment{
+	assignment5 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type2.ID,
 		Name:    "Test 1",
 	}
-	a6 := m.Assignment{
+	assignment6 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type3.ID,
 		Name:    "Formula Quiz",
 	}
-	a7 := m.Assignment{
+	assignment7 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type4.ID,
 		Name:    "Solar Model",
 	}
-	a8 := m.Assignment{
+	assignment8 = m.Assignment{
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 		TypeID:  type5.ID,
 		Name:    "Cell Model",
 	}
-	a9 := m.Assignment{
+	assignment9 = m.Assignment{
 		ClassID: class2.ID,
 		TermID:  term1.ID,
 		TypeID:  type5.ID,
 		Name:    "Cell Model",
 	}
-	a10 := m.Assignment{
+	assignment10 = m.Assignment{
 		ClassID: class2.ID,
 		TermID:  term1.ID,
 		TypeID:  type5.ID,
 		Name:    "Cell Model",
 	}
-	a11 := m.Assignment{
+	assignment11 = m.Assignment{
 		ClassID: class2.ID,
 		TermID:  term2.ID,
 		TypeID:  type5.ID,
 		Name:    "Cell Model",
 	}
 
-	Assignments.Store(&a1)
-	Assignments.Store(&a2)
-	Assignments.Store(&a3)
-	Assignments.Store(&a4)
-	Assignments.Store(&a5)
-	Assignments.Store(&a6)
-	Assignments.Store(&a7)
-	Assignments.Store(&a8)
-	Assignments.Store(&a9)
-	Assignments.Store(&a10)
-	Assignments.Store(&a11)
+	assignment1.ID, _ = Assignments.Store(&assignment1)
+	Assignments.Store(&assignment2)
+	Assignments.Store(&assignment3)
+	Assignments.Store(&assignment4)
+	Assignments.Store(&assignment5)
+	Assignments.Store(&assignment6)
+	Assignments.Store(&assignment7)
+	Assignments.Store(&assignment8)
+	Assignments.Store(&assignment9)
+	Assignments.Store(&assignment10)
+	Assignments.Store(&assignment11)
 }
 func insertTestPeople() {
 
@@ -367,17 +409,19 @@ func insertTestPeople() {
 		FirstName: "Karen",
 		LastName:  "Portman",
 	}
+	keys, _ := People.Insert(&person1, &person2, &person3, &person4, &person5,
+		&person6, &person7, &person8, &person9, &person10)
 
-	person1.ID, _ = People.Store(&person1)
-	person2.ID, _ = People.Store(&person2)
-	person3.ID, _ = People.Store(&person3)
-	person4.ID, _ = People.Store(&person4)
-	person5.ID, _ = People.Store(&person5)
-	person6.ID, _ = People.Store(&person6)
-	person7.ID, _ = People.Store(&person7)
-	person8.ID, _ = People.Store(&person8)
-	person9.ID, _ = People.Store(&person9)
-	person10.ID, _ = People.Store(&person10)
+	person1.ID = keys[0]
+	person2.ID = keys[1]
+	person3.ID = keys[2]
+	person4.ID = keys[3]
+	person5.ID = keys[4]
+	person6.ID = keys[5]
+	person7.ID = keys[6]
+	person8.ID = keys[7]
+	person9.ID = keys[8]
+	person10.ID = keys[9]
 
 	student1 = m.Student{
 		PersonID:   person1.ID,
@@ -490,4 +534,19 @@ func insertTestEnrollments() {
 	Enrollments.Store(&p7)
 	Enrollments.Store(&p8)
 	Enrollments.Store(&p9)
+}
+
+func insertTestGrades() {
+	grade1 := m.AssignmentGrade{
+		AssignmentID: assignment1.ID,
+		StudentID:    student1.ID,
+		Grade:        "50",
+	}
+	grade2 := m.AssignmentGrade{
+		AssignmentID: assignment1.ID,
+		StudentID:    student2.ID,
+		Grade:        "50",
+	}
+
+	AssignmentGrades.Insert(&grade1, &grade2)
 }

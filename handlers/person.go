@@ -18,13 +18,13 @@ func CreatePerson(c *gin.Context) {
 		return
 	}
 
-	id, err := store.People.Store(p)
+	ids, err := store.People.Insert(p)
 	if err != nil {
 		writeError(c.Writer, "Error creating Person", 500, err)
 		return
 	}
 
-	p.ID = id
+	p.ID = ids[0]
 
 	c.JSON(201, &APIRes{"person": []m.Person{*p}})
 	return
@@ -61,7 +61,8 @@ func GetPerson(c *gin.Context) {
 	id := c.Params.ByName("id")
 
 	p := m.Person{}
-	err := store.People.FindByID(&p, id)
+	// err := store.People.FindByID(&p, id)
+	err := store.People.One(&p, id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -77,7 +78,12 @@ func GetPerson(c *gin.Context) {
 
 // GetAllPeople ...
 func GetAllPeople(c *gin.Context) {
-	p, err := store.People.FindAll()
+
+	// p, err := store.People.FindAll()
+	p := []m.Person{}
+	query := store.QueryAllPeople()
+	err := store.DB.All(&p, query)
+	// err := store.Classes.FindAll(&classes)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

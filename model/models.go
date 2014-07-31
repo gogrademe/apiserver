@@ -7,8 +7,6 @@ import (
 )
 
 type Model interface {
-	// ID string
-	// Validate() *ValErrors
 	UpdateTime()
 }
 

@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	rh "github.com/Lanciv/rethinkHelper"
 	r "github.com/dancannon/gorethink"
 )
 
@@ -16,19 +17,25 @@ var (
 	sess   *r.Session
 	dbName string
 
+	DB rh.DB
+
 	// Tables
 	Parents  ParentStore
 	Teachers TeacherStore
 	Students StudentStore
 
-	Classes     ClassStore
+	// Classes     ClassStore
 	Enrollments EnrollmentStore
-	Terms       TermStore
-	People      PersonStore
 
-	Assignments      AssignmentStore
-	AssignmentTypes  AssignmentTypeStore
-	AssignmentGrades AssignmentGradeStore
+	Classes          = DB.NewCollection("classes")
+	Terms            = DB.NewCollection("terms")
+	EnrollmentH      = DB.NewCollection("enrollments")
+	People           = DB.NewCollection("people")
+	AssignmentH      = DB.NewCollection("assignments")
+	AssignmentGrades = DB.NewCollection("grades")
+
+	Assignments     AssignmentStore
+	AssignmentTypes AssignmentTypeStore
 
 	Sessions SessionStore
 	Users    UserStore
@@ -38,25 +45,20 @@ var (
 	ErrValidation = errors.New("validation error")
 
 	tables = []string{"users", "classes", "enrollments", "terms", "assignments",
-		"assignmentGrades", "assignmentTypes", "people", "students",
+		"grades", "assignmentTypes", "people", "students",
 		"teachers", "parents", "sessions"}
 )
 
 func init() {
-	// People
-	People = NewPersonStore()
 	Teachers = NewTeacherStore()
 	Parents = NewParentStore()
 	Students = NewStudentStore()
 
 	Assignments = NewAssignmentStore()
 	AssignmentTypes = NewAssignmentTypeStore()
-	AssignmentGrades = NewAssignmentGradeStore()
 
 	// Classes
-	Classes = NewClassStore()
 	Enrollments = NewEnrollmentStore()
-	Terms = NewTermStore()
 
 	// Users/Auth
 	Sessions = NewSessionStore()
@@ -77,6 +79,8 @@ func Connect(address, database string) error {
 	if err != nil {
 		return err
 	}
+
+	DB = rh.NewDBFromSession(sess)
 
 	return nil
 }

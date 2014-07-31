@@ -42,11 +42,8 @@ func main() {
 
 	r := gin.Default()
 	r.Static("/app", staticDir)
-	// r.Use(negroni.HandlerFunc(h.CORSMiddleware))
 
 	h.SetupHandlers(r)
-
-
 
 	r.Run(listenAddr)
 

@@ -43,16 +43,6 @@ func (a Assignment) Validate(req *http.Request, errs binding.Errors) binding.Err
 	if a.TypeID == "" {
 		errs = append(errs, RequiredErr("typeId"))
 	}
-	// if a.Type == (AssignmentType{}) {
-	// 	errs = append(errs, binding.Error{
-	// 		FieldNames: []string{"type"},
-	// 		Message:    "required",
-	// 	})
-	// } else {
-	// 	typeErrs := a.Type.Validate(req, errs)
-	// 	if typeErrs.Len() > 0 {
-	// 		errs = append(errs, typeErrs)
-	// 	}
-	// }
+
 	return errs
 }

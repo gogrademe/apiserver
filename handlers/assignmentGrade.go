@@ -18,12 +18,12 @@ func CreateAssignmentGrade(c *gin.Context) {
 		return
 	}
 
-	id, err := store.AssignmentGrades.Store(a)
+	ids, err := store.AssignmentGrades.Insert(a)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
-	a.ID = id
+	a.ID = ids[0]
 
 	c.JSON(201, &APIRes{"grade": []m.AssignmentGrade{*a}})
 	return
@@ -35,7 +35,7 @@ func GetAssignmentGrade(c *gin.Context) {
 	id := c.Params.ByName("id")
 
 	a := m.AssignmentGrade{}
-	err := store.AssignmentGrades.FindByID(&a, id)
+	err := store.AssignmentGrades.One(&a, id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -76,7 +76,8 @@ func UpdateAssignmentGrade(c *gin.Context) {
 // GetAllAssignmentGrades ...
 func GetAllAssignmentGrades(c *gin.Context) {
 	grades := []m.AssignmentGrade{}
-	err := store.AssignmentGrades.FindAll(&grades)
+	query := store.AssignmentGrades.Term
+	err := store.DB.All(&grades, query)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

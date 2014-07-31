@@ -36,14 +36,3 @@ func (a AssignmentGrade) Validate(req *http.Request, errs binding.Errors) bindin
 	}
 	return errs
 }
-
-// Validate ...
-// func (a *AssignmentGrade) Validate() *ValErrors {
-// 	var v *ValErrors
-//
-// 	v.RequiredString(a.AssignmentID, "assignmentId")
-// 	v.RequiredString(a.StudentID, "studentId")
-// 	v.RequiredString(a.Grade, "grade")
-//
-// 	return v
-// }

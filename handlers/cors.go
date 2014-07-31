@@ -16,21 +16,3 @@ func CORSMiddleware() gin.HandlerFunc {
 		}
 	}
 }
-
-//
-// func AuthRequired() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		res, err := jwt.ParseFromRequest(c.Request, func(t *jwt.Token) ([]byte, error) {
-// 			return []byte("someRandomSigningKey"), nil
-// 		})
-// 		if err != nil {
-// 			// c.JSON(200,http.StatusUnauthorized, "Access denied.")
-// 			writeError(c.Writer, "Unauthorized", 401, nil)
-// 			c.Fail(401, err)
-// 			return
-// 		}
-//
-// 		c.Set("user", res.Claims)
-// 		log.Println(res)
-// 	}
-// }

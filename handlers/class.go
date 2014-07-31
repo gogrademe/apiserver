@@ -4,6 +4,7 @@ import (
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
+	r "github.com/dancannon/gorethink"
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
@@ -11,7 +12,10 @@ import (
 // GetAllClasses ...
 func GetAllClasses(c *gin.Context) {
 	classes := []m.Class{}
-	err := store.Classes.FindAll(&classes)
+
+	query := store.Classes.OrderBy(r.Asc("gradeLevel"), r.Asc("name"))
+	err := store.DB.All(&classes, query)
+	// err := store.Classes.FindAll(&classes)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
@@ -26,7 +30,7 @@ func GetClass(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 	class := m.Class{}
-	err := store.Classes.FindByID(&class, id)
+	err := store.Classes.One(&class, id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -50,13 +54,13 @@ func CreateClass(c *gin.Context) {
 		return
 	}
 
-	id, err := store.Classes.Store(class)
+	ids, err := store.Classes.Insert(class)
 
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
-	class.ID = id
+	class.ID = ids[0]
 
 	c.JSON(201, &APIRes{"class": []m.Class{*class}})
 	return

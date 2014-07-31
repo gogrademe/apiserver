@@ -4,6 +4,7 @@ import (
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
+	r "github.com/dancannon/gorethink"
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
@@ -11,7 +12,9 @@ import (
 // GetAllTerms ...
 func GetAllTerms(c *gin.Context) {
 	terms := []m.Term{}
-	err := store.Terms.FindAll(&terms)
+
+	query := store.Terms.OrderBy(r.Desc("schoolYear"), r.Asc("startDate"), r.Asc("endDate"))
+	err := store.DB.All(&terms, query)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
@@ -26,7 +29,9 @@ func GetTerm(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 	term := m.Term{}
-	err := store.Terms.FindByID(&term, id)
+
+	//err := store.Terms.FindByID(&term, id)
+	err := store.Terms.One(&term, id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -50,14 +55,14 @@ func CreateTerm(c *gin.Context) {
 		return
 	}
 
-	id, err := store.Terms.Store(term)
+	id, err := store.Terms.Insert(term)
 
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	term.ID = id
+	term.ID = id[0]
 
 	c.JSON(201, &APIRes{"term": []m.Term{*term}})
 	return

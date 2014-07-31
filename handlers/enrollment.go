@@ -110,6 +110,8 @@ func GetAllEnrollments(c *gin.Context) {
 
 	enrollments := []m.EnrollmentAPIRes{}
 	err := store.Enrollments.Filter(&enrollments, filter)
+	//query := store.EnrollmentH.OrderBy("firstName", "middleName", "lastName").Filter(filter)
+	//err := store.DB.All(&enrollments, query)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
