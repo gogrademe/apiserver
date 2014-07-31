@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"os"
+	"strings"
 
 	h "github.com/Lanciv/GoGradeAPI/handlers"
 	"github.com/Lanciv/GoGradeAPI/store"
@@ -33,7 +34,8 @@ func main() {
 	flag.StringVar(&staticDir, "staticDir", "public", "")
 	flag.BoolVar(&insertTestData, "insertTestData", true, "")
 
-	address = os.Getenv("RETHINKDB_PORT")
+	address = os.Getenv("RETHINKDB_PORT_28015_TCP")
+	address = strings.Trim(address, "tcp://")
 
 	if address == "" {
 		address = "localhost:28015"
