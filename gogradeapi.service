@@ -1,0 +1,15 @@
+[Unit]
+Description=GoGradeAPI
+Requires=gogradeweb.service
+Requires=rethinkdb.service
+After=docker.service
+After=rethinkdb.service
+After=gogradeweb.service
+
+[Service]
+ExecStartPre=/usr/bin/docker pull registry.lanciv.com:5000/gogradeapi
+ExecStart=/usr/bin/docker run --link rethinkdb-1:RETHINKDB --volumes-from gogradeweb-1 --rm --name gogradeapi-1 -p 80:5005 registry.lanciv.com:5000/gogradeapi --staticDir /opt/app/buildd
+ExecStop=/usr/bin/docker stop gogradeapi-1
+
+[X-Fleet]
+X-Conflicts=gogradeapi.service

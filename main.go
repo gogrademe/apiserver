@@ -10,6 +10,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/contrib/static"
 )
 
 var log = logrus.New()
@@ -50,7 +51,8 @@ func main() {
 	store.SetupDB(insertTestData)
 
 	r := gin.Default()
-	r.Static("/app", staticDir)
+	r.NoRoute(static.Serve(staticDir))
+	//r.Static("/app", staticDir)
 
 	h.SetupHandlers(r)
 
