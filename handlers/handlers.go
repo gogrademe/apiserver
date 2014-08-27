@@ -26,8 +26,9 @@ var NotFoundErr = &APIError{
 }
 
 const (
-	serverError   = "server error"
-	notFoundError = "not found"
+	StatusUnprocessable = 422
+	serverError         = "server error"
+	notFoundError       = "not found"
 )
 
 // writeError will write a JSON error to the client.

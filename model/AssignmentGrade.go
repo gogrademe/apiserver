@@ -2,6 +2,7 @@ package model
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/mholt/binding"
 )
@@ -25,13 +26,13 @@ func (a *AssignmentGrade) FieldMap() binding.FieldMap {
 	}
 }
 func (a AssignmentGrade) Validate(req *http.Request, errs binding.Errors) binding.Errors {
-	if a.AssignmentID == "" {
+	if strings.TrimSpace(a.AssignmentID) == "" {
 		errs = append(errs, RequiredErr("assignmentId"))
 	}
-	if a.StudentID == "" {
+	if strings.TrimSpace(a.StudentID) == "" {
 		errs = append(errs, RequiredErr("studentId"))
 	}
-	if a.Grade == "" {
+	if strings.TrimSpace(a.Grade) == "" {
 		errs = append(errs, RequiredErr("grade"))
 	}
 	return errs

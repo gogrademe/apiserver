@@ -17,7 +17,7 @@ func CreateAssignment(c *gin.Context) {
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
 		c.Error(errors.New("validation"), errs)
-		c.JSON(400, errs)
+		c.JSON(StatusUnprocessable, errs)
 		return
 	}
 
@@ -60,7 +60,8 @@ func UpdateAssignment(c *gin.Context) {
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
-		writeError(c.Writer, errs, 400, nil)
+		c.Error(errors.New("validation"), errs)
+		c.JSON(StatusUnprocessable, errs)
 		return
 	}
 

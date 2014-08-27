@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+
 	m "github.com/Lanciv/GoGradeAPI/model"
 	"github.com/Lanciv/GoGradeAPI/store"
 
@@ -14,7 +16,8 @@ func CreateAssignmentGrade(c *gin.Context) {
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
-		writeError(c.Writer, errs, 400, nil)
+		c.Error(errors.New("validation"), errs)
+		c.JSON(StatusUnprocessable, errs)
 		return
 	}
 
@@ -57,7 +60,8 @@ func UpdateAssignmentGrade(c *gin.Context) {
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
-		writeError(c.Writer, errs, 400, nil)
+		c.Error(errors.New("validation"), errs)
+		c.JSON(StatusUnprocessable, errs)
 		return
 	}
 
