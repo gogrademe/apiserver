@@ -18,6 +18,10 @@
 			"Rev": "f5ac12b15e49095c60ae0acc6da0e28d47e2a29f"
 		},
 		{
+			"ImportPath": "github.com/Lanciv/rethinkHelper",
+			"Rev": "3eafeb79e098fe132ae6d7ecb7f28d6b94060771"
+		},
+		{
 			"ImportPath": "github.com/Sirupsen/logrus",
 			"Comment": "v0.2.0-9-g97978e5",
 			"Rev": "97978e5e5483a3f926c2bb6e19f9e2ff344e81f0"
@@ -31,6 +35,10 @@
 			"ImportPath": "github.com/dgrijalva/jwt-go",
 			"Comment": "v1.0.0-2-gf7a9d2e",
 			"Rev": "f7a9d2e66ed71a4e3bfaa24380e84bf465d665a8"
+		},
+		{
+			"ImportPath": "github.com/gin-gonic/contrib/static",
+			"Rev": "e9efbef205f470b07afe985980f9074bb955f39d"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
