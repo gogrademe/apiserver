@@ -23,4 +23,4 @@ build:
         - script:
             name: build
             code: |
-                go build -o GoGradeAPI main.go
+                go build -o $WERCKER_OUTPUT_DIR/GoGradeAPI main.go
