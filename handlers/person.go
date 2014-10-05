@@ -91,3 +91,22 @@ func GetAllPeople(c *gin.Context) {
 	c.JSON(200, &APIRes{"person": p})
 	return
 }
+
+// DeletePerson ...
+func DeletePerson(c *gin.Context) {
+
+	id := c.Params.ByName("id")
+
+	_, err := store.DB.RunWrite(store.People.Get(id).Delete())
+	if err == store.ErrNotFound {
+		writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
+	if err != nil {
+		writeError(c.Writer, serverError, 500, nil)
+		return
+	}
+
+	c.JSON(200, &APIRes{"person": []m.Person{}})
+	return
+}

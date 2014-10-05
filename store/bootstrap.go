@@ -85,6 +85,7 @@ func createIndexes() {
 
 	r.Db(dbName).Table("users").IndexCreate("email").Run(sess)
 	r.Db(dbName).Table("users").IndexCreate("emailLower").Run(sess)
+	r.Db(dbName).Table("users").IndexCreate("personId").Run(sess)
 
 	r.Db(dbName).Table("assignments").IndexCreate("classId").Run(sess)
 	r.Db(dbName).Table("assignments").IndexCreate("termId").Run(sess)
@@ -109,12 +110,12 @@ func createIndexes() {
 
 func insertTestData() {
 
-	insertTestUsers()
-
 	insertTestTerms()
 	insertTestTypes()
 
 	insertTestPeople()
+
+	insertTestUsers()
 	insertTestClasses()
 
 	insertTestAssignments()
@@ -127,8 +128,10 @@ func insertTestData() {
 
 func insertTestUsers() {
 
-	u, _ := m.NewUser("test@test.com", "somePassword", "Admin")
+	u, _ := m.NewUserFor("test@test.com", "somePassword", "Admin", person7.ID)
+	u2, _ := m.NewUserFor("Susan.Feathers@test.com", "somePassword", "Teacher", person9.ID)
 	Users.Store(u)
+	Users.Store(u2)
 }
 
 func insertTestTerms() {

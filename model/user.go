@@ -16,19 +16,20 @@ type User struct {
 	Email          string `gorethink:"email,omitempty"json:"email"`
 	EmailLower     string `gorethink:"emailLower,omitempty"json:"emailLower"`
 	HashedPassword string `gorethink:"hashedPassword,omitempty"json:"-"`
+	PersonID       string `gorethink:"personId,omitempty"json:"personId"`
 	Role           string `gorethink:"role,omitempty"json:"role"`
 	Disabled       bool   `gorethink:"disabled,omitempty"json:"disabled"`
 	TimeStamp
 }
 
-func NewUser(email, password, role string) (*User, error) {
-
+func NewUserFor(email, password, role, personID string) (*User, error) {
 	emailLower := strings.ToLower(email)
 
 	user := User{
 		Email:      email,
 		EmailLower: emailLower,
 		Role:       role,
+		PersonID:   personID,
 	}
 
 	err := user.SetPassword(password)

@@ -31,6 +31,7 @@ var (
 	Terms            = DB.NewCollection("terms")
 	EnrollmentH      = DB.NewCollection("enrollments")
 	People           = DB.NewCollection("people")
+	UserH            = DB.NewCollection("users")
 	AssignmentH      = DB.NewCollection("assignments")
 	AssignmentGrades = DB.NewCollection("grades")
 

@@ -75,7 +75,6 @@ func AuthRequired() gin.HandlerFunc {
 			c.Fail(401, err)
 			return
 		}
-
-		c.Set("user", res.Claims)
+		c.Set("userId", res.Claims["userId"])
 	}
 }

@@ -65,24 +65,6 @@ func (us *UserStore) FindByEmail(email string) (m.User, error) {
 
 }
 
-// // FindAll return every user in the DB.
-// func (us *UserStore) FindAll() ([]m.User, error) {
-// 	users := []m.User{}
-//
-// 	res, err := r.Table("users").Run(sess)
-// 	if err != nil {
-// 		// Check to make sure this error is okay. (Not a connection error)
-// 		return nil, err
-// 	}
-//
-// 	err = res.All(&users)
-// 	if err != nil {
-// 		// Check to make sure this error is okay. (Not a connection error)
-// 		return nil, err
-// 	}
-// 	return users, nil
-// }
-
 // GetUserByID get a user by a ID.
 func GetUserByID(id string) (m.User, error) {
 	u := m.User{}

@@ -16,71 +16,75 @@ func SetupHandlers(r *gin.Engine) {
 	auth := m.Group("", AuthRequired())
 
 	// Users
-	auth.GET("/user", GetAllUsers)
+	auth.GET("/user", Can("Admin", "Teacher"), GetAllUsers)
+	auth.POST("/user", Can("Admin"), CreateUser)
 
 	// Classes
 	g := auth.Group("/class")
-	g.GET("", GetAllClasses)
-	g.POST("", CreateClass)
-	g.GET("/:id", GetClass)
-	g.PUT("/:id", UpdateClass)
+	g.GET("", Can("Admin", "Teacher"), GetAllClasses)
+	g.GET("/:id", Can("Admin", "Teacher"), GetClass)
+	g.POST("", Can("Admin"), CreateClass)
+
+	g.PUT("/:id", Can("Admin"), UpdateClass)
 
 	// Enrollments
 	g = auth.Group("/enrollment")
-	g.GET("", GetAllEnrollments)
-	g.POST("", CreateEnrollment)
-	g.GET("/:id", GetEnrollment)
-	g.PUT("/:id", UpdateEnrollment)
-	g.DELETE("/:id", DeleteEnrollment)
+	g.GET("", Can("Admin", "Teacher"), GetAllEnrollments)
+	g.POST("", Can("Admin"), CreateEnrollment)
+	g.GET("/:id", Can("Admin", "Teacher"), GetEnrollment)
+	g.PUT("/:id", Can("Admin"), UpdateEnrollment)
+	g.DELETE("/:id", Can("Admin"), DeleteEnrollment)
 
 	// Terms
 	g = auth.Group("/term")
-	g.GET("", GetAllTerms)
-	g.POST("", CreateTerm)
-	g.GET("/:id", GetTerm)
-	g.PUT("/:id", UpdateTerm)
+	g.GET("", Can("Admin", "Teacher"), GetAllTerms)
+	g.POST("", Can("Admin"), CreateTerm)
+	g.GET("/:id", Can("Admin", "Teacher"), GetTerm)
+	g.PUT("/:id", Can("Admin"), UpdateTerm)
 
 	// Assignments
 	g = auth.Group("/assignment")
-	g.GET("", GetAllAssignments)
-	g.POST("", CreateAssignment)
+	g.GET("", Can("Admin", "Teacher"), GetAllAssignments)
+	g.POST("", Can("Admin", "Teacher"), CreateAssignment)
 	// g.POST("", Create(store.Assignments))
-	g.GET("/:id", GetAssignment)
-	g.PUT("/:id", UpdateAssignment)
+	g.GET("/:id", Can("Admin", "Teacher"), GetAssignment)
+	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignment)
+	g.DELETE("/:id", Can("Admin", "Teacher"), DeleteAssignment)
 
 	// AssignmentTypes
 	g = auth.Group("/type")
-	g.GET("", GetAllAssignmentTypes)
-	g.POST("", CreateAssignmentType)
-	g.GET("/:id", GetAssignmentType)
-	g.PUT("/:id", UpdateAssignmentType)
+	g.GET("", Can("Admin", "Teacher"), GetAllAssignmentTypes)
+	g.POST("", Can("Admin", "Teacher"), CreateAssignmentType)
+	g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentType)
+	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignmentType)
 
 	// AssignmentGrades
 	g = auth.Group("/grade")
-	g.GET("", GetAllAssignmentGrades)
-	g.POST("", CreateAssignmentGrade)
-	g.GET("/:id", GetAssignmentGrade)
-	g.PUT("/:id", UpdateAssignmentGrade)
+	g.GET("", Can("Admin", "Teacher"), GetAllAssignmentGrades)
+	g.POST("", Can("Admin", "Teacher"), CreateAssignmentGrade)
+	g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentGrade)
+	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignmentGrade)
 
 	// People
 	g = auth.Group("/person")
-	g.GET("", GetAllPeople)
-	g.POST("", CreatePerson)
-	g.GET("/:id", GetPerson)
-	g.PUT("/:id", UpdatePerson)
+	g.GET("", Can("Admin", "Teacher"), GetAllPeople)
+	g.POST("", Can("Admin"), CreatePerson)
+	g.GET("/:id", Can("Admin", "Teacher"), GetPerson)
+	g.PUT("/:id", Can("Admin"), UpdatePerson)
+	g.DELETE("/:id", Can("Admin"), DeletePerson)
 
 	// Students
 	g = auth.Group("/student")
-	g.GET("", GetAllStudents)
-	g.POST("", CreateStudent)
-	g.GET("/:id", GetStudent)
-	g.PUT("/:id", UpdateStudent)
+	g.GET("", Can("Admin", "Teacher"), GetAllStudents)
+	g.POST("", Can("Admin"), CreateStudent)
+	g.GET("/:id", Can("Admin", "Teacher"), GetStudent)
+	g.PUT("/:id", Can("Admin"), UpdateStudent)
 
 	// Teachers
 	g = auth.Group("/teacher")
-	g.GET("", GetAllTeachers)
-	g.POST("", CreateTeacher)
-	g.GET("/:id", GetTeacher)
-	g.PUT("/:id", UpdateTeacher)
+	g.GET("", Can("Admin", "Teacher"), GetAllTeachers)
+	g.POST("", Can("Admin"), CreateTeacher)
+	g.GET("/:id", Can("Admin", "Teacher"), GetTeacher)
+	g.PUT("/:id", Can("Admin"), UpdateTeacher)
 
 }

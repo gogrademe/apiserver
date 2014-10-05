@@ -10,6 +10,25 @@ import (
 	"github.com/mholt/binding"
 )
 
+// DeleteAssignment ...
+func DeleteAssignment(c *gin.Context) {
+
+	id := c.Params.ByName("id")
+
+	err := store.Assignments.Delete(id)
+	if err == store.ErrNotFound {
+		writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
+	if err != nil {
+		writeError(c.Writer, serverError, 500, nil)
+		return
+	}
+
+	c.JSON(200, &APIRes{"assignment": []m.Assignment{}})
+	return
+}
+
 // CreateAssignment ...
 func CreateAssignment(c *gin.Context) {
 	a := new(m.Assignment)

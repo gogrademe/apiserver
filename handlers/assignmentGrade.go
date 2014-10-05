@@ -79,8 +79,13 @@ func UpdateAssignmentGrade(c *gin.Context) {
 
 // GetAllAssignmentGrades ...
 func GetAllAssignmentGrades(c *gin.Context) {
+	filter := map[string]string{}
+	if c.Request.URL.Query().Get("assignmentId") != "" {
+		filter["assignmentId"] = c.Request.URL.Query().Get("assignmentId")
+	}
+
 	grades := []m.AssignmentGrade{}
-	query := store.AssignmentGrades.Term
+	query := store.AssignmentGrades.Filter(filter)
 	err := store.DB.All(&grades, query)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
