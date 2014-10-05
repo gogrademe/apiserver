@@ -3,6 +3,10 @@ box: wercker/golang
 build:
     steps:
         - script:
+            name: go env
+            code: |
+                go env
+        - script:
             name: install godep
             code: |
                 go get github.com/tools/godep
@@ -13,8 +17,8 @@ build:
         - script:
             name: clean
             code: |
-                godep go clean ./...
+                go clean ./...
         - script:
             name: build
             code: |
-                godep go build -o /usr/bin/GoGradeAPI main.go
+                go build -o /usr/bin/GoGradeAPI main.go
