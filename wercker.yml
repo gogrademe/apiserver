@@ -1,26 +1,29 @@
-box: wercker/golang
+box: wercker-labs/docker
 
-build:
-    steps:
-        - setup-go-workspace
-        - script:
-            name: go env
-            code: |
-                cd $WERCKER_SOURCE_DIR
-                go env
-        - script:
-            name: install godep
-            code: |
-                go get github.com/tools/godep
-        - script:
-            name: restore deps
-            code: |
-                godep restore ./...
-        - script:
-            name: clean
-            code: |
-                go clean ./...
-        - script:
-            name: build
-            code: |
-                go build -o $WERCKER_OUTPUT_DIR/GoGradeAPI main.go
+
+# box: wercker/golang
+#
+# build:
+#     steps:
+#         - setup-go-workspace
+#         - script:
+#             name: go env
+#             code: |
+#                 cd $WERCKER_SOURCE_DIR
+#                 go env
+#         - script:
+#             name: install godep
+#             code: |
+#                 go get github.com/tools/godep
+#         - script:
+#             name: restore deps
+#             code: |
+#                 godep restore ./...
+#         - script:
+#             name: clean
+#             code: |
+#                 go clean ./...
+#         - script:
+#             name: build
+#             code: |
+#                 go build -o $WERCKER_OUTPUT_DIR/GoGradeAPI main.go
