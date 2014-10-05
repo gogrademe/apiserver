@@ -2,9 +2,11 @@ box: wercker/golang
 
 build:
     steps:
+        - setup-go-workspace
         - script:
             name: go env
             code: |
+                cd $WERCKER_SOURCE_DIR
                 go env
         - script:
             name: install godep
