@@ -6,6 +6,8 @@ WORKDIR /go/src/github.com/Lanciv/GoGradeAPI
 
 RUN go env
 
+RUN go get github.com/tools/godep
+
 RUN godep restore ./...
 
 RUN godep go build -o /usr/bin/GoGradeAPI main.go
