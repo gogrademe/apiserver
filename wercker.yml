@@ -1,0 +1,20 @@
+box: wercker/golang
+
+build:
+    steps:
+        - script:
+            name: install godep
+            code: |
+                go get github.com/tools/godep
+        - script:
+            name: restore deps
+            code: |
+                godep restore ./...
+        - script:
+            name: clean
+            code: |
+                godep go clean ./...
+        - script:
+            name: build
+            code: |
+                godep go build -o /usr/bin/GoGradeAPI main.go
