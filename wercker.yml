@@ -1,5 +1,15 @@
 box: wercker-labs/docker
 
+build:
+    steps:
+        - script:
+            name: Build docker image
+            code: |
+                docker build -t "lanciv/gogradeapi:latest" .
+        - script:
+            name: Push docker image
+            code: |
+                docker push "lanciv/gogradeapi:latest"
 
 # box: wercker/golang
 #
