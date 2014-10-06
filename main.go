@@ -10,7 +10,6 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/contrib/static"
 )
 
 var log = logrus.New()
@@ -30,10 +29,9 @@ func init() {
 
 func main() {
 	flag.StringVar(&listenAddr, "listenAddr", ":5005", "")
-	//flag.StringVar(&address, "dbAddress", "localhost:28015", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
 	flag.StringVar(&staticDir, "staticDir", "public", "")
-	flag.BoolVar(&insertTestData, "insertTestData", true, "")
+	flag.BoolVar(&insertTestData, "insertTestData", false, "")
 
 	address = os.Getenv("RETHINKDB_PORT_28015_TCP")
 	address = strings.Trim(address, "tcp://")
@@ -51,8 +49,6 @@ func main() {
 	store.SetupDB(insertTestData)
 
 	r := gin.Default()
-	r.NoRoute(static.Serve(staticDir))
-	//r.Static("/app", staticDir)
 
 	h.SetupHandlers(r)
 

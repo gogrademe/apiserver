@@ -13,3 +13,7 @@ ExecStop=/usr/bin/docker stop gogradeapi-1
 
 [X-Fleet]
 X-Conflicts=gogradeapi.service
+
+
+
+docker run -d --link grade-rethinkdb:RETHINKDB --volumes-from gogradeweb-1 --name gogradeapi-1 -p 80:5005 lanciv/gogradeapi --staticDir /opt/app
