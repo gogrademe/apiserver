@@ -15,15 +15,8 @@ func NewEnrollmentStore() EnrollmentStore {
 
 func (pr EnrollmentStore) Filter(enrollments *[]m.EnrollmentAPIRes, filter interface{}) error {
 	q := r.Table("enrollments").Filter(filter)
-	q = q.EqJoin("studentId", r.Table("students"))
+	q = q.EqJoin("personId", r.Table("people"))
 	// Join Students.
-	q = q.Map(func(row r.Term) r.Term {
-		return row.Field("left").Merge(map[string]interface{}{
-			"student": row.Field("right"),
-		})
-	})
-	// Join Person.
-	q = q.EqJoin(r.Row.Field("student").Field("personId"), r.Table("people"))
 	q = q.Map(func(row r.Term) r.Term {
 		return row.Field("left").Merge(map[string]interface{}{
 			"person": row.Field("right"),

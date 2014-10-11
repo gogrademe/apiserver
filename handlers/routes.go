@@ -73,18 +73,4 @@ func SetupHandlers(r *gin.Engine) {
 	g.PUT("/:id", Can("Admin"), UpdatePerson)
 	g.DELETE("/:id", Can("Admin"), DeletePerson)
 
-	// Students
-	g = auth.Group("/student")
-	g.GET("", Can("Admin", "Teacher"), GetAllStudents)
-	g.POST("", Can("Admin"), CreateStudent)
-	g.GET("/:id", Can("Admin", "Teacher"), GetStudent)
-	g.PUT("/:id", Can("Admin"), UpdateStudent)
-
-	// Teachers
-	g = auth.Group("/teacher")
-	g.GET("", Can("Admin", "Teacher"), GetAllTeachers)
-	g.POST("", Can("Admin"), CreateTeacher)
-	g.GET("/:id", Can("Admin", "Teacher"), GetTeacher)
-	g.PUT("/:id", Can("Admin"), UpdateTeacher)
-
 }

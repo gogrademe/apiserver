@@ -31,6 +31,9 @@ func (a AssignmentType) Validate(req *http.Request, errs binding.Errors) binding
 	if a.Name == "" {
 		errs = append(errs, RequiredErr("name"))
 	}
+	if a.MaxScore <= 0 {
+		errs = append(errs, RequiredErr("maxScore"))
+	}
 	if a.Weight > 1 || a.Weight < 0.005 {
 		errs = append(errs, binding.Error{
 			FieldNames: []string{"weight"},

@@ -20,6 +20,15 @@ func (t Term) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if t.Name == "" {
 		errs = append(errs, RequiredErr("name"))
 	}
+	if t.SchoolYear == "" {
+		errs = append(errs, RequiredErr("schoolYear"))
+	}
+	if t.StartDate.IsZero() {
+		errs = append(errs, RequiredErr("startDate"))
+	}
+	if t.EndDate.IsZero() {
+		errs = append(errs, RequiredErr("endDate"))
+	}
 	return errs
 }
 

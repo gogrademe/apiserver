@@ -1,10 +1,6 @@
 package model
 
-import (
-	"time"
-
-	"github.com/mholt/binding"
-)
+import "time"
 
 type Model interface {
 	UpdateTime()
@@ -27,9 +23,9 @@ func (a *TimeStamp) UpdateTime() {
 	return
 }
 
-func field(form string, required bool) binding.Field {
-	return binding.Field{
-		Form:     form,
-		Required: required,
-	}
-}
+// func field(form string, required bool) binding.Field {
+// 	return binding.Field{
+// 		Form:     form,
+// 		Required: required,
+// 	}
+// }

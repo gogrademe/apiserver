@@ -13,16 +13,11 @@ const testAddress = "localhost:28015"
 const testDBName = "test_goGrade"
 
 var (
-	// DB
 	sess   *r.Session
 	dbName string
 
+	// DB Global DB object
 	DB rh.DB
-
-	// Tables
-	Parents  ParentStore
-	Teachers TeacherStore
-	Students StudentStore
 
 	// Classes     ClassStore
 	Enrollments EnrollmentStore
@@ -46,14 +41,10 @@ var (
 	ErrValidation = errors.New("validation error")
 
 	tables = []string{"users", "classes", "enrollments", "terms", "assignments",
-		"grades", "assignmentTypes", "people", "students",
-		"teachers", "parents", "sessions"}
+		"grades", "assignmentTypes", "people", "sessions"}
 )
 
 func init() {
-	Teachers = NewTeacherStore()
-	Parents = NewParentStore()
-	Students = NewStudentStore()
 
 	Assignments = NewAssignmentStore()
 	AssignmentTypes = NewAssignmentTypeStore()

@@ -7,26 +7,25 @@ import (
 )
 
 type Enrollment struct {
-	ID        string `gorethink:"id,omitempty"json:"id"`
-	StudentID string `gorethink:"studentId,omitempty"json:"studentId"`
-	ClassID   string `gorethink:"classId,omitempty"json:"classId"`
-	TermID    string `gorethink:"termId,omitempty"json:"termId"`
+	ID       string `gorethink:"id,omitempty"json:"id"`
+	PersonID string `gorethink:"personId,omitempty"json:"personId"`
+	ClassID  string `gorethink:"classId,omitempty"json:"classId"`
+	TermID   string `gorethink:"termId,omitempty"json:"termId"`
 	TimeStamp
 }
 
 type EnrollmentAPIRes struct {
-	ID        string  `gorethink:"id,omitempty"json:"id"`
-	StudentID string  `gorethink:"studentId,omitempty"json:"studentId"`
-	ClassID   string  `gorethink:"classId,omitempty"json:"classId"`
-	TermID    string  `gorethink:"termId,omitempty"json:"termId"`
-	Student   Student `gorethink:"student,omitempty"json:"student"`
-	Person    Person  `gorethink:"person,omitempty"json:"person"`
+	ID       string `gorethink:"id,omitempty"json:"id"`
+	PersonID string `gorethink:"personId,omitempty"json:"personId"`
+	ClassID  string `gorethink:"classId,omitempty"json:"classId"`
+	TermID   string `gorethink:"termId,omitempty"json:"termId"`
+	Person   Person `gorethink:"person,omitempty"json:"person"`
 	TimeStamp
 }
 
 func (e Enrollment) Validate(req *http.Request, errs binding.Errors) binding.Errors {
-	if e.StudentID == "" {
-		errs = append(errs, RequiredErr("studentId"))
+	if e.PersonID == "" {
+		errs = append(errs, RequiredErr("personId"))
 	}
 	if e.TermID == "" {
 		errs = append(errs, RequiredErr("termId"))
@@ -39,9 +38,9 @@ func (e Enrollment) Validate(req *http.Request, errs binding.Errors) binding.Err
 
 func (e *Enrollment) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
-		&e.ID:        "id",
-		&e.StudentID: "studentId",
-		&e.TermID:    "termId",
-		&e.ClassID:   "classId",
+		&e.ID:       "id",
+		&e.PersonID: "personId",
+		&e.TermID:   "termId",
+		&e.ClassID:  "classId",
 	}
 }

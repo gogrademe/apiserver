@@ -42,14 +42,14 @@ var (
 	person9  m.Person
 	person10 m.Person
 
-	student1 m.Student
-	student2 m.Student
-	student3 m.Student
-	student4 m.Student
-	student5 m.Student
-	student6 m.Student
-	student7 m.Student
-	student8 m.Student
+	// student1 m.Student
+	// student2 m.Student
+	// student3 m.Student
+	// student4 m.Student
+	// student5 m.Student
+	// student6 m.Student
+	// student7 m.Student
+	// student8 m.Student
 
 	assignment1  m.Assignment
 	assignment2  m.Assignment
@@ -92,19 +92,15 @@ func createIndexes() {
 	r.Db(dbName).Table("assignments").IndexCreate("typeId").Run(sess)
 
 	r.Db(dbName).Table("grades").IndexCreate("assignmentId").Run(sess)
-	r.Db(dbName).Table("grades").IndexCreate("studentId").Run(sess)
+	r.Db(dbName).Table("grades").IndexCreate("personId").Run(sess)
 
-	r.Db(dbName).Table("enrollments").IndexCreate("studentId").Run(sess)
+	r.Db(dbName).Table("enrollments").IndexCreate("personId").Run(sess)
 	r.Db(dbName).Table("enrollments").IndexCreate("classId").Run(sess)
 	r.Db(dbName).Table("enrollments").IndexCreate("termId").Run(sess)
 
 	r.Db(dbName).Table("person").IndexCreate("firstName").Run(sess)
 	r.Db(dbName).Table("person").IndexCreate("middleName").Run(sess)
 	r.Db(dbName).Table("person").IndexCreate("lastName").Run(sess)
-
-	r.Db(dbName).Table("students").IndexCreate("personId").Run(sess)
-
-	r.Db(dbName).Table("teachers").IndexCreate("personId").Run(sess)
 
 }
 
@@ -372,46 +368,65 @@ func insertTestPeople() {
 		FirstName:  "Jon",
 		MiddleName: "David",
 		LastName:   "Bush",
+		GradeLevel: "Year 1",
+		Types:      []string{"Student"},
 	}
 	person2 = m.Person{
-		FirstName: "Angel",
-		LastName:  "Heredia",
+		FirstName:  "Angel",
+		LastName:   "Heredia",
+		GradeLevel: "Year 9",
+		Types:      []string{"Student"},
 	}
 	person3 = m.Person{
-		FirstName: "Nicole",
-		LastName:  "Aitchison",
+		FirstName:  "Nicole",
+		LastName:   "Aitchison",
+		GradeLevel: "Year 7",
+		Types:      []string{"Student"},
 	}
 	person4 = m.Person{
-		FirstName: "Frankie",
-		LastName:  "Bagnardi",
+		FirstName:  "Frankie",
+		LastName:   "Bagnardi",
+		GradeLevel: "Year 9",
+		Types:      []string{"Student"},
 	}
 	person5 = m.Person{
-		FirstName: "Adam",
-		LastName:  "Price",
+		FirstName:  "Adam",
+		LastName:   "Price",
+		GradeLevel: "Year 4",
+		Types:      []string{"Student"},
 	}
 	person6 = m.Person{
 		FirstName:  "Jake",
 		MiddleName: "Matthew",
 		LastName:   "Price",
+		GradeLevel: "Year 9",
+		Types:      []string{"Student"},
 	}
 	person7 = m.Person{
-		FirstName: "Matthew",
-		LastName:  "Aitchison",
+		FirstName:  "Matthew",
+		LastName:   "Aitchison",
+		GradeLevel: "Year 12",
+		Types:      []string{"Student"},
 	}
 	person8 = m.Person{
-		FirstName: "Natalie",
-		LastName:  "Aitchison",
+		FirstName:  "Natalie",
+		LastName:   "Aitchison",
+		GradeLevel: "Year 3",
+		Types:      []string{"Student"},
 	}
 	person9 = m.Person{
-
 		FirstName: "Susan",
 		LastName:  "Feathers",
+		Email:     "Susan.Feathers@test.com",
+		Types:     []string{"Teacher"},
 	}
 	person10 = m.Person{
-
 		FirstName: "Karen",
 		LastName:  "Portman",
+		Email:     "Karen.Portman@test.com",
+		Types:     []string{"Teacher"},
 	}
+
 	keys, _ := People.Insert(&person1, &person2, &person3, &person4, &person5,
 		&person6, &person7, &person8, &person9, &person10)
 
@@ -426,107 +441,53 @@ func insertTestPeople() {
 	person9.ID = keys[8]
 	person10.ID = keys[9]
 
-	student1 = m.Student{
-		PersonID:   person1.ID,
-		GradeLevel: "Year 1",
-	}
-	student2 = m.Student{
-		PersonID:   person2.ID,
-		GradeLevel: "Year 9",
-	}
-	student3 = m.Student{
-		PersonID:   person3.ID,
-		GradeLevel: "Year 12",
-	}
-	student4 = m.Student{
-		PersonID:   person4.ID,
-		GradeLevel: "Year 9",
-	}
-	student5 = m.Student{
-		PersonID:   person5.ID,
-		GradeLevel: "Year 12",
-	}
-	student6 = m.Student{
-		PersonID:   person6.ID,
-		GradeLevel: "Year 12",
-	}
-	student7 = m.Student{
-		PersonID:   person7.ID,
-		GradeLevel: "Year 12",
-	}
-	student8 = m.Student{
-		PersonID:   person8.ID,
-		GradeLevel: "Year 12",
-	}
-
-	student1.ID, _ = Students.Store(&student1)
-	student2.ID, _ = Students.Store(&student2)
-	student3.ID, _ = Students.Store(&student3)
-	student4.ID, _ = Students.Store(&student4)
-	student5.ID, _ = Students.Store(&student5)
-	student6.ID, _ = Students.Store(&student6)
-	student7.ID, _ = Students.Store(&student7)
-	student8.ID, _ = Students.Store(&student8)
-
-	t1 := m.Teacher{
-		PersonID: person9.ID,
-		Email:    "Susan.Feathers@test.com",
-	}
-	t2 := m.Teacher{
-		PersonID: person10.ID,
-		Email:    "Karen.Portman@test.com",
-	}
-
-	Teachers.Store(&t1)
-	Teachers.Store(&t2)
-
 }
 
 func insertTestEnrollments() {
 	p1 := m.Enrollment{
-		StudentID: student1.ID,
-		ClassID:   class1.ID,
-		TermID:    term1.ID,
+		PersonID: person1.ID,
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
 	}
 	p2 := m.Enrollment{
-		StudentID: student2.ID,
-		ClassID:   class1.ID,
-		TermID:    term1.ID,
+		PersonID: person2.ID,
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
 	}
 	p3 := m.Enrollment{
-		StudentID: student3.ID,
-		ClassID:   class1.ID,
-		TermID:    term1.ID,
+		PersonID: person3.ID,
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
 	}
 	p4 := m.Enrollment{
-		StudentID: student4.ID,
-		ClassID:   class1.ID,
-		TermID:    term1.ID,
+		PersonID: person4.ID,
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
 	}
 	p5 := m.Enrollment{
-		StudentID: student4.ID,
-		ClassID:   class2.ID,
-		TermID:    term1.ID,
+		PersonID: person4.ID,
+		ClassID:  class2.ID,
+		TermID:   term1.ID,
 	}
 	p6 := m.Enrollment{
-		StudentID: student4.ID,
-		ClassID:   class3.ID,
-		TermID:    term1.ID,
+		PersonID: person4.ID,
+		ClassID:  class3.ID,
+		TermID:   term1.ID,
 	}
 	p7 := m.Enrollment{
-		StudentID: student4.ID,
-		ClassID:   class5.ID,
-		TermID:    term1.ID,
+		PersonID: person4.ID,
+		ClassID:  class5.ID,
+		TermID:   term1.ID,
 	}
 	p8 := m.Enrollment{
-		StudentID: student4.ID,
-		ClassID:   class6.ID,
-		TermID:    term1.ID,
+		PersonID: person4.ID,
+		ClassID:  class6.ID,
+		TermID:   term1.ID,
 	}
 	p9 := m.Enrollment{
-		StudentID: student4.ID,
-		ClassID:   class7.ID,
-		TermID:    term1.ID,
+		PersonID: person4.ID,
+		ClassID:  class7.ID,
+		TermID:   term1.ID,
 	}
 	Enrollments.Store(&p1)
 	Enrollments.Store(&p2)
@@ -542,12 +503,12 @@ func insertTestEnrollments() {
 func insertTestGrades() {
 	grade1 := m.AssignmentGrade{
 		AssignmentID: assignment1.ID,
-		StudentID:    student1.ID,
+		PersonID:     person1.ID,
 		Grade:        "50",
 	}
 	grade2 := m.AssignmentGrade{
 		AssignmentID: assignment1.ID,
-		StudentID:    student2.ID,
+		PersonID:     person2.ID,
 		Grade:        "50",
 	}
 
