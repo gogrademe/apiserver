@@ -30,7 +30,6 @@ func init() {
 func main() {
 	flag.StringVar(&listenAddr, "listenAddr", ":5005", "")
 	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
-	flag.StringVar(&staticDir, "staticDir", "public", "")
 	flag.BoolVar(&insertTestData, "insertTestData", false, "")
 
 	address = os.Getenv("RETHINKDB_PORT_28015_TCP")
