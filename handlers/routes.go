@@ -8,12 +8,12 @@ import (
 func SetupHandlers(r *gin.Engine) {
 	// r.Handle("OPTIONS", "/*cors", []gin.HandlerFunc{CORSMiddleware()})
 	r.Use(CORSMiddleware())
-	m := r.Group("/api")
+	// m := r.Group("/api")
 
 	// Auth
-	m.POST("/session", Login)
+	r.POST("/session", Login)
 
-	auth := m.Group("", AuthRequired())
+	auth := r.Group("", AuthRequired())
 
 	// Users
 	auth.GET("/user", Can("Admin", "Teacher"), GetAllUsers)

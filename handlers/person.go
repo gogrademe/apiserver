@@ -83,7 +83,6 @@ func GetAllPeople(c *gin.Context) {
 	p := []m.Person{}
 	query := store.People.OrderBy("firstName", "middleName", "lastName")
 	err := store.DB.All(&p, query)
-	// err := store.Classes.FindAll(&classes)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
