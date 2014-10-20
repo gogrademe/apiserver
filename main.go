@@ -2,55 +2,51 @@ package main
 
 import (
 	"flag"
+	"log"
 	"os"
 	"strings"
 
 	h "github.com/Lanciv/GoGradeAPI/handlers"
 	"github.com/Lanciv/GoGradeAPI/store"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 )
 
-var log = logrus.New()
-
-var (
-	listenAddr     string
-	address        string
-	dbName         string
-	staticDir      string
-	insertTestData bool
-)
-
-func init() {
-	log.Formatter = new(logrus.JSONFormatter)
-	log.Formatter = new(logrus.TextFormatter) // default
+// Borrowed from:
+// github.com/progrium/logspout/blob/master/logspout.go#L33
+func getopt(name, dfault string) string {
+	value := os.Getenv(name)
+	if value == "" {
+		value = dfault
+	}
+	return value
 }
 
 func main() {
-	flag.StringVar(&listenAddr, "listenAddr", ":5005", "")
-	flag.StringVar(&dbName, "dbName", "dev_go_grade", "")
-	flag.BoolVar(&insertTestData, "insertTestData", false, "")
+	port := getopt("PORT", "5005")
+	dbName := getopt("DB_NAME", "dev_go_grade")
+	bootstrap := getopt("BOOTSTRAP_DB", "") != ""
+	testData := getopt("INSERT_TEST_DATA", "") != ""
 
-	address = os.Getenv("RETHINKDB_PORT_28015_TCP")
-	address = strings.Trim(address, "tcp://")
+	dbAddress := os.Getenv("RETHINKDB_PORT_28015_TCP")
+	dbAddress = strings.Trim(dbAddress, "tcp://")
 
-	if address == "" {
-		address = "localhost:28015"
+	if dbAddress == "" {
+		dbAddress = "localhost:28015"
 	}
 
 	flag.Parse()
 
-	if err := store.Connect(address, dbName); err != nil {
+	if err := store.Connect(dbAddress, dbName); err != nil {
 		log.Fatal("Error setting up database: ", err)
 	}
 
-	store.SetupDB(insertTestData)
+	store.SetupDB(bootstrap, testData)
 
 	r := gin.Default()
 
 	h.SetupHandlers(r)
 
-	r.Run(listenAddr)
+	r.Run(":" + port)
 
 }

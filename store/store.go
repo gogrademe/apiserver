@@ -78,14 +78,20 @@ func Connect(address, database string) error {
 }
 
 // SetupDB will be used to bootstrap the DB
-func SetupDB(testData bool) {
-	log.Println("SetupDB: Start")
-	createDatabase()
-	createTables()
-	createIndexes()
+func SetupDB(bootstrap, testData bool) {
+
+	if bootstrap {
+		log.Println("SetupDB: Bootstrapping...")
+		createDatabase()
+		createTables()
+		createIndexes()
+		log.Println("SetupDB: Bootstrap Done")
+	}
 
 	if testData {
+		log.Println("SetupDB: Cleaning...")
 		cleanTables()
+		log.Println("SetupDB: Inserting Data...")
 		insertTestData()
 	}
 
