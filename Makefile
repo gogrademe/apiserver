@@ -1,22 +1,31 @@
-NAME=GoGradeMeAPI
+NAME=gogradeapi
 HARDWARE=$(shell uname -m)
 VERSION=0.1.0
 
-build:
-	mkdir -p stage
-	GOOS=linux go build -o stage/$(NAME)
-	docker build -t gogrademe/api-server .
+build/container: stage/$(NAME) Dockerfile
+	docker build -t $(NAME) .
+	touch build/container
 
-release:
+build/$(NAME): *.go
+	GOOS=linux GOARCH=amd64 go build -o build/$(NAME)
+
+stage/$(NAME): build/$(NAME)
+	mkdir -p stage
+	cp build/$(NAME) stage/$(NAME)
+
+release: build/container
 	rm -rf release
 	mkdir release
-	GOOS=linux go build -o release/$(NAME)
-	cd release && tar -zcf $(NAME)_$(VERSION)_linux_$(HARDWARE).tgz $(NAME)
-	GOOS=darwin go build -o release/$(NAME)
-	cd release && tar -zcf $(NAME)_$(VERSION)_darwin_$(HARDWARE).tgz $(NAME)
-	rm release/$(NAME)
-	echo "$(VERSION)" > release/version
-	echo "gogrademe/$(NAME)" > release/repo
-	gh-release
+	docker tag $(NAME) lanciv/$(NAME)
+	docker push lanciv/$(NAME)
+	#cd release && tar -zcf $(NAME)_$(VERSION)_linux_$(HARDWARE).tgz ../build/$(NAME)
+	#echo "$(VERSION)" > release/version
+	#echo "lanciv/$(NAME)" > release/repo
+	#gh-release
 
-.PHONY: release
+
+.PHONY: clean release
+clean:
+	rm -rf build
+	rm -rf release
+	rm -rf stage

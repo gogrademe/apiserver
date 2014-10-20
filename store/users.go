@@ -13,6 +13,8 @@ var (
 
 	//ErrUserAlreadyExists err for duplicate user
 	ErrUserAlreadyExists = errors.New("User with email already exists.")
+	//ErrUserForPersonExists err for duplicate person
+	ErrUserForPersonExists = errors.New("User for person already exists.")
 
 	//ErrUserPasswordRequired err for trying to save without a password.
 	// TODO: Remove this after refactoring.
@@ -35,10 +37,19 @@ func userExist(email string) bool {
 	return !row.IsNil()
 }
 
+func userForPersonExist(personID string) bool {
+	row, _ := r.Table("users").Filter(r.Row.Field("personId").Eq(personID)).Run(sess)
+
+	return !row.IsNil()
+}
+
 // Store saves a user into the db
 func (us *UserStore) Store(u *m.User) error {
 	if userExist(u.Email) {
 		return ErrUserAlreadyExists
+	}
+	if userForPersonExist(u.PersonID) {
+		return ErrUserForPersonExists
 	}
 	res, err := r.Table("users").Insert(u).RunWrite(sess)
 	if err != nil {

@@ -22,13 +22,12 @@ type User struct {
 	TimeStamp
 }
 
-func NewUserFor(email, password, role, personID string) (*User, error) {
+func NewUserFor(email, password, personID string) (*User, error) {
 	emailLower := strings.ToLower(email)
 
 	user := User{
 		Email:      email,
 		EmailLower: emailLower,
-		Role:       role,
 		PersonID:   personID,
 	}
 

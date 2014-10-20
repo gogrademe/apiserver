@@ -20,6 +20,16 @@ type (
 	}
 )
 
+// RoleIn ...
+func isIn(val string, slice []string) bool {
+	for _, item := range slice {
+		if val == item {
+			return true
+		}
+	}
+	return false
+}
+
 func (p Person) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if p.FirstName == "" {
 		errs = append(errs, RequiredErr("firstName"))
@@ -30,6 +40,10 @@ func (p Person) Validate(req *http.Request, errs binding.Errors) binding.Errors 
 	if len(p.Types) == 0 {
 		errs = append(errs, RequiredErr("types"))
 	}
+	if isIn("Student", p.Types) && p.GradeLevel == "" {
+		errs = append(errs, RequiredErr("gradeLevel"))
+	}
+
 	return errs
 }
 

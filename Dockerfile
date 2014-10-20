@@ -1,9 +1,9 @@
 FROM progrium/busybox
 MAINTAINER Matt Aitchison <matt@lanciv.com>
 
-ADD ./stage/GoGradeMeAPI /bin/GoGradeMeAPI
+ADD ./stage/gogradeapi /bin/gogradeapi
 
 EXPOSE 5005
 
-ENTRYPOINT ["/bin/GoGradeMeAPI"]
+ENTRYPOINT ["/bin/gogradeapi"]
 # CMD ["-staticDir=/opt/www"]

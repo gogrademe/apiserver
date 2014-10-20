@@ -124,10 +124,9 @@ func insertTestData() {
 
 func insertTestUsers() {
 
-	u, _ := m.NewUserFor("test@test.com", "somePassword", "Admin", person7.ID)
-	u2, _ := m.NewUserFor("Susan.Feathers@test.com", "somePassword", "Teacher", person9.ID)
-	Users.Store(u)
-	Users.Store(u2)
+	// u, _ := m.NewUserFor("test@test.com", "somePassword", "Admin", person7.ID)
+	// Users.Store(u)
+	// Users.Store(u2)
 }
 
 func insertTestTerms() {

@@ -50,7 +50,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	newUser, err := m.NewUserFor(u.Email, u.Password, "Teacher", u.PersonID)
+	newUser, err := m.NewUserFor(u.Email, u.Password, u.PersonID)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
