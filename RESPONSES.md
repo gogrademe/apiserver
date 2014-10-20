@@ -6,9 +6,9 @@ Every response from the api must follow this format, including errors, searches,
       {
         "id": "THING_ID",
         "OTHER_TYPE_ID": "ID",
-        "OTHER_TYPE_ID_MULTI": ["ID", "ID"]
-        "MISC_PROPERTY": MISC_VALUE,
-        "OTHER_MISC_PROPERTY": OTHER_MISC_VALUE
+        "OTHER_TYPE_ID_MULTI": ["ID", "ID"],
+        "MISC_PROPERTY": "$MISC_VALUE",
+        "OTHER_MISC_PROPERTY": "$OTHER_MISC_VALUE"
       }
     ]
 }
@@ -17,7 +17,7 @@ Every response from the api must follow this format, including errors, searches,
 
 <dl>
   <dt> `TYPE`
-  <dd> type is the resouce type.  Examples: person, student, teacher, grade, assignment, session
+  <dd> type is the resource type.  Examples: person, student, teacher, grade, assignment, session
   <dd> there may be multiple values for a type
   <dd> there may be multiple types on a response
   <dd> `GET /api/TYPE/id` should give the data for an object type
