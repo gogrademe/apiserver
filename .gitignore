@@ -27,4 +27,7 @@ _testmain.go
 
 .ssh
 .DS_Store
+GoGradeMeAPI
 GoGradeAPI
+stage
+release
