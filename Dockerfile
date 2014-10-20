@@ -1,19 +1,9 @@
-FROM golang
+FROM progrium/busybox
+MAINTAINER Matt Aitchison <matt@lanciv.com>
 
-ADD . /go/src/github.com/Lanciv/GoGradeAPI
-
-WORKDIR /go/src/github.com/Lanciv/GoGradeAPI
-
-RUN go env
-
-RUN go get github.com/tools/godep
-
-RUN godep restore ./...
-
-RUN godep go build -o /usr/bin/GoGradeAPI main.go
-
+ADD ./stage/GoGradeMeAPI /bin/GoGradeMeAPI
 
 EXPOSE 5005
 
-ENTRYPOINT ["/usr/bin/GoGradeAPI"]
+ENTRYPOINT ["/bin/GoGradeMeAPI"]
 # CMD ["-staticDir=/opt/www"]
