@@ -89,3 +89,22 @@ func UpdateClass(c *gin.Context) {
 	c.JSON(200, &APIRes{"class": []m.Class{*class}})
 	return
 }
+
+// DeleteClass ...
+func DeleteClass(c *gin.Context) {
+
+	id := c.Params.ByName("id")
+
+	_, err := store.DB.RunWrite(store.Classes.Get(id).Delete())
+	if err == store.ErrNotFound {
+		writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
+	if err != nil {
+		writeError(c.Writer, serverError, 500, nil)
+		return
+	}
+
+	c.JSON(200, &APIRes{"class": []m.Class{}})
+	return
+}

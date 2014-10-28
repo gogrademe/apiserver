@@ -24,6 +24,7 @@ func SetupHandlers(r *gin.Engine) {
 	g.GET("", Can("Admin", "Teacher"), GetAllClasses)
 	g.GET("/:id", Can("Admin", "Teacher"), GetClass)
 	g.POST("", Can("Admin"), CreateClass)
+	g.DELETE("/:id", Can("Admin"), DeleteClass)
 
 	g.PUT("/:id", Can("Admin"), UpdateClass)
 
