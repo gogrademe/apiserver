@@ -66,7 +66,7 @@ func Login(c *gin.Context) {
 // AuthRequired ...
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		res, err := jwt.ParseFromRequest(c.Request, func(t *jwt.Token) ([]byte, error) {
+		res, err := jwt.ParseFromRequest(c.Request, func(t *jwt.Token) (interface{}, error) {
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {
