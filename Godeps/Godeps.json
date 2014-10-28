@@ -52,6 +52,10 @@
 		{
 			"ImportPath": "github.com/mholt/binding",
 			"Rev": "495a5e4b7e8461e29dc0c976cdd36c2251319e2d"
+		},
+		{
+			"ImportPath": "gopkg.in/fatih/pool.v2",
+			"Rev": "dae43b8a8a190d1f2b5908e2f6dd02481e7d59e9"
 		}
 	]
 }
