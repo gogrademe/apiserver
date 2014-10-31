@@ -1,4 +1,4 @@
-NAME=gogradeapi
+NAME=apiserver
 HARDWARE=$(shell uname -m)
 VERSION=0.1.1
 
@@ -16,12 +16,12 @@ stage/$(NAME): build/$(NAME)
 release: build/container
 	rm -rf release
 	mkdir release
-	docker tag $(NAME) lanciv/$(NAME)
-	docker push lanciv/$(NAME)
-	cd release && tar -zcf $(NAME)_$(VERSION)_linux_$(HARDWARE).tgz ../build/$(NAME)
-	echo "$(VERSION)" > release/version
-	echo "lanciv/$(NAME)" > release/repo
-	gh-release
+	docker tag $(NAME) gogrademe/$(NAME)
+	docker push gogrademe/$(NAME)
+	# cd release && tar -zcf $(NAME)_$(VERSION)_linux_$(HARDWARE).tgz ../build/$(NAME)
+	# echo "$(VERSION)" > release/version
+	# echo "gogrademe/$(NAME)" > release/repo
+	# gh-release
 
 
 .PHONY: clean release
