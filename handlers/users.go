@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	m "github.com/Lanciv/GoGradeAPI/model"
-	s "github.com/Lanciv/GoGradeAPI/store"
+	m "github.com/GoGradeMe/APIServer/model"
+	s "github.com/GoGradeMe/APIServer/store"
 
 	"github.com/mholt/binding"
 )

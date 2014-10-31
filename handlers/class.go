@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	m "github.com/Lanciv/GoGradeAPI/model"
-	"github.com/Lanciv/GoGradeAPI/store"
+	m "github.com/GoGradeMe/APIServer/model"
+	"github.com/GoGradeMe/APIServer/store"
 
 	r "github.com/dancannon/gorethink"
 	"github.com/gin-gonic/gin"

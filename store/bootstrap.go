@@ -3,7 +3,7 @@ package store
 import (
 	"time"
 
-	m "github.com/Lanciv/GoGradeAPI/model"
+	m "github.com/GoGradeMe/APIServer/model"
 	r "github.com/dancannon/gorethink"
 
 	//"github.com/Pallinder/go-randomdata"

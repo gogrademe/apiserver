@@ -1,7 +1,7 @@
 package store
 
 import (
-	m "github.com/Lanciv/GoGradeAPI/model"
+	m "github.com/GoGradeMe/APIServer/model"
 	. "gopkg.in/check.v1"
 	// "log"
 )

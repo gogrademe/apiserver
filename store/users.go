@@ -3,7 +3,7 @@ package store
 import (
 	"errors"
 
-	m "github.com/Lanciv/GoGradeAPI/model"
+	m "github.com/GoGradeMe/APIServer/model"
 	r "github.com/dancannon/gorethink"
 )
 
