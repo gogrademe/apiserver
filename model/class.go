@@ -25,6 +25,10 @@ func (c Class) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if c.GradeLevel == "" {
 		errs = append(errs, RequiredErr("gradeLevel"))
 	}
+
+	if len(c.Terms) <= 0 {
+		errs = append(errs, RequiredErr("terms"))
+	}
 	return errs
 }
 

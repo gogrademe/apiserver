@@ -248,29 +248,24 @@ func insertTestClasses() {
 }
 func insertTestTypes() {
 	type1 = m.AssignmentType{
-		Name:     "Class Test",
-		Weight:   .20,
-		MaxScore: 100,
+		Name:   "Class Test",
+		Weight: .20,
 	}
 	type2 = m.AssignmentType{
-		Name:     "Written Work",
-		Weight:   .40,
-		MaxScore: 100,
+		Name:   "Written Work",
+		Weight: .40,
 	}
 	type3 = m.AssignmentType{
-		Name:     "Quiz",
-		Weight:   .20,
-		MaxScore: 100,
+		Name:   "Quiz",
+		Weight: .20,
 	}
 	type4 = m.AssignmentType{
-		Name:     "Project",
-		Weight:   .20,
-		MaxScore: 100,
+		Name:   "Project",
+		Weight: .20,
 	}
 	type5 = m.AssignmentType{
-		Name:     "Mid Term",
-		Weight:   .60,
-		MaxScore: 100,
+		Name:   "Mid Term",
+		Weight: .60,
 	}
 
 	type1.ID, _ = AssignmentTypes.Store(&type1)
@@ -283,70 +278,81 @@ func insertTestTypes() {
 
 func insertTestAssignments() {
 	assignment1 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type1.ID,
-		Name:    "Notebook Check",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type1.ID,
+		MaxScore: 100,
+		Name:     "Notebook Check",
 	}
 	assignment2 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type1.ID,
-		Name:    "Formula Quiz",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type1.ID,
+		MaxScore: 100,
+		Name:     "Formula Quiz",
 	}
 	assignment3 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type1.ID,
-		Name:    "Solar Model",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type1.ID,
+		MaxScore: 100,
+		Name:     "Solar Model",
 	}
 	assignment4 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type1.ID,
-		Name:    "Cell Model",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type1.ID,
+		MaxScore: 100,
+		Name:     "Cell Model",
 	}
 	assignment5 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type2.ID,
-		Name:    "Test 1",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type2.ID,
+		MaxScore: 100,
+		Name:     "Test 1",
 	}
 	assignment6 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type3.ID,
-		Name:    "Formula Quiz",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type3.ID,
+		MaxScore: 100,
+		Name:     "Formula Quiz",
 	}
 	assignment7 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type4.ID,
-		Name:    "Solar Model",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type4.ID,
+		MaxScore: 100,
+		Name:     "Solar Model",
 	}
 	assignment8 = m.Assignment{
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-		TypeID:  type5.ID,
-		Name:    "Cell Model",
+		ClassID:  class1.ID,
+		TermID:   term1.ID,
+		TypeID:   type5.ID,
+		MaxScore: 100,
+		Name:     "Cell Model",
 	}
 	assignment9 = m.Assignment{
-		ClassID: class2.ID,
-		TermID:  term1.ID,
-		TypeID:  type5.ID,
-		Name:    "Cell Model",
+		ClassID:  class2.ID,
+		TermID:   term1.ID,
+		MaxScore: 100,
+		TypeID:   type5.ID,
+		Name:     "Cell Model",
 	}
 	assignment10 = m.Assignment{
-		ClassID: class2.ID,
-		TermID:  term1.ID,
-		TypeID:  type5.ID,
-		Name:    "Cell Model",
+		ClassID:  class2.ID,
+		TermID:   term1.ID,
+		TypeID:   type5.ID,
+		MaxScore: 100,
+		Name:     "Cell Model",
 	}
 	assignment11 = m.Assignment{
-		ClassID: class2.ID,
-		TermID:  term2.ID,
-		TypeID:  type5.ID,
-		Name:    "Cell Model",
+		ClassID:  class2.ID,
+		TermID:   term2.ID,
+		TypeID:   type5.ID,
+		MaxScore: 100,
+		Name:     "Cell Model",
 	}
 
 	assignment1.ID, _ = Assignments.Store(&assignment1)
