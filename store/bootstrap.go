@@ -124,41 +124,59 @@ func insertTestData() {
 
 func insertTestUsers() {
 
-	// u, _ := m.NewUserFor("test@test.com", "somePassword", "Admin", person7.ID)
-	// Users.Store(u)
+	u, _ := m.NewUserFor("test@test.com", "somePassword", person7.ID)
+	Users.Store(u)
 	// Users.Store(u2)
 }
 
 func insertTestTerms() {
 	term1 = m.Term{
-		Name:       "Term 1",
-		SchoolYear: "2014-2015",
-		StartDate:  time.Date(2014, time.September, 10, 8, 0, 0, 0, time.UTC),
+		Name: "Term 1",
+		SchoolYear: m.SchoolYear{
+			Start: 2014,
+			End:   2015,
+		},
+		StartDate: time.Date(2014, time.September, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term2 = m.Term{
-		Name:       "Term 2",
-		SchoolYear: "2014-2015",
-		StartDate:  time.Date(2015, time.January, 10, 8, 0, 0, 0, time.UTC),
+		Name: "Term 2",
+		SchoolYear: m.SchoolYear{
+			Start: 2014,
+			End:   2015,
+		},
+		StartDate: time.Date(2015, time.January, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term3 = m.Term{
-		Name:       "Term 3",
-		SchoolYear: "2014-2015",
-		StartDate:  time.Date(2015, time.May, 10, 8, 0, 0, 0, time.UTC),
+		Name: "Term 3",
+		SchoolYear: m.SchoolYear{
+			Start: 2014,
+			End:   2015,
+		},
+		StartDate: time.Date(2015, time.May, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term4 = m.Term{
-		Name:       "Term 1",
-		SchoolYear: "2012-2013",
-		StartDate:  time.Date(2012, time.September, 10, 8, 0, 0, 0, time.UTC),
+		Name: "Term 1",
+		SchoolYear: m.SchoolYear{
+			Start: 2012,
+			End:   2013,
+		},
+		StartDate: time.Date(2012, time.September, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term5 = m.Term{
-		Name:       "Term 2",
-		SchoolYear: "2012-2013",
-		StartDate:  time.Date(2013, time.January, 10, 8, 0, 0, 0, time.UTC),
+		Name: "Term 2",
+		SchoolYear: m.SchoolYear{
+			Start: 2012,
+			End:   2013,
+		},
+		StartDate: time.Date(2013, time.January, 10, 8, 0, 0, 0, time.UTC),
 	}
 	term6 = m.Term{
-		Name:       "Term 3",
-		SchoolYear: "2012-2013",
-		StartDate:  time.Date(2013, time.May, 10, 8, 0, 0, 0, time.UTC),
+		Name: "Term 3",
+		SchoolYear: m.SchoolYear{
+			Start: 2012,
+			End:   2013,
+		},
+		StartDate: time.Date(2013, time.May, 10, 8, 0, 0, 0, time.UTC),
 	}
 
 	keys, _ := Terms.Insert(&term1, &term2, &term3, &term4, &term5, &term6)
@@ -411,7 +429,7 @@ func insertTestPeople() {
 		FirstName:  "Matthew",
 		LastName:   "Aitchison",
 		GradeLevel: "Year 12",
-		Types:      []string{"Student"},
+		Types:      []string{"Admin"},
 	}
 	person8 = m.Person{
 		FirstName:  "Natalie",

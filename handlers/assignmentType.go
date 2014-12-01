@@ -88,3 +88,22 @@ func GetAllAssignmentTypes(c *gin.Context) {
 	c.JSON(200, &APIRes{"type": types})
 	return
 }
+
+// DeleteAssignmentType ...
+func DeleteAssignmentType(c *gin.Context) {
+
+	id := c.Params.ByName("id")
+
+	err := store.AssignmentTypes.Delete(id)
+	if err == store.ErrNotFound {
+		writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
+	if err != nil {
+		writeError(c.Writer, serverError, 500, nil)
+		return
+	}
+
+	c.JSON(200, &APIRes{"type": []m.AssignmentType{}})
+	return
+}

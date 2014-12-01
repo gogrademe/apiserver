@@ -23,27 +23,30 @@ func RoleIn(role string, roles []string) bool {
 // Can ...
 func Can(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userID, err := c.Get("userId")
-		if err != nil && userID == nil {
-			c.Fail(401, errors.New("UserID not found."))
+		personID, err := c.Get("personId")
+		if err != nil && personID == nil {
+			c.Fail(401, errors.New("PersonId not found."))
 			return
 		}
 
-		id := userID.(string)
+		id := personID.(string)
 
-		user := m.User{}
-		err = store.UserH.One(&user, id)
+		person := m.Person{}
+		err = store.People.One(&person, id)
 		if err != nil {
-			c.Fail(401, errors.New("User not found."))
+			c.Fail(401, errors.New("Person not found."))
 			return
 		}
 
-		log.Println("DEBUG: AUTH DISABLED")
-		// if !RoleIn(user.Role, roles) {
-		//
-		// 	c.Fail(401, errors.New("Unauthorized"))
-		// 	return
-		// }
+		for k := range person.Types {
+			if RoleIn(person.Types[k], roles) {
+				log.Printf("Role %s matched for person: %s", roles, person)
+				return
+			}
+		}
+
+		c.Fail(401, errors.New("Unauthorized"))
+		return
 
 	}
 }

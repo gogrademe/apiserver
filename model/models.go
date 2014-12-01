@@ -22,10 +22,3 @@ func (a *TimeStamp) UpdateTime() {
 	a.UpdatedAt = t
 	return
 }
-
-// func field(form string, required bool) binding.Field {
-// 	return binding.Field{
-// 		Form:     form,
-// 		Required: required,
-// 	}
-// }

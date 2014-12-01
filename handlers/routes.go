@@ -6,9 +6,7 @@ import (
 
 // SetupHandlers loads all routes
 func SetupHandlers(r *gin.Engine) {
-	// r.Handle("OPTIONS", "/*cors", []gin.HandlerFunc{CORSMiddleware()})
 	r.Use(CORSMiddleware())
-	// m := r.Group("/api")
 
 	// Auth
 	r.POST("/session", Login)
@@ -16,7 +14,7 @@ func SetupHandlers(r *gin.Engine) {
 	auth := r.Group("", AuthRequired())
 
 	// Users
-	auth.GET("/user", Can("Admin", "Teacher"), GetAllUsers)
+	auth.GET("/user", Can("Admin"), GetAllUsers)
 	auth.POST("/user", Can("Admin"), CreateUser)
 
 	// Classes
@@ -47,7 +45,6 @@ func SetupHandlers(r *gin.Engine) {
 	g = auth.Group("/assignment")
 	g.GET("", Can("Admin", "Teacher"), GetAllAssignments)
 	g.POST("", Can("Admin", "Teacher"), CreateAssignment)
-	// g.POST("", Create(store.Assignments))
 	g.GET("/:id", Can("Admin", "Teacher"), GetAssignment)
 	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignment)
 	g.DELETE("/:id", Can("Admin", "Teacher"), DeleteAssignment)
@@ -55,9 +52,10 @@ func SetupHandlers(r *gin.Engine) {
 	// AssignmentTypes
 	g = auth.Group("/type")
 	g.GET("", Can("Admin", "Teacher"), GetAllAssignmentTypes)
-	g.POST("", Can("Admin", "Teacher"), CreateAssignmentType)
+	g.POST("", Can("Admin"), CreateAssignmentType)
 	g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentType)
-	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignmentType)
+	g.PUT("/:id", Can("Admin"), UpdateAssignmentType)
+	g.DELETE("/:id", Can("Admin"), DeleteAssignmentType)
 
 	// AssignmentGrades
 	g = auth.Group("/grade")
