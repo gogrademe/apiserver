@@ -3,9 +3,10 @@ package handlers
 import (
 	"errors"
 
-	m "github.com/GoGradeMe/APIServer/model"
-	"github.com/GoGradeMe/APIServer/store"
+	m "github.com/gogrademe/apiserver/model"
+	"github.com/gogrademe/apiserver/store"
 
+	r "github.com/dancannon/gorethink"
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
@@ -85,8 +86,17 @@ func GetAllAssignmentGrades(c *gin.Context) {
 	}
 
 	grades := []m.AssignmentGrade{}
-	query := store.AssignmentGrades.Filter(filter)
-	err := store.DB.All(&grades, query)
+	q := store.AssignmentGrades.Filter(filter)
+
+	q = q.EqJoin("assignmentId", r.Table("assignments"))
+
+	q = q.Map(func(row r.Term) r.Term {
+		return row.Field("left").Merge(map[string]interface{}{
+			"assignment":   row.Field("right"),
+			"gradeAverage": 3,
+		})
+	})
+	err := store.DB.All(&grades, q)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

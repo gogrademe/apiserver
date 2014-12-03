@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	h "github.com/GoGradeMe/APIServer/handlers"
-	"github.com/GoGradeMe/APIServer/store"
+	h "github.com/gogrademe/apiserver/handlers"
+	"github.com/gogrademe/apiserver/store"
 
 	"github.com/gin-gonic/gin"
 )

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/gogrademe/apiserver/store"
 )
 
 type (
@@ -30,6 +32,18 @@ const (
 	serverError         = "server error"
 	notFoundError       = "not found"
 )
+
+func handleDBError(rw http.ResponseWriter, err error) {
+	if err == store.ErrNotFound {
+		rw.WriteHeader(http.StatusNotFound)
+		// writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
+	if err != nil {
+		writeError(c.Writer, serverError, 500, nil)
+		return
+	}
+}
 
 // writeError will write a JSON error to the client.
 func writeError(w http.ResponseWriter, message interface{}, code int, errorToLog error) {

@@ -3,8 +3,8 @@ package handlers
 import (
 	"errors"
 
-	m "github.com/GoGradeMe/APIServer/model"
-	"github.com/GoGradeMe/APIServer/store"
+	m "github.com/gogrademe/apiserver/model"
+	"github.com/gogrademe/apiserver/store"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
@@ -16,14 +16,20 @@ func DeleteAssignment(c *gin.Context) {
 	id := c.Params.ByName("id")
 
 	err := store.Assignments.Delete(id)
-	if err == store.ErrNotFound {
-		writeError(c.Writer, notFoundError, 404, nil)
-		return
-	}
+
 	if err != nil {
-		writeError(c.Writer, serverError, 500, nil)
+		handleDBError(c.Writer, err)
 		return
 	}
+	// if err == store.ErrNotFound {
+	// 	c.Writer.WriteHeader(http.StatusNotFound)
+	// 	// writeError(c.Writer, notFoundError, 404, nil)
+	// 	return
+	// }
+	// if err != nil {
+	// 	writeError(c.Writer, serverError, 500, nil)
+	// 	return
+	// }
 
 	c.JSON(200, &APIRes{"assignment": []m.Assignment{}})
 	return
@@ -53,19 +59,24 @@ func CreateAssignment(c *gin.Context) {
 
 // GetAssignment ...
 func GetAssignment(c *gin.Context) {
+	var (
+		id = c.Params.ByName("id")
+		a  = m.Assignment{}
+	)
 
-	id := c.Params.ByName("id")
-
-	a := m.Assignment{}
 	err := store.Assignments.FindByID(&a, id)
-	if err == store.ErrNotFound {
-		writeError(c.Writer, notFoundError, 404, nil)
-		return
-	}
 	if err != nil {
-		writeError(c.Writer, serverError, 500, nil)
+		handleDBError(c.Writer, err)
 		return
 	}
+	// if err == store.ErrNotFound {
+	// 	writeError(c.Writer, notFoundError, 404, nil)
+	// 	return
+	// }
+	// if err != nil {
+	// 	writeError(c.Writer, serverError, 500, nil)
+	// 	return
+	// }
 
 	c.JSON(200, &APIRes{"assignment": []m.Assignment{a}})
 	return

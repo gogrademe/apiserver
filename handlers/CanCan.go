@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	m "github.com/GoGradeMe/APIServer/model"
-	"github.com/GoGradeMe/APIServer/store"
+	m "github.com/gogrademe/apiserver/model"
+	"github.com/gogrademe/apiserver/store"
 )
 
 // RoleIn ...

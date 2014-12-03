@@ -9,10 +9,12 @@ import (
 
 //AssignmentGrade ...
 type AssignmentGrade struct {
-	ID           string `gorethink:"id,omitempty"json:"id"`
-	AssignmentID string `gorethink:"assignmentId,omitempty"json:"assignmentId"`
-	PersonID     string `gorethink:"personId,omitempty"json:"personId"`
-	Grade        string `gorethink:"grade,omitempty"json:"grade"`
+	ID           string     `gorethink:"id,omitempty"json:"id"`
+	AssignmentID string     `gorethink:"assignmentId,omitempty"json:"assignmentId"`
+	PersonID     string     `gorethink:"personId,omitempty"json:"personId"`
+	Grade        string     `gorethink:"grade,omitempty"json:"grade"`
+	GradeAverage string     `gorethink:"gradeAverage,omitempty"json:"gradeAverage"`
+	Assignment   Assignment `gorethink:"assignment,omitempty"json:"assignment"`
 	TimeStamp
 }
 

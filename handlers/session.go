@@ -3,8 +3,8 @@ package handlers
 import (
 	// "log"
 
-	m "github.com/GoGradeMe/APIServer/model"
-	s "github.com/GoGradeMe/APIServer/store"
+	m "github.com/gogrademe/apiserver/model"
+	s "github.com/gogrademe/apiserver/store"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

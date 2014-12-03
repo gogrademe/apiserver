@@ -1,6 +1,6 @@
 package store
 
-// m "github.com/GoGradeMe/APIServer/model"
+// m "github.com/gogrademe/apiserver/model"
 // r "github.com/dancannon/gorethink"
 
 type SessionStore struct {

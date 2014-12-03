@@ -1,7 +1,7 @@
 package handlers
 
 // import (
-// 	"github.com/GoGradeMe/APIServer/model"
+// 	"github.com/gogrademe/apiserver/model"
 // 	"github.com/martini-contrib/render"
 //
 // )
