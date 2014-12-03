@@ -27,18 +27,24 @@ func GetAllClasses(c *gin.Context) {
 
 // GetClass ...
 func GetClass(c *gin.Context) {
+	var (
+		id    = c.Params.ByName("id")
+		class = m.Class{}
+	)
 
-	id := c.Params.ByName("id")
-	class := m.Class{}
 	err := store.Classes.One(&class, id)
-	if err == store.ErrNotFound {
-		writeError(c.Writer, notFoundError, 404, nil)
-		return
-	}
 	if err != nil {
-		writeError(c.Writer, serverError, 500, nil)
+		handleDBError(c.Writer, err)
 		return
 	}
+	// if err == store.ErrNotFound {
+	// 	writeError(c.Writer, notFoundError, 404, nil)
+	// 	return
+	// }
+	// if err != nil {
+	// 	writeError(c.Writer, serverError, 500, nil)
+	// 	return
+	// }
 
 	c.JSON(200, &APIRes{"class": []m.Class{class}})
 	return

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -34,13 +35,14 @@ const (
 )
 
 func handleDBError(rw http.ResponseWriter, err error) {
+	fmt.Println(err)
 	if err == store.ErrNotFound {
 		rw.WriteHeader(http.StatusNotFound)
 		// writeError(c.Writer, notFoundError, 404, nil)
 		return
 	}
 	if err != nil {
-		writeError(c.Writer, serverError, 500, nil)
+		writeError(rw, serverError, 500, nil)
 		return
 	}
 }
