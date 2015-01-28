@@ -24,6 +24,7 @@ var (
 
 	Classes          = DB.NewCollection("classes")
 	Terms            = DB.NewCollection("terms")
+	SchoolYears      = DB.NewCollection("schoolYears")
 	EnrollmentH      = DB.NewCollection("enrollments")
 	People           = DB.NewCollection("people")
 	UserH            = DB.NewCollection("users")

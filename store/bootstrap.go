@@ -3,8 +3,8 @@ package store
 import (
 	"time"
 
-	m "github.com/gogrademe/apiserver/model"
 	r "github.com/dancannon/gorethink"
+	m "github.com/gogrademe/apiserver/model"
 
 	//"github.com/Pallinder/go-randomdata"
 )
