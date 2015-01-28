@@ -19,9 +19,6 @@ var (
 	// DB Global DB object
 	DB rh.DB
 
-	// Classes     ClassStore
-	Enrollments EnrollmentStore
-
 	Classes          = DB.NewCollection("classes")
 	Terms            = DB.NewCollection("terms")
 	SchoolYears      = DB.NewCollection("schoolYears")
@@ -34,8 +31,9 @@ var (
 	Assignments     AssignmentStore
 	AssignmentTypes AssignmentTypeStore
 
-	Sessions SessionStore
-	Users    UserStore
+	Sessions    SessionStore
+	Users       UserStore
+	Enrollments EnrollmentStore
 
 	// Errors
 	ErrNotFound   = errors.New("record not found")

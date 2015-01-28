@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ErrInvalidPassword = errors.New("Username or password incorrect.")
+	ErrInvalidPassword = errors.New("password must be between 6 and 256 characters")
 )
 
 type User struct {
@@ -23,11 +23,9 @@ type User struct {
 }
 
 func NewUserFor(email, password, personID string) (*User, error) {
-	emailLower := strings.ToLower(email)
-
 	user := User{
 		Email:      email,
-		EmailLower: emailLower,
+		EmailLower: strings.ToLower(email),
 		PersonID:   personID,
 	}
 

@@ -5,8 +5,6 @@ import (
 
 	r "github.com/dancannon/gorethink"
 	m "github.com/gogrademe/apiserver/model"
-
-	//"github.com/Pallinder/go-randomdata"
 )
 
 var (
@@ -41,15 +39,6 @@ var (
 	person8  m.Person
 	person9  m.Person
 	person10 m.Person
-
-	// student1 m.Student
-	// student2 m.Student
-	// student3 m.Student
-	// student4 m.Student
-	// student5 m.Student
-	// student6 m.Student
-	// student7 m.Student
-	// student8 m.Student
 
 	assignment1  m.Assignment
 	assignment2  m.Assignment

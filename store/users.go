@@ -3,22 +3,16 @@ package store
 import (
 	"errors"
 
-	m "github.com/gogrademe/apiserver/model"
 	r "github.com/dancannon/gorethink"
+	m "github.com/gogrademe/apiserver/model"
 )
 
 var (
-	//ErrUserOrPasswdIncorrect err for password incorrect
-	ErrUserOrPasswdIncorrect = errors.New("Email or password incorrect.")
 
 	//ErrUserAlreadyExists err for duplicate user
 	ErrUserAlreadyExists = errors.New("User with email already exists.")
 	//ErrUserForPersonExists err for duplicate person
 	ErrUserForPersonExists = errors.New("User for person already exists.")
-
-	//ErrUserPasswordRequired err for trying to save without a password.
-	// TODO: Remove this after refactoring.
-	ErrUserPasswordRequired = errors.New("Password is required")
 )
 
 // UserStore used to interact with db users
