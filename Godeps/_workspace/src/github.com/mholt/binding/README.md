@@ -80,6 +80,77 @@ func main() {
 }
 ```
 
+Multipart/form-data usage example
+---------------------------------
+
+```go
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"github.com/mholt/binding"
+	"io"
+	"log"
+	"mime/multipart"
+	"net/http"
+)
+
+// We expect a multipart/form-data upload with
+// a file field named 'data'
+type MultipartForm struct {
+	Data *multipart.FileHeader `json:"data"`
+}
+
+func (f *MultipartForm) FieldMap() binding.FieldMap {
+	return binding.FieldMap{
+		&f.Data: "data",
+	}
+}
+
+// Handlers are still clean and simple
+func handler(resp http.ResponseWriter, req *http.Request) {
+	multipartForm := new(MultipartForm)
+	errs := binding.Bind(req, multipartForm)
+	if errs.Handle(resp) {
+		return
+	}
+
+	// To access the file data you need to Open the file
+	// handler and read the bytes out.
+	var fh io.ReadCloser
+	var err error
+	if fh, err = multipartForm.Data.Open(); err != nil {
+		http.Error(resp,
+			fmt.Sprint("Error opening Mime::Data %+v", err),
+			http.StatusInternalServerError)
+		return
+	}
+	defer fh.Close()
+	dataBytes := bytes.Buffer{}
+	var size int64
+	if size, err = dataBytes.ReadFrom(fh); err != nil {
+		http.Error(resp,
+			fmt.Sprint("Error reading Mime::Data %+v", err),
+			http.StatusInternalServerError)
+		return
+	}
+	// Now you have the attachment in databytes.
+	// Maximum size is default is 10MB.
+	log.Printf("Read %v bytes with filename %s",
+		size, multipartForm.Data.Filename)
+}
+
+func main() {
+	http.HandleFunc("/upload", handler)
+	http.ListenAndServe(":3000", nil)
+}
+
+```
+
+You can test from CLI using the excellent httpie client
+
+   `http -f POST localhost:3000/upload data@myupload`
 
 Custom data validation
 -----------------------
@@ -125,7 +196,7 @@ For types you've defined, you can bind form data to it by implementing the `Bind
 ```go
 type MyType map[string]string
 
-func (t *MyType) Bind(strVals []string, errs binding.Errors) binding.Errors {
+func (t *MyType) Bind(fieldName string, strVals []string, errs binding.Errors) binding.Errors {
 	t["formData"] = strVals[0]
 	return errs
 }
@@ -137,10 +208,10 @@ If you can't add a method to the type, you can still specify a `Binder` func in 
 func (t *MyType) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		"number": binding.Field{
-			Binder: func(formVals []string, errs binding.Errors) binding.Errors {
+			Binder: func(fieldName string, formVals []string, errs binding.Errors) binding.Errors {
 				val, err := strconv.Atoi(formVals[0])
 				if err != nil {
-					errs.Add([]string{"id"}, binding.DeserializationError, err.Error())
+					errs.Add([]string{fieldName}, binding.DeserializationError, err.Error())
 				}
 				t.SomeNumber = val
 				return errs
@@ -158,10 +229,10 @@ Supported types (forms)
 
 The following types are supported in form deserialization by default. (JSON requests are delegated to `encoding/json`.)
 
-- uint, []uint, uint8, uint16, uint32, uint64
-- int, []int, int8, int16, int32, int64
-- float32, []float32, float64, []float64
-- bool, []bool
-- string, []string
-- time.Time, []time.Time
+- uint, *uint, []uint, uint8, *uint8, []uint8, uint16, *uint16, []uint16, uint32, *uint32, []uint32, uint64, *uint64, []uint64
+- int, *int, []int, int8, *int8, []int8, int16, *int16, []int16, int32, *int32, []int32, int64, *int64, []int64
+- float32, *float32, []float32, float64, *float64, []float64
+- bool, *bool, []bool
+- string, *string, []string
+- time.Time, *time.Time, []time.Time
 - *multipart.FileHeader, []*multipart.FileHeader

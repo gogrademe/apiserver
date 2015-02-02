@@ -1,16 +1,14 @@
 package gorethink
 
 import (
-	"fmt"
-	"math"
 	"reflect"
-	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
 
-	"code.google.com/p/goprotobuf/proto"
 	"github.com/dancannon/gorethink/encoding"
+
+	"code.google.com/p/goprotobuf/proto"
 	p "github.com/dancannon/gorethink/ql2"
 )
 
@@ -55,31 +53,25 @@ func makeArray(args termsList) Term {
 
 // makeObject takes a map of terms and produces a single MAKE_OBJECT term
 func makeObject(args termsObj) Term {
-	// First all evaluate all fields in the map
-	temp := termsObj{}
-	for k, v := range args {
-		temp[k] = Expr(v)
-	}
-
 	return Term{
 		name:     "{...}",
 		termType: p.Term_MAKE_OBJ,
-		optArgs:  temp,
+		optArgs:  args,
 	}
 }
 
-var nextVarId int64 = 0
+var nextVarId int64
 
 func makeFunc(f interface{}) Term {
 	value := reflect.ValueOf(f)
 	valueType := value.Type()
 
-	var argNums []interface{}
-	var args []reflect.Value
+	var argNums = make([]interface{}, valueType.NumIn())
+	var args = make([]reflect.Value, valueType.NumIn())
 	for i := 0; i < valueType.NumIn(); i++ {
 		// Get a slice of the VARs to use as the function arguments
-		args = append(args, reflect.ValueOf(constructRootTerm("var", p.Term_VAR, []interface{}{nextVarId}, map[string]interface{}{})))
-		argNums = append(argNums, nextVarId)
+		args[i] = reflect.ValueOf(constructRootTerm("var", p.Term_VAR, []interface{}{nextVarId}, map[string]interface{}{}))
+		argNums[i] = nextVarId
 		atomic.AddInt64(&nextVarId, 1)
 
 		// make sure all input arguments are of type Term
@@ -101,13 +93,12 @@ func makeFunc(f interface{}) Term {
 func funcWrap(value interface{}) Term {
 	val := Expr(value)
 
-	if implVarScan(val) {
+	if implVarScan(val) && val.termType != p.Term_ARGS {
 		return makeFunc(func(x Term) Term {
 			return val
 		})
-	} else {
-		return val
 	}
+	return val
 }
 
 func funcWrapArgs(args []interface{}) []interface{} {
@@ -123,26 +114,25 @@ func funcWrapArgs(args []interface{}) []interface{} {
 func implVarScan(value Term) bool {
 	if value.termType == p.Term_IMPLICIT_VAR {
 		return true
-	} else {
-		for _, v := range value.args {
-			if implVarScan(v) {
-				return true
-			}
-		}
-
-		for _, v := range value.optArgs {
-			if implVarScan(v) {
-				return true
-			}
-		}
-
-		return false
 	}
+	for _, v := range value.args {
+		if implVarScan(v) {
+			return true
+		}
+	}
+
+	for _, v := range value.optArgs {
+		if implVarScan(v) {
+			return true
+		}
+	}
+
+	return false
 }
 
 // Convert an opt args struct to a map.
 func optArgsToMap(optArgs OptArgs) map[string]interface{} {
-	data, err := encoding.Encode(optArgs)
+	data, err := encode(optArgs)
 
 	if err == nil && data != nil {
 		if m, ok := data.(map[string]interface{}); ok {
@@ -155,9 +145,9 @@ func optArgsToMap(optArgs OptArgs) map[string]interface{} {
 
 // Convert a list into a slice of terms
 func convertTermList(l []interface{}) termsList {
-	terms := termsList{}
-	for _, v := range l {
-		terms = append(terms, Expr(v))
+	terms := make(termsList, len(l))
+	for i, v := range l {
+		terms[i] = Expr(v)
 	}
 
 	return terms
@@ -165,7 +155,7 @@ func convertTermList(l []interface{}) termsList {
 
 // Convert a map into a map of terms
 func convertTermObj(o map[string]interface{}) termsObj {
-	terms := termsObj{}
+	terms := make(termsObj, len(o))
 	for k, v := range o {
 		terms[k] = Expr(v)
 	}
@@ -188,80 +178,41 @@ func mergeArgs(args ...interface{}) []interface{} {
 	return newArgs
 }
 
-// Pseudo-type helper functions
-
-func reqlTimeToNativeTime(timestamp float64, timezone string) (time.Time, error) {
-	sec, ms := math.Modf(timestamp)
-
-	t := time.Unix(int64(sec), int64(ms*1000*1000*1000))
-
-	// Caclulate the timezone
-	if timezone != "" {
-		hours, err := strconv.Atoi(timezone[1:3])
-		if err != nil {
-			return time.Time{}, err
-		}
-		minutes, err := strconv.Atoi(timezone[4:6])
-		if err != nil {
-			return time.Time{}, err
-		}
-		tzOffset := ((hours * 60) + minutes) * 60
-		if timezone[:1] == "-" {
-			tzOffset = 0 - tzOffset
-		}
-
-		t = t.In(time.FixedZone(timezone, tzOffset))
-	}
-
-	return t, nil
-}
-
-func reqlGroupedDataToObj(obj map[string]interface{}) (interface{}, error) {
-	if data, ok := obj["data"]; ok {
-		ret := []interface{}{}
-		for _, v := range data.([]interface{}) {
-			v := v.([]interface{})
-			ret = append(ret, map[string]interface{}{
-				"group":     v[0],
-				"reduction": v[1],
-			})
-		}
-		return ret, nil
-	} else {
-		return nil, fmt.Errorf("pseudo-type GROUPED_DATA object %v does not have the expected field \"data\"", obj)
-	}
-}
-
 // Helper functions for debugging
 
 func allArgsToStringSlice(args termsList, optArgs termsObj) []string {
-	allArgs := []string{}
+	allArgs := make([]string, len(args)+len(optArgs))
+	i := 0
 
 	for _, v := range args {
-		allArgs = append(allArgs, v.String())
+		allArgs[i] = v.String()
+		i++
 	}
 	for k, v := range optArgs {
-		allArgs = append(allArgs, k+"="+v.String())
+		allArgs[i] = k + "=" + v.String()
+		i++
 	}
 
 	return allArgs
 }
 
 func argsToStringSlice(args termsList) []string {
-	allArgs := []string{}
+	allArgs := make([]string, len(args))
 
-	for _, v := range args {
-		allArgs = append(allArgs, v.String())
+	for i, v := range args {
+		allArgs[i] = v.String()
 	}
 
 	return allArgs
 }
 
 func optArgsToStringSlice(optArgs termsObj) []string {
-	allArgs := []string{}
+	allArgs := make([]string, len(optArgs))
+	i := 0
 
 	for k, v := range optArgs {
-		allArgs = append(allArgs, k+"="+v.String())
+		allArgs[i] = k + "=" + v.String()
+		i++
 	}
 
 	return allArgs
@@ -276,4 +227,20 @@ func prefixLines(s string, prefix string) (result string) {
 
 func protobufToString(p proto.Message, indentLevel int) string {
 	return prefixLines(proto.MarshalTextString(p), strings.Repeat("    ", indentLevel))
+}
+
+var timeType = reflect.TypeOf(time.Time{})
+var termType = reflect.TypeOf(Term{})
+
+func encode(data interface{}) (interface{}, error) {
+	if _, ok := data.(Term); ok {
+		return data, nil
+	}
+
+	v, err := encoding.Encode(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return v, nil
 }

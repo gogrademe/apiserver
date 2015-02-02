@@ -1,7 +1,7 @@
 package gorethink
 
 import (
-	test "launchpad.net/gocheck"
+	test "gopkg.in/check.v1"
 )
 
 func (s *RethinkSuite) TestTransformationMapImplicit(c *test.C) {
@@ -70,6 +70,48 @@ func (s *RethinkSuite) TestTransformationConcatMap(c *test.C) {
 	c.Assert(response, JsonEquals, []interface{}{0, 5, 10, 0, 100, 15, 0, 50, 25})
 }
 
+func (s *RethinkSuite) TestTransformationVariadicMap(c *test.C) {
+	query := Range(5).Map(Range(5), func(a, b Term) interface{} {
+		return []interface{}{a, b}
+	})
+
+	var response []interface{}
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.All(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, [][]int{
+		{0, 0},
+		{1, 1},
+		{2, 2},
+		{3, 3},
+		{4, 4},
+	})
+}
+
+func (s *RethinkSuite) TestTransformationVariadicRootMap(c *test.C) {
+	query := Map(Range(5), Range(5), func(a, b Term) interface{} {
+		return []interface{}{a, b}
+	})
+
+	var response []interface{}
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.All(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, [][]int{
+		{0, 0},
+		{1, 1},
+		{2, 2},
+		{3, 3},
+		{4, 4},
+	})
+}
+
 func (s *RethinkSuite) TestTransformationOrderByDesc(c *test.C) {
 	query := Expr(noDupNumObjList).OrderBy(Desc("num"))
 
@@ -122,6 +164,36 @@ func (s *RethinkSuite) TestTransformationOrderByIndex(c *test.C) {
 
 	query := Db("test").Table("OrderByIndex").OrderBy(OrderByOpts{
 		Index: "test",
+	})
+
+	var response []interface{}
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.All(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, []interface{}{
+		map[string]interface{}{"num": 0, "id": 1, "g2": 1, "g1": 1},
+		map[string]interface{}{"num": 5, "id": 2, "g2": 2, "g1": 2},
+		map[string]interface{}{"num": 10, "id": 3, "g2": 2, "g1": 3},
+		map[string]interface{}{"num": 15, "id": 6, "g2": 1, "g1": 1},
+		map[string]interface{}{"num": 25, "id": 9, "g2": 3, "g1": 2},
+		map[string]interface{}{"num": 50, "id": 8, "g2": 2, "g1": 4},
+		map[string]interface{}{"num": 100, "id": 5, "g2": 3, "g1": 2},
+	})
+}
+
+func (s *RethinkSuite) TestTransformationOrderByIndexAsc(c *test.C) {
+	Db("test").TableCreate("OrderByIndex").Exec(sess)
+	Db("test").Table("test").IndexDrop("OrderByIndex").Exec(sess)
+
+	// Test database creation
+	Db("test").Table("OrderByIndex").IndexCreateFunc("test", Row.Field("num")).Exec(sess)
+	Db("test").Table("OrderByIndex").Insert(noDupNumObjList).Exec(sess)
+
+	query := Db("test").Table("OrderByIndex").OrderBy(OrderByOpts{
+		Index: Asc("test"),
 	})
 
 	var response []interface{}
@@ -279,6 +351,39 @@ func (s *RethinkSuite) TestTransformationNth(c *test.C) {
 
 	c.Assert(err, test.IsNil)
 	c.Assert(response, JsonEquals, 3)
+}
+
+func (s *RethinkSuite) TestTransformationAtIndexNth(c *test.C) {
+	query := Expr([]interface{}{1}).AtIndex(Expr(0))
+
+	var response interface{}
+	r, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = r.One(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, 1)
+}
+
+func (s *RethinkSuite) TestTransformationAtIndexField(c *test.C) {
+	query := Expr(map[string]interface{}{"foo": 1}).AtIndex(Expr("foo"))
+
+	var response interface{}
+	r, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = r.One(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, 1)
+}
+
+func (s *RethinkSuite) TestTransformationAtIndexArrayField(c *test.C) {
+	query := Expr([]interface{}{1}).AtIndex(Expr("foo"))
+
+	_, err := query.Run(sess)
+	c.Assert(err, test.NotNil)
 }
 
 func (s *RethinkSuite) TestTransformationIndexesOf(c *test.C) {

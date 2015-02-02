@@ -247,7 +247,7 @@ func (p *Buffer) Marshal(pb Message) error {
 		return ErrNil
 	}
 	if err == nil {
-		err = p.enc_struct(t.Elem(), GetProperties(t.Elem()), base)
+		err = p.enc_struct(GetProperties(t.Elem()), base)
 	}
 
 	if collectStats {
@@ -271,7 +271,7 @@ func Size(pb Message) (n int) {
 		return 0
 	}
 	if err == nil {
-		n = size_struct(t.Elem(), GetProperties(t.Elem()), base)
+		n = size_struct(GetProperties(t.Elem()), base)
 	}
 
 	if collectStats {
@@ -429,7 +429,7 @@ func (o *Buffer) enc_struct_message(p *Properties, base structPointer) error {
 	}
 
 	o.buf = append(o.buf, p.tagcode...)
-	return o.enc_len_struct(p.stype, p.sprop, structp, &state)
+	return o.enc_len_struct(p.sprop, structp, &state)
 }
 
 func size_struct_message(p *Properties, base structPointer) int {
@@ -448,7 +448,7 @@ func size_struct_message(p *Properties, base structPointer) int {
 	}
 
 	n0 := len(p.tagcode)
-	n1 := size_struct(p.stype, p.sprop, structp)
+	n1 := size_struct(p.sprop, structp)
 	n2 := sizeVarint(uint64(n1)) // size of encoded length
 	return n0 + n1 + n2
 }
@@ -462,7 +462,7 @@ func (o *Buffer) enc_struct_group(p *Properties, base structPointer) error {
 	}
 
 	o.EncodeVarint(uint64((p.Tag << 3) | WireStartGroup))
-	err := o.enc_struct(p.stype, p.sprop, b)
+	err := o.enc_struct(p.sprop, b)
 	if err != nil && !state.shouldContinue(err, nil) {
 		return err
 	}
@@ -477,7 +477,7 @@ func size_struct_group(p *Properties, base structPointer) (n int) {
 	}
 
 	n += sizeVarint(uint64((p.Tag << 3) | WireStartGroup))
-	n += size_struct(p.stype, p.sprop, b)
+	n += size_struct(p.sprop, b)
 	n += sizeVarint(uint64((p.Tag << 3) | WireEndGroup))
 	return
 }
@@ -570,7 +570,7 @@ func (o *Buffer) enc_slice_int32(p *Properties, base structPointer) error {
 	}
 	for i := 0; i < l; i++ {
 		o.buf = append(o.buf, p.tagcode...)
-		x := s.Index(i)
+		x := int32(s.Index(i)) // permit sign extension to use full 64-bit range
 		p.valEnc(o, uint64(x))
 	}
 	return nil
@@ -584,7 +584,7 @@ func size_slice_int32(p *Properties, base structPointer) (n int) {
 	}
 	for i := 0; i < l; i++ {
 		n += len(p.tagcode)
-		x := s.Index(i)
+		x := int32(s.Index(i)) // permit sign extension to use full 64-bit range
 		n += p.valSize(uint64(x))
 	}
 	return
@@ -592,6 +592,75 @@ func size_slice_int32(p *Properties, base structPointer) (n int) {
 
 // Encode a slice of int32s ([]int32) in packed format.
 func (o *Buffer) enc_slice_packed_int32(p *Properties, base structPointer) error {
+	s := structPointer_Word32Slice(base, p.field)
+	l := s.Len()
+	if l == 0 {
+		return ErrNil
+	}
+	// TODO: Reuse a Buffer.
+	buf := NewBuffer(nil)
+	for i := 0; i < l; i++ {
+		x := int32(s.Index(i)) // permit sign extension to use full 64-bit range
+		p.valEnc(buf, uint64(x))
+	}
+
+	o.buf = append(o.buf, p.tagcode...)
+	o.EncodeVarint(uint64(len(buf.buf)))
+	o.buf = append(o.buf, buf.buf...)
+	return nil
+}
+
+func size_slice_packed_int32(p *Properties, base structPointer) (n int) {
+	s := structPointer_Word32Slice(base, p.field)
+	l := s.Len()
+	if l == 0 {
+		return 0
+	}
+	var bufSize int
+	for i := 0; i < l; i++ {
+		x := int32(s.Index(i)) // permit sign extension to use full 64-bit range
+		bufSize += p.valSize(uint64(x))
+	}
+
+	n += len(p.tagcode)
+	n += sizeVarint(uint64(bufSize))
+	n += bufSize
+	return
+}
+
+// Encode a slice of uint32s ([]uint32).
+// Exactly the same as int32, except for no sign extension.
+func (o *Buffer) enc_slice_uint32(p *Properties, base structPointer) error {
+	s := structPointer_Word32Slice(base, p.field)
+	l := s.Len()
+	if l == 0 {
+		return ErrNil
+	}
+	for i := 0; i < l; i++ {
+		o.buf = append(o.buf, p.tagcode...)
+		x := s.Index(i)
+		p.valEnc(o, uint64(x))
+	}
+	return nil
+}
+
+func size_slice_uint32(p *Properties, base structPointer) (n int) {
+	s := structPointer_Word32Slice(base, p.field)
+	l := s.Len()
+	if l == 0 {
+		return 0
+	}
+	for i := 0; i < l; i++ {
+		n += len(p.tagcode)
+		x := s.Index(i)
+		n += p.valSize(uint64(x))
+	}
+	return
+}
+
+// Encode a slice of uint32s ([]uint32) in packed format.
+// Exactly the same as int32, except for no sign extension.
+func (o *Buffer) enc_slice_packed_uint32(p *Properties, base structPointer) error {
 	s := structPointer_Word32Slice(base, p.field)
 	l := s.Len()
 	if l == 0 {
@@ -609,7 +678,7 @@ func (o *Buffer) enc_slice_packed_int32(p *Properties, base structPointer) error
 	return nil
 }
 
-func size_slice_packed_int32(p *Properties, base structPointer) (n int) {
+func size_slice_packed_uint32(p *Properties, base structPointer) (n int) {
 	s := structPointer_Word32Slice(base, p.field)
 	l := s.Len()
 	if l == 0 {
@@ -762,7 +831,7 @@ func (o *Buffer) enc_slice_struct_message(p *Properties, base structPointer) err
 		}
 
 		o.buf = append(o.buf, p.tagcode...)
-		err := o.enc_len_struct(p.stype, p.sprop, structp, &state)
+		err := o.enc_len_struct(p.sprop, structp, &state)
 		if err != nil && !state.shouldContinue(err, nil) {
 			if err == ErrNil {
 				return ErrRepeatedHasNil
@@ -792,7 +861,7 @@ func size_slice_struct_message(p *Properties, base structPointer) (n int) {
 			continue
 		}
 
-		n0 := size_struct(p.stype, p.sprop, structp)
+		n0 := size_struct(p.sprop, structp)
 		n1 := sizeVarint(uint64(n0)) // size of encoded length
 		n += n0 + n1
 	}
@@ -813,7 +882,7 @@ func (o *Buffer) enc_slice_struct_group(p *Properties, base structPointer) error
 
 		o.EncodeVarint(uint64((p.Tag << 3) | WireStartGroup))
 
-		err := o.enc_struct(p.stype, p.sprop, b)
+		err := o.enc_struct(p.sprop, b)
 
 		if err != nil && !state.shouldContinue(err, nil) {
 			if err == ErrNil {
@@ -839,7 +908,7 @@ func size_slice_struct_group(p *Properties, base structPointer) (n int) {
 			return // return size up to this point
 		}
 
-		n += size_struct(p.stype, p.sprop, b)
+		n += size_struct(p.sprop, b)
 	}
 	return
 }
@@ -877,7 +946,7 @@ func size_map(p *Properties, base structPointer) int {
 }
 
 // Encode a struct.
-func (o *Buffer) enc_struct(t reflect.Type, prop *StructProperties, base structPointer) error {
+func (o *Buffer) enc_struct(prop *StructProperties, base structPointer) error {
 	var state errorState
 	// Encode fields in tag order so that decoders may use optimizations
 	// that depend on the ordering.
@@ -909,7 +978,7 @@ func (o *Buffer) enc_struct(t reflect.Type, prop *StructProperties, base structP
 	return state.err
 }
 
-func size_struct(t reflect.Type, prop *StructProperties, base structPointer) (n int) {
+func size_struct(prop *StructProperties, base structPointer) (n int) {
 	for _, i := range prop.order {
 		p := prop.Prop[i]
 		if p.size != nil {
@@ -929,11 +998,11 @@ func size_struct(t reflect.Type, prop *StructProperties, base structPointer) (n 
 var zeroes [20]byte // longer than any conceivable sizeVarint
 
 // Encode a struct, preceded by its encoded length (as a varint).
-func (o *Buffer) enc_len_struct(t reflect.Type, prop *StructProperties, base structPointer, state *errorState) error {
+func (o *Buffer) enc_len_struct(prop *StructProperties, base structPointer, state *errorState) error {
 	iLen := len(o.buf)
 	o.buf = append(o.buf, 0, 0, 0, 0) // reserve four bytes for length
 	iMsg := len(o.buf)
-	err := o.enc_struct(t, prop, base)
+	err := o.enc_struct(prop, base)
 	if err != nil && !state.shouldContinue(err, nil) {
 		return err
 	}

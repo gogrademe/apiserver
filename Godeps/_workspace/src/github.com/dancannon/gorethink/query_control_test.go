@@ -1,13 +1,14 @@
 package gorethink
 
 import (
+	"bytes"
 	"testing"
 	"time"
 
-	test "launchpad.net/gocheck"
+	test "gopkg.in/check.v1"
 )
 
-func (s *RethinkSuite) TestControlExecNil(c *test.C) {
+func (s *RethinkSuite) TestControlExprNil(c *test.C) {
 	var response interface{}
 	query := Expr(nil)
 	res, err := query.Run(sess)
@@ -15,11 +16,11 @@ func (s *RethinkSuite) TestControlExecNil(c *test.C) {
 
 	err = res.One(&response)
 
-	c.Assert(err, test.IsNil)
+	c.Assert(err, test.Equals, ErrEmptyResult)
 	c.Assert(response, test.Equals, nil)
 }
 
-func (s *RethinkSuite) TestControlExecSimple(c *test.C) {
+func (s *RethinkSuite) TestControlExprSimple(c *test.C) {
 	var response int
 	query := Expr(1)
 	res, err := query.Run(sess)
@@ -31,7 +32,7 @@ func (s *RethinkSuite) TestControlExecSimple(c *test.C) {
 	c.Assert(response, test.Equals, 1)
 }
 
-func (s *RethinkSuite) TestControlExecList(c *test.C) {
+func (s *RethinkSuite) TestControlExprList(c *test.C) {
 	var response []interface{}
 	query := Expr(narr)
 	res, err := query.Run(sess)
@@ -47,7 +48,7 @@ func (s *RethinkSuite) TestControlExecList(c *test.C) {
 	})
 }
 
-func (s *RethinkSuite) TestControlExecObj(c *test.C) {
+func (s *RethinkSuite) TestControlExprObj(c *test.C) {
 	var response map[string]interface{}
 	query := Expr(nobj)
 	res, err := query.Run(sess)
@@ -128,7 +129,7 @@ func (s *RethinkSuite) TestControlStringTypeAlias(c *test.C) {
 	c.Assert(response, JsonEquals, TStr("Hello"))
 }
 
-func (s *RethinkSuite) TestControlExecTypes(c *test.C) {
+func (s *RethinkSuite) TestControlExprTypes(c *test.C) {
 	var response []interface{}
 	query := Expr([]interface{}{int64(1), uint64(1), float64(1.0), int32(1), uint32(1), float32(1), "1", true, false})
 	res, err := query.Run(sess)
@@ -189,6 +190,7 @@ func (s *RethinkSuite) TestControlError(c *test.C) {
 
 	c.Assert(err, test.NotNil)
 	c.Assert(err, test.FitsTypeOf, RqlRuntimeError{})
+
 	c.Assert(err.Error(), test.Equals, "gorethink: An error occurred in: \nr.Error(\"An error occurred\")")
 }
 
@@ -213,6 +215,82 @@ func (s *RethinkSuite) TestControlArgs(c *test.C) {
 	err = res.One(&response)
 	c.Assert(err, test.IsNil)
 	c.Assert(response.Unix(), test.Equals, int64(1405123200))
+}
+
+func (s *RethinkSuite) TestControlBinaryByteArray(c *test.C) {
+	var response []byte
+
+	query := Binary([]byte("Hello World"))
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+	c.Assert(err, test.IsNil)
+	c.Assert(bytes.Equal(response, []byte("Hello World")), test.Equals, true)
+}
+
+type byteArray []byte
+
+func (s *RethinkSuite) TestControlBinaryByteArrayAlias(c *test.C) {
+	var response []byte
+
+	query := Binary(byteArray("Hello World"))
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+	c.Assert(err, test.IsNil)
+	c.Assert(bytes.Equal(response, []byte("Hello World")), test.Equals, true)
+}
+
+func (s *RethinkSuite) TestControlBinaryExpr(c *test.C) {
+	var response []byte
+
+	query := Expr([]byte("Hello World"))
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+	c.Assert(err, test.IsNil)
+	c.Assert(bytes.Equal(response, []byte("Hello World")), test.Equals, true)
+}
+
+func (s *RethinkSuite) TestControlBinaryExprAlias(c *test.C) {
+	var response []byte
+
+	query := Expr(byteArray("Hello World"))
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+	c.Assert(err, test.IsNil)
+	c.Assert(bytes.Equal(response, []byte("Hello World")), test.Equals, true)
+}
+
+func (s *RethinkSuite) TestControlBinaryTerm(c *test.C) {
+	var response []byte
+
+	query := Binary(Expr([]byte("Hello World")))
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+	c.Assert(err, test.IsNil)
+	c.Assert(bytes.Equal(response, []byte("Hello World")), test.Equals, true)
+}
+
+func (s *RethinkSuite) TestControlBinaryElemTerm(c *test.C) {
+	var response map[string]interface{}
+
+	query := Expr(map[string]interface{}{
+		"bytes": []byte("Hello World"),
+	})
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+	c.Assert(err, test.IsNil)
+	c.Assert(bytes.Equal(response["bytes"].([]byte), []byte("Hello World")), test.Equals, true)
 }
 
 func (s *RethinkSuite) TestControlDo(c *test.C) {
@@ -319,4 +397,52 @@ func (s *RethinkSuite) TestControlTypeOf(c *test.C) {
 
 	c.Assert(err, test.IsNil)
 	c.Assert(response, test.Equals, "NUMBER")
+}
+
+func (s *RethinkSuite) TestControlRangeNoArgs(c *test.C) {
+	var response []int
+	query := Range().Limit(100)
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.All(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(len(response), test.Equals, 100)
+}
+
+func (s *RethinkSuite) TestControlRangeSingleArgs(c *test.C) {
+	var response []int
+	query := Range(4)
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.All(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, test.DeepEquals, []int{0, 1, 2, 3})
+}
+
+func (s *RethinkSuite) TestControlRangeTwoArgs(c *test.C) {
+	var response []int
+	query := Range(4, 6)
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.All(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, test.DeepEquals, []int{4, 5})
+}
+
+func (s *RethinkSuite) TestControlToJSON(c *test.C) {
+	var response string
+	query := Expr([]int{4, 5}).ToJSON()
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, test.Equals, "[4,5]")
 }

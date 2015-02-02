@@ -1,7 +1,7 @@
 package gorethink
 
 import (
-	test "launchpad.net/gocheck"
+	test "gopkg.in/check.v1"
 )
 
 func (s *RethinkSuite) TestAggregationReduce(c *test.C) {
@@ -169,8 +169,8 @@ func (s *RethinkSuite) TestAggregationGroupAvg(c *test.C) {
 
 	c.Assert(err, test.IsNil)
 	c.Assert(response, JsonEquals, []interface{}{
-		map[string]interface{}{"reduction": 15, "group": 1},
-		map[string]interface{}{"group": 2, "reduction": 130},
+		map[string]interface{}{"group": 1, "reduction": 5},
+		map[string]interface{}{"group": 2, "reduction": 32.5},
 		map[string]interface{}{"group": 3, "reduction": 10},
 		map[string]interface{}{"group": 4, "reduction": 50},
 	})
@@ -208,6 +208,48 @@ func (s *RethinkSuite) TestAggregationGroupMax(c *test.C) {
 		map[string]interface{}{"group": 3, "reduction": map[string]interface{}{"num": 10, "g1": 3, "g2": 2, "id": 3}},
 		map[string]interface{}{"group": 4, "reduction": map[string]interface{}{"g2": 2, "id": 8, "num": 50, "g1": 4}},
 	})
+}
+
+func (s *RethinkSuite) TestAggregationMin(c *test.C) {
+	// Ensure table + database exist
+	DbCreate("test").Exec(sess)
+	Db("test").TableCreate("Table2").Exec(sess)
+	Db("test").Table("Table2").IndexCreate("num").Exec(sess)
+
+	// Insert rows
+	Db("test").Table("Table2").Insert(objList).Exec(sess)
+
+	// Test query
+	var response interface{}
+	query := Db("test").Table("Table2").MinIndex("num")
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, map[string]interface{}{"id": 1, "g1": 1, "g2": 1, "num": 0})
+}
+
+func (s *RethinkSuite) TestAggregationMaxIndex(c *test.C) {
+	// Ensure table + database exist
+	DbCreate("test").Exec(sess)
+	Db("test").TableCreate("Table2").Exec(sess)
+	Db("test").Table("Table2").IndexCreate("num").Exec(sess)
+
+	// Insert rows
+	Db("test").Table("Table2").Insert(objList).Exec(sess)
+
+	// Test query
+	var response interface{}
+	query := Db("test").Table("Table2").MaxIndex("num")
+	res, err := query.Run(sess)
+	c.Assert(err, test.IsNil)
+
+	err = res.One(&response)
+
+	c.Assert(err, test.IsNil)
+	c.Assert(response, JsonEquals, map[string]interface{}{"id": 5, "g1": 2, "g2": 3, "num": 100})
 }
 
 func (s *RethinkSuite) TestAggregationMultipleGroupSum(c *test.C) {

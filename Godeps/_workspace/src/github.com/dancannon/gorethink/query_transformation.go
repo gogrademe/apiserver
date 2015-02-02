@@ -1,10 +1,17 @@
 package gorethink
 
-import (
-	p "github.com/dancannon/gorethink/ql2"
-)
+import p "github.com/dancannon/gorethink/ql2"
 
 // Transform each element of the sequence by applying the given mapping function.
+func Map(args ...interface{}) Term {
+	if len(args) > 0 {
+		args = append(args[:len(args)-1], funcWrapArgs(args[len(args)-1:])...)
+	}
+
+	return constructRootTerm("Map", p.Term_MAP, funcWrapArgs(args), map[string]interface{}{})
+}
+
+// Transfor >m each element of the sequence by applying the given mapping function.
 func (t Term) Map(args ...interface{}) Term {
 	return constructMethodTerm(t, "Map", p.Term_MAP, funcWrapArgs(args), map[string]interface{}{})
 }
@@ -20,7 +27,7 @@ func (t Term) WithFields(args ...interface{}) Term {
 // Flattens a sequence of arrays returned by the mapping function into a single
 // sequence.
 func (t Term) ConcatMap(args ...interface{}) Term {
-	return constructMethodTerm(t, "ConcatMap", p.Term_CONCATMAP, funcWrapArgs(args), map[string]interface{}{})
+	return constructMethodTerm(t, "ConcatMap", p.Term_CONCAT_MAP, funcWrapArgs(args), map[string]interface{}{})
 }
 
 type OrderByOpts struct {
@@ -34,7 +41,7 @@ func (o *OrderByOpts) toMap() map[string]interface{} {
 // Sort the sequence by document values of the given key(s).
 // To specify the index to use for ordering us a last argument in the following form:
 //
-//	map[string]interface{}{"index": "index-name"}
+//	OrderByOpts{Index: "index-name"}
 //
 // OrderBy defaults to ascending ordering. To explicitly specify the ordering,
 // wrap the attribute with either Asc or Desc.
@@ -59,7 +66,7 @@ func (t Term) OrderBy(args ...interface{}) Term {
 		}
 	}
 
-	return constructMethodTerm(t, "OrderBy", p.Term_ORDERBY, args, opts)
+	return constructMethodTerm(t, "OrderBy", p.Term_ORDER_BY, args, opts)
 }
 
 func Desc(args ...interface{}) Term {
@@ -89,7 +96,6 @@ func (o *SliceOpts) toMap() map[string]interface{} {
 	return optArgsToMap(o)
 }
 
-// TODO: Add optional arguments
 // Trim the sequence to within the bounds provided.
 func (t Term) Slice(args ...interface{}) Term {
 	var opts = map[string]interface{}{}
@@ -105,7 +111,12 @@ func (t Term) Slice(args ...interface{}) Term {
 	return constructMethodTerm(t, "Slice", p.Term_SLICE, args, opts)
 }
 
-// Get the nth element of a sequence.
+// AtIndex gets a single field from an object or the nth element from a sequence.
+func (t Term) AtIndex(args ...interface{}) Term {
+	return constructMethodTerm(t, "AtIndex", p.Term_BRACKET, args, map[string]interface{}{})
+}
+
+// Nth gets the nth element from a sequence.
 func (t Term) Nth(args ...interface{}) Term {
 	return constructMethodTerm(t, "Nth", p.Term_NTH, args, map[string]interface{}{})
 }

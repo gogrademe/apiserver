@@ -1,6 +1,6 @@
 package gorethink
 
-import test "launchpad.net/gocheck"
+import test "gopkg.in/check.v1"
 
 func (s *RethinkSuite) TestQueryRun(c *test.C) {
 	var response string
@@ -12,6 +12,11 @@ func (s *RethinkSuite) TestQueryRun(c *test.C) {
 
 	c.Assert(err, test.IsNil)
 	c.Assert(response, test.Equals, "Test")
+}
+
+func (s *RethinkSuite) TestQueryExec(c *test.C) {
+	err := Expr("Test").Exec(sess)
+	c.Assert(err, test.IsNil)
 }
 
 func (s *RethinkSuite) TestQueryProfile(c *test.C) {

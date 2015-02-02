@@ -2,28 +2,15 @@
 // source: ql2.proto
 // DO NOT EDIT!
 
-/*
-Package ql2 is a generated protocol buffer package.
-
-It is generated from these files:
-	ql2.proto
-
-It has these top-level messages:
-	VersionDummy
-	Query
-	Frame
-	Backtrace
-	Response
-	Datum
-	Term
-*/
 package ql2
 
 import proto "code.google.com/p/goprotobuf/proto"
+import json "encoding/json"
 import math "math"
 
-// Reference imports to suppress errors if they are not otherwise used.
+// Reference proto, json, and math imports to suppress error if they are not otherwise used.
 var _ = proto.Marshal
+var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type VersionDummy_Version int32
@@ -52,6 +39,9 @@ func (x VersionDummy_Version) Enum() *VersionDummy_Version {
 }
 func (x VersionDummy_Version) String() string {
 	return proto.EnumName(VersionDummy_Version_name, int32(x))
+}
+func (x VersionDummy_Version) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
 }
 func (x *VersionDummy_Version) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(VersionDummy_Version_value, data, "VersionDummy_Version")
@@ -85,6 +75,9 @@ func (x VersionDummy_Protocol) Enum() *VersionDummy_Protocol {
 }
 func (x VersionDummy_Protocol) String() string {
 	return proto.EnumName(VersionDummy_Protocol_name, int32(x))
+}
+func (x VersionDummy_Protocol) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
 }
 func (x *VersionDummy_Protocol) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(VersionDummy_Protocol_value, data, "VersionDummy_Protocol")
@@ -125,6 +118,9 @@ func (x Query_QueryType) Enum() *Query_QueryType {
 func (x Query_QueryType) String() string {
 	return proto.EnumName(Query_QueryType_name, int32(x))
 }
+func (x Query_QueryType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
+}
 func (x *Query_QueryType) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Query_QueryType_value, data, "Query_QueryType")
 	if err != nil {
@@ -158,6 +154,9 @@ func (x Frame_FrameType) Enum() *Frame_FrameType {
 func (x Frame_FrameType) String() string {
 	return proto.EnumName(Frame_FrameType_name, int32(x))
 }
+func (x Frame_FrameType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
+}
 func (x *Frame_FrameType) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Frame_FrameType_value, data, "Frame_FrameType")
 	if err != nil {
@@ -170,14 +169,15 @@ func (x *Frame_FrameType) UnmarshalJSON(data []byte) error {
 type Response_ResponseType int32
 
 const (
-	Response_SUCCESS_ATOM     Response_ResponseType = 1
-	Response_SUCCESS_SEQUENCE Response_ResponseType = 2
-	Response_SUCCESS_PARTIAL  Response_ResponseType = 3
-	Response_SUCCESS_FEED     Response_ResponseType = 5
-	Response_WAIT_COMPLETE    Response_ResponseType = 4
-	Response_CLIENT_ERROR     Response_ResponseType = 16
-	Response_COMPILE_ERROR    Response_ResponseType = 17
-	Response_RUNTIME_ERROR    Response_ResponseType = 18
+	Response_SUCCESS_ATOM      Response_ResponseType = 1
+	Response_SUCCESS_SEQUENCE  Response_ResponseType = 2
+	Response_SUCCESS_PARTIAL   Response_ResponseType = 3
+	Response_SUCCESS_FEED      Response_ResponseType = 5
+	Response_WAIT_COMPLETE     Response_ResponseType = 4
+	Response_SUCCESS_ATOM_FEED Response_ResponseType = 6
+	Response_CLIENT_ERROR      Response_ResponseType = 16
+	Response_COMPILE_ERROR     Response_ResponseType = 17
+	Response_RUNTIME_ERROR     Response_ResponseType = 18
 )
 
 var Response_ResponseType_name = map[int32]string{
@@ -186,19 +186,21 @@ var Response_ResponseType_name = map[int32]string{
 	3:  "SUCCESS_PARTIAL",
 	5:  "SUCCESS_FEED",
 	4:  "WAIT_COMPLETE",
+	6:  "SUCCESS_ATOM_FEED",
 	16: "CLIENT_ERROR",
 	17: "COMPILE_ERROR",
 	18: "RUNTIME_ERROR",
 }
 var Response_ResponseType_value = map[string]int32{
-	"SUCCESS_ATOM":     1,
-	"SUCCESS_SEQUENCE": 2,
-	"SUCCESS_PARTIAL":  3,
-	"SUCCESS_FEED":     5,
-	"WAIT_COMPLETE":    4,
-	"CLIENT_ERROR":     16,
-	"COMPILE_ERROR":    17,
-	"RUNTIME_ERROR":    18,
+	"SUCCESS_ATOM":      1,
+	"SUCCESS_SEQUENCE":  2,
+	"SUCCESS_PARTIAL":   3,
+	"SUCCESS_FEED":      5,
+	"WAIT_COMPLETE":     4,
+	"SUCCESS_ATOM_FEED": 6,
+	"CLIENT_ERROR":      16,
+	"COMPILE_ERROR":     17,
+	"RUNTIME_ERROR":     18,
 }
 
 func (x Response_ResponseType) Enum() *Response_ResponseType {
@@ -208,6 +210,9 @@ func (x Response_ResponseType) Enum() *Response_ResponseType {
 }
 func (x Response_ResponseType) String() string {
 	return proto.EnumName(Response_ResponseType_name, int32(x))
+}
+func (x Response_ResponseType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
 }
 func (x *Response_ResponseType) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Response_ResponseType_value, data, "Response_ResponseType")
@@ -257,6 +262,9 @@ func (x Datum_DatumType) Enum() *Datum_DatumType {
 func (x Datum_DatumType) String() string {
 	return proto.EnumName(Datum_DatumType_name, int32(x))
 }
+func (x Datum_DatumType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
+}
 func (x *Datum_DatumType) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Datum_DatumType_value, data, "Datum_DatumType")
 	if err != nil {
@@ -274,6 +282,7 @@ const (
 	Term_MAKE_OBJ         Term_TermType = 3
 	Term_VAR              Term_TermType = 10
 	Term_JAVASCRIPT       Term_TermType = 11
+	Term_UUID             Term_TermType = 169
 	Term_HTTP             Term_TermType = 153
 	Term_ERROR            Term_TermType = 12
 	Term_IMPLICIT_VAR     Term_TermType = 13
@@ -317,23 +326,25 @@ const (
 	Term_REDUCE           Term_TermType = 37
 	Term_MAP              Term_TermType = 38
 	Term_FILTER           Term_TermType = 39
-	Term_CONCATMAP        Term_TermType = 40
-	Term_ORDERBY          Term_TermType = 41
+	Term_CONCAT_MAP       Term_TermType = 40
+	Term_ORDER_BY         Term_TermType = 41
 	Term_DISTINCT         Term_TermType = 42
 	Term_COUNT            Term_TermType = 43
 	Term_IS_EMPTY         Term_TermType = 86
 	Term_UNION            Term_TermType = 44
 	Term_NTH              Term_TermType = 45
+	Term_BRACKET          Term_TermType = 170
 	Term_INNER_JOIN       Term_TermType = 48
 	Term_OUTER_JOIN       Term_TermType = 49
 	Term_EQ_JOIN          Term_TermType = 50
 	Term_ZIP              Term_TermType = 72
+	Term_RANGE            Term_TermType = 173
 	Term_INSERT_AT        Term_TermType = 82
 	Term_DELETE_AT        Term_TermType = 83
 	Term_CHANGE_AT        Term_TermType = 84
 	Term_SPLICE_AT        Term_TermType = 85
 	Term_COERCE_TO        Term_TermType = 51
-	Term_TYPEOF           Term_TermType = 52
+	Term_TYPE_OF          Term_TermType = 52
 	Term_UPDATE           Term_TermType = 53
 	Term_DELETE           Term_TermType = 54
 	Term_REPLACE          Term_TermType = 55
@@ -344,17 +355,23 @@ const (
 	Term_TABLE_CREATE     Term_TermType = 60
 	Term_TABLE_DROP       Term_TermType = 61
 	Term_TABLE_LIST       Term_TermType = 62
+	Term_CONFIG           Term_TermType = 174
+	Term_STATUS           Term_TermType = 175
+	Term_WAIT             Term_TermType = 177
+	Term_RECONFIGURE      Term_TermType = 176
+	Term_REBALANCE        Term_TermType = 179
 	Term_SYNC             Term_TermType = 138
 	Term_INDEX_CREATE     Term_TermType = 75
 	Term_INDEX_DROP       Term_TermType = 76
 	Term_INDEX_LIST       Term_TermType = 77
 	Term_INDEX_STATUS     Term_TermType = 139
 	Term_INDEX_WAIT       Term_TermType = 140
+	Term_INDEX_RENAME     Term_TermType = 156
 	Term_FUNCALL          Term_TermType = 64
 	Term_BRANCH           Term_TermType = 65
 	Term_ANY              Term_TermType = 66
 	Term_ALL              Term_TermType = 67
-	Term_FOREACH          Term_TermType = 68
+	Term_FOR_EACH         Term_TermType = 68
 	Term_FUNC             Term_TermType = 69
 	Term_ASC              Term_TermType = 73
 	Term_DESC             Term_TermType = 74
@@ -365,6 +382,7 @@ const (
 	Term_SAMPLE           Term_TermType = 81
 	Term_DEFAULT          Term_TermType = 92
 	Term_JSON             Term_TermType = 98
+	Term_TO_JSON_STRING   Term_TermType = 172
 	Term_ISO8601          Term_TermType = 99
 	Term_TO_ISO8601       Term_TermType = 100
 	Term_EPOCH_TIME       Term_TermType = 101
@@ -414,6 +432,20 @@ const (
 	Term_RANDOM           Term_TermType = 151
 	Term_CHANGES          Term_TermType = 152
 	Term_ARGS             Term_TermType = 154
+	Term_BINARY           Term_TermType = 155
+	Term_GEOJSON          Term_TermType = 157
+	Term_TO_GEOJSON       Term_TermType = 158
+	Term_POINT            Term_TermType = 159
+	Term_LINE             Term_TermType = 160
+	Term_POLYGON          Term_TermType = 161
+	Term_DISTANCE         Term_TermType = 162
+	Term_INTERSECTS       Term_TermType = 163
+	Term_INCLUDES         Term_TermType = 164
+	Term_CIRCLE           Term_TermType = 165
+	Term_GET_INTERSECTING Term_TermType = 166
+	Term_FILL             Term_TermType = 167
+	Term_GET_NEAREST      Term_TermType = 168
+	Term_POLYGON_SUB      Term_TermType = 171
 )
 
 var Term_TermType_name = map[int32]string{
@@ -422,6 +454,7 @@ var Term_TermType_name = map[int32]string{
 	3:   "MAKE_OBJ",
 	10:  "VAR",
 	11:  "JAVASCRIPT",
+	169: "UUID",
 	153: "HTTP",
 	12:  "ERROR",
 	13:  "IMPLICIT_VAR",
@@ -465,23 +498,25 @@ var Term_TermType_name = map[int32]string{
 	37:  "REDUCE",
 	38:  "MAP",
 	39:  "FILTER",
-	40:  "CONCATMAP",
-	41:  "ORDERBY",
+	40:  "CONCAT_MAP",
+	41:  "ORDER_BY",
 	42:  "DISTINCT",
 	43:  "COUNT",
 	86:  "IS_EMPTY",
 	44:  "UNION",
 	45:  "NTH",
+	170: "BRACKET",
 	48:  "INNER_JOIN",
 	49:  "OUTER_JOIN",
 	50:  "EQ_JOIN",
 	72:  "ZIP",
+	173: "RANGE",
 	82:  "INSERT_AT",
 	83:  "DELETE_AT",
 	84:  "CHANGE_AT",
 	85:  "SPLICE_AT",
 	51:  "COERCE_TO",
-	52:  "TYPEOF",
+	52:  "TYPE_OF",
 	53:  "UPDATE",
 	54:  "DELETE",
 	55:  "REPLACE",
@@ -492,17 +527,23 @@ var Term_TermType_name = map[int32]string{
 	60:  "TABLE_CREATE",
 	61:  "TABLE_DROP",
 	62:  "TABLE_LIST",
+	174: "CONFIG",
+	175: "STATUS",
+	177: "WAIT",
+	176: "RECONFIGURE",
+	179: "REBALANCE",
 	138: "SYNC",
 	75:  "INDEX_CREATE",
 	76:  "INDEX_DROP",
 	77:  "INDEX_LIST",
 	139: "INDEX_STATUS",
 	140: "INDEX_WAIT",
+	156: "INDEX_RENAME",
 	64:  "FUNCALL",
 	65:  "BRANCH",
 	66:  "ANY",
 	67:  "ALL",
-	68:  "FOREACH",
+	68:  "FOR_EACH",
 	69:  "FUNC",
 	73:  "ASC",
 	74:  "DESC",
@@ -513,6 +554,7 @@ var Term_TermType_name = map[int32]string{
 	81:  "SAMPLE",
 	92:  "DEFAULT",
 	98:  "JSON",
+	172: "TO_JSON_STRING",
 	99:  "ISO8601",
 	100: "TO_ISO8601",
 	101: "EPOCH_TIME",
@@ -562,6 +604,20 @@ var Term_TermType_name = map[int32]string{
 	151: "RANDOM",
 	152: "CHANGES",
 	154: "ARGS",
+	155: "BINARY",
+	157: "GEOJSON",
+	158: "TO_GEOJSON",
+	159: "POINT",
+	160: "LINE",
+	161: "POLYGON",
+	162: "DISTANCE",
+	163: "INTERSECTS",
+	164: "INCLUDES",
+	165: "CIRCLE",
+	166: "GET_INTERSECTING",
+	167: "FILL",
+	168: "GET_NEAREST",
+	171: "POLYGON_SUB",
 }
 var Term_TermType_value = map[string]int32{
 	"DATUM":            1,
@@ -569,6 +625,7 @@ var Term_TermType_value = map[string]int32{
 	"MAKE_OBJ":         3,
 	"VAR":              10,
 	"JAVASCRIPT":       11,
+	"UUID":             169,
 	"HTTP":             153,
 	"ERROR":            12,
 	"IMPLICIT_VAR":     13,
@@ -612,23 +669,25 @@ var Term_TermType_value = map[string]int32{
 	"REDUCE":           37,
 	"MAP":              38,
 	"FILTER":           39,
-	"CONCATMAP":        40,
-	"ORDERBY":          41,
+	"CONCAT_MAP":       40,
+	"ORDER_BY":         41,
 	"DISTINCT":         42,
 	"COUNT":            43,
 	"IS_EMPTY":         86,
 	"UNION":            44,
 	"NTH":              45,
+	"BRACKET":          170,
 	"INNER_JOIN":       48,
 	"OUTER_JOIN":       49,
 	"EQ_JOIN":          50,
 	"ZIP":              72,
+	"RANGE":            173,
 	"INSERT_AT":        82,
 	"DELETE_AT":        83,
 	"CHANGE_AT":        84,
 	"SPLICE_AT":        85,
 	"COERCE_TO":        51,
-	"TYPEOF":           52,
+	"TYPE_OF":          52,
 	"UPDATE":           53,
 	"DELETE":           54,
 	"REPLACE":          55,
@@ -639,17 +698,23 @@ var Term_TermType_value = map[string]int32{
 	"TABLE_CREATE":     60,
 	"TABLE_DROP":       61,
 	"TABLE_LIST":       62,
+	"CONFIG":           174,
+	"STATUS":           175,
+	"WAIT":             177,
+	"RECONFIGURE":      176,
+	"REBALANCE":        179,
 	"SYNC":             138,
 	"INDEX_CREATE":     75,
 	"INDEX_DROP":       76,
 	"INDEX_LIST":       77,
 	"INDEX_STATUS":     139,
 	"INDEX_WAIT":       140,
+	"INDEX_RENAME":     156,
 	"FUNCALL":          64,
 	"BRANCH":           65,
 	"ANY":              66,
 	"ALL":              67,
-	"FOREACH":          68,
+	"FOR_EACH":         68,
 	"FUNC":             69,
 	"ASC":              73,
 	"DESC":             74,
@@ -660,6 +725,7 @@ var Term_TermType_value = map[string]int32{
 	"SAMPLE":           81,
 	"DEFAULT":          92,
 	"JSON":             98,
+	"TO_JSON_STRING":   172,
 	"ISO8601":          99,
 	"TO_ISO8601":       100,
 	"EPOCH_TIME":       101,
@@ -709,6 +775,20 @@ var Term_TermType_value = map[string]int32{
 	"RANDOM":           151,
 	"CHANGES":          152,
 	"ARGS":             154,
+	"BINARY":           155,
+	"GEOJSON":          157,
+	"TO_GEOJSON":       158,
+	"POINT":            159,
+	"LINE":             160,
+	"POLYGON":          161,
+	"DISTANCE":         162,
+	"INTERSECTS":       163,
+	"INCLUDES":         164,
+	"CIRCLE":           165,
+	"GET_INTERSECTING": 166,
+	"FILL":             167,
+	"GET_NEAREST":      168,
+	"POLYGON_SUB":      171,
 }
 
 func (x Term_TermType) Enum() *Term_TermType {
@@ -718,6 +798,9 @@ func (x Term_TermType) Enum() *Term_TermType {
 }
 func (x Term_TermType) String() string {
 	return proto.EnumName(Term_TermType_name, int32(x))
+}
+func (x Term_TermType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
 }
 func (x *Term_TermType) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Term_TermType_value, data, "Term_TermType")
@@ -757,7 +840,7 @@ func (m *Query) GetType() Query_QueryType {
 	if m != nil && m.Type != nil {
 		return *m.Type
 	}
-	return Query_START
+	return 0
 }
 
 func (m *Query) GetQuery() *Term {
@@ -834,7 +917,7 @@ func (m *Frame) GetType() Frame_FrameType {
 	if m != nil && m.Type != nil {
 		return *m.Type
 	}
-	return Frame_POS
+	return 0
 }
 
 func (m *Frame) GetPos() int64 {
@@ -884,7 +967,7 @@ func (m *Response) GetType() Response_ResponseType {
 	if m != nil && m.Type != nil {
 		return *m.Type
 	}
-	return Response_SUCCESS_ATOM
+	return 0
 }
 
 func (m *Response) GetToken() int64 {
@@ -948,7 +1031,7 @@ func (m *Datum) GetType() Datum_DatumType {
 	if m != nil && m.Type != nil {
 		return *m.Type
 	}
-	return Datum_R_NULL
+	return 0
 }
 
 func (m *Datum) GetRBool() bool {
@@ -1041,7 +1124,7 @@ func (m *Term) GetType() Term_TermType {
 	if m != nil && m.Type != nil {
 		return *m.Type
 	}
-	return Term_DATUM
+	return 0
 }
 
 func (m *Term) GetDatum() *Datum {

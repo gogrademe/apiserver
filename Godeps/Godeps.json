@@ -4,8 +4,8 @@
 	"Deps": [
 		{
 			"ImportPath": "code.google.com/p/goprotobuf/proto",
-			"Comment": "go.r60-149",
-			"Rev": "616d4b420266ce21bf4398860608c28d561361db"
+			"Comment": "go.r60-163",
+			"Rev": "9352842ae63ee1d7e74e074ce7bb10370c4b6b9e"
 		},
 		{
 			"ImportPath": "github.com/Lanciv/rethinkHelper",
@@ -13,26 +13,26 @@
 		},
 		{
 			"ImportPath": "github.com/dancannon/gorethink",
-			"Comment": "v0.3.1",
-			"Rev": "34ae3362d0b3cdcf1daa41e179af3a5a1d0c7cbc"
+			"Comment": "v0.6.0",
+			"Rev": "2e7684d7ac636f4ea39a909b624c9298252d5122"
 		},
 		{
 			"ImportPath": "github.com/dgrijalva/jwt-go",
-			"Comment": "v1.0.1-2-g1482919",
-			"Rev": "1482919d15c7cbc3c48db6132a5b30d1a9c79bcc"
+			"Comment": "v2.2.0-15-g61124b6",
+			"Rev": "61124b62ad244d655f87d944aefaa2ae5a0d2f16"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v0.3-3-gc3abaf9",
-			"Rev": "c3abaf9afcd167475951249d5a406ba10b24a1d9"
+			"Comment": "v0.4-16-g28b9ff9",
+			"Rev": "28b9ff9e3495dabeaea2da86c100effbf1a68346"
 		},
 		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
-			"Rev": "7deadb6844d2c6ff1dfb812eaa439b87cdaedf20"
+			"Rev": "00ce1c6a267162792c367acc43b1681a884e1872"
 		},
 		{
 			"ImportPath": "github.com/mholt/binding",
-			"Rev": "495a5e4b7e8461e29dc0c976cdd36c2251319e2d"
+			"Rev": "6c082304f300fc70793cb0be18af0fdd4acd2b75"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/bcrypt",
