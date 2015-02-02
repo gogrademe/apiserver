@@ -12,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var version string
+
 // Borrowed from:
 // github.com/progrium/logspout/blob/master/logspout.go#L33
 func getopt(name, dfault string) string {
@@ -23,6 +25,8 @@ func getopt(name, dfault string) string {
 }
 
 func main() {
+	log.Println("Starting api server Version:", version)
+
 	port := getopt("PORT", "5005")
 	dbName := getopt("DB_NAME", "dev_go_grade")
 	bootstrap := getopt("BOOTSTRAP_DB", "") != ""
@@ -30,6 +34,7 @@ func main() {
 
 	// FIXME: I don't think this is needed any more.
 	// I think it was only for wercker.
+	// Actually I think this may have been for docker links.
 	dbAddress := os.Getenv("RETHINKDB_PORT_28015_TCP")
 	dbAddress = strings.Trim(dbAddress, "tcp://")
 

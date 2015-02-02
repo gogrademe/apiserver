@@ -1,0 +1,13 @@
+machine:
+  environment:
+    GOROOT:
+  services:
+    - docker
+dependencies:
+  cache_directories:
+    - go
+  pre:
+    - docker version
+    - PATH=$PWD/go/bin:$PATH make deps
+  override:
+    - PATH=$PWD/go/bin:$PATH make build
