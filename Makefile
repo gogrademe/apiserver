@@ -8,9 +8,9 @@ VERSION=$(shell git describe --tags)
 # 	touch build/container
 #
 deps:
-	go get github.com/tools/godep
+	go get -u github.com/tools/godep
 	godep restore
-	
+
 build:
 	go build -ldflags "-X main.version $(VERSION)" -o build/$(NAME)
 
