@@ -54,10 +54,10 @@ func Connect(address, database string) error {
 	dbName = database
 	var err error
 	sess, err = r.Connect(r.ConnectOpts{
-		Address:     address,
-		Database:    dbName,
-		MaxIdle:     10,
-		IdleTimeout: time.Second * 10,
+		Address:  address,
+		Database: dbName,
+		MaxIdle:  10,
+		Timeout:  time.Second * 10,
 	})
 	if err != nil {
 		return err
