@@ -21,15 +21,6 @@ func DeleteAssignment(c *gin.Context) {
 		handleDBError(c.Writer, err)
 		return
 	}
-	// if err == store.ErrNotFound {
-	// 	c.Writer.WriteHeader(http.StatusNotFound)
-	// 	// writeError(c.Writer, notFoundError, 404, nil)
-	// 	return
-	// }
-	// if err != nil {
-	// 	writeError(c.Writer, serverError, 500, nil)
-	// 	return
-	// }
 
 	c.JSON(200, &APIRes{"assignment": []m.Assignment{}})
 	return
@@ -69,14 +60,6 @@ func GetAssignment(c *gin.Context) {
 		handleDBError(c.Writer, err)
 		return
 	}
-	// if err == store.ErrNotFound {
-	// 	writeError(c.Writer, notFoundError, 404, nil)
-	// 	return
-	// }
-	// if err != nil {
-	// 	writeError(c.Writer, serverError, 500, nil)
-	// 	return
-	// }
 
 	c.JSON(200, &APIRes{"assignment": []m.Assignment{a}})
 	return

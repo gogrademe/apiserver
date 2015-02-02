@@ -5,8 +5,6 @@ import (
 
 	r "github.com/dancannon/gorethink"
 	m "github.com/gogrademe/apiserver/model"
-
-	//"github.com/Pallinder/go-randomdata"
 )
 
 var (
@@ -41,15 +39,6 @@ var (
 	person8  m.Person
 	person9  m.Person
 	person10 m.Person
-
-	// student1 m.Student
-	// student2 m.Student
-	// student3 m.Student
-	// student4 m.Student
-	// student5 m.Student
-	// student6 m.Student
-	// student7 m.Student
-	// student8 m.Student
 
 	assignment1  m.Assignment
 	assignment2  m.Assignment
@@ -102,6 +91,8 @@ func createIndexes() {
 	r.Db(dbName).Table("person").IndexCreate("middleName").Run(sess)
 	r.Db(dbName).Table("person").IndexCreate("lastName").Run(sess)
 
+	r.Db(dbName).Table("emailConfirmations").IndexCreate("userId").Run(sess)
+
 }
 
 func insertTestData() {
@@ -125,6 +116,8 @@ func insertTestData() {
 func insertTestUsers() {
 
 	u, _ := m.NewUserFor("test@test.com", "somePassword", person7.ID)
+	u.Activated = true
+	u.Disabled = false
 	Users.Store(u)
 	// Users.Store(u2)
 }

@@ -13,6 +13,7 @@ import (
 
 // ErrLoginFailed ...
 var ErrLoginFailed = "Login Failed! Email and/or password incorrect."
+var ErrUserDisabled = "Login Failed! Account is either disabled or email has not been verified."
 
 // LoginForm ...
 type LoginForm struct {
@@ -45,6 +46,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	if !user.Activated || user.Disabled {
+		writeError(c.Writer, ErrUserDisabled, 401, err)
+		return
+	}
+
 	if err := user.ComparePassword(lf.Password); err != nil {
 		writeError(c.Writer, ErrLoginFailed, 401, nil)
 		return
@@ -70,7 +76,6 @@ func AuthRequired() gin.HandlerFunc {
 			return []byte("someRandomSigningKey"), nil
 		})
 		if err != nil {
-			// c.JSON(200,http.StatusUnauthorized, "Access denied.")
 			writeError(c.Writer, "Unauthorized", 401, nil)
 			c.Fail(401, err)
 			return

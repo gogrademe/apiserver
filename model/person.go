@@ -18,6 +18,10 @@ type (
 		Email       string   `gorethink:"email,omitempty"json:"email"`
 		TimeStamp
 	}
+	PersonRes struct {
+		Person
+		Account User
+	}
 )
 
 // RoleIn ...

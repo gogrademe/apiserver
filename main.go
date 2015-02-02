@@ -28,6 +28,8 @@ func main() {
 	bootstrap := getopt("BOOTSTRAP_DB", "") != ""
 	testData := getopt("INSERT_TEST_DATA", "") != ""
 
+	// FIXME: I don't think this is needed any more.
+	// I think it was only for wercker.
 	dbAddress := os.Getenv("RETHINKDB_PORT_28015_TCP")
 	dbAddress = strings.Trim(dbAddress, "tcp://")
 
@@ -38,7 +40,7 @@ func main() {
 	flag.Parse()
 
 	if err := store.Connect(dbAddress, dbName); err != nil {
-		log.Fatal("Error setting up database: ", err)
+		log.Fatal("Error connecting to database: ", err)
 	}
 
 	store.SetupDB(bootstrap, testData)

@@ -90,9 +90,11 @@ func GetAllAssignmentGrades(c *gin.Context) {
 
 	q = q.EqJoin("assignmentId", r.Table("assignments"))
 
+	// FIXME: Fix this!
 	q = q.Map(func(row r.Term) r.Term {
 		return row.Field("left").Merge(map[string]interface{}{
-			"assignment":   row.Field("right"),
+			"assignment": row.Field("right"),
+			// Specifically this part.
 			"gradeAverage": 3,
 		})
 	})

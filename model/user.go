@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ErrInvalidPassword = errors.New("Username or password incorrect.")
+	ErrInvalidPassword = errors.New("password must be between 6 and 256 characters")
 )
 
 type User struct {
@@ -18,17 +18,18 @@ type User struct {
 	HashedPassword string `gorethink:"hashedPassword,omitempty"json:"-"`
 	PersonID       string `gorethink:"personId,omitempty"json:"personId"`
 	Role           string `gorethink:"role,omitempty"json:"role"`
+	Activated      bool   `gorethink:"activated"json:"activated"`
 	Disabled       bool   `gorethink:"disabled,omitempty"json:"disabled"`
 	TimeStamp
 }
 
 func NewUserFor(email, password, personID string) (*User, error) {
-	emailLower := strings.ToLower(email)
-
-	user := User{
+	user := &User{
 		Email:      email,
-		EmailLower: emailLower,
+		EmailLower: strings.ToLower(email),
 		PersonID:   personID,
+		Activated:  false,
+		Disabled:   false,
 	}
 
 	err := user.SetPassword(password)
@@ -36,7 +37,7 @@ func NewUserFor(email, password, personID string) (*User, error) {
 		return nil, err
 	}
 	user.UpdateTime()
-	return &user, nil
+	return user, nil
 }
 
 func (u *User) SetPassword(password string) error {
