@@ -28,24 +28,7 @@ var (
 	AssignmentH      = DB.NewCollection("assignments")
 	AssignmentGrades = DB.NewCollection("grades")
 
-	Assignments     AssignmentStore
-	AssignmentTypes AssignmentTypeStore
-
-	Sessions    SessionStore
-	Users       UserStore
-	Enrollments EnrollmentStore
-
-	// Errors
-	ErrNotFound   = errors.New("record not found")
-	ErrValidation = errors.New("validation error")
-
-	tables = []string{"users", "classes", "enrollments", "terms", "assignments",
-		"grades", "assignmentTypes", "people", "sessions"}
-)
-
-func init() {
-
-	Assignments = NewAssignmentStore()
+	Assignments     = NewAssignmentStore()
 	AssignmentTypes = NewAssignmentTypeStore()
 
 	// Classes
@@ -53,8 +36,17 @@ func init() {
 
 	// Users/Auth
 	Sessions = NewSessionStore()
-	Users = NewUserStore()
-}
+	Users    = NewUserStore()
+
+	EmailConfirmations = NewEmailConfirmationStore()
+
+	// Errors
+	ErrNotFound   = errors.New("record not found")
+	ErrValidation = errors.New("validation error")
+
+	tables = []string{"users", "classes", "enrollments", "terms", "assignments",
+		"grades", "assignmentTypes", "people", "sessions", "emailConfirmations"}
+)
 
 // Connect establishes connection with rethinkDB
 func Connect(address, database string) error {

@@ -91,6 +91,8 @@ func createIndexes() {
 	r.Db(dbName).Table("person").IndexCreate("middleName").Run(sess)
 	r.Db(dbName).Table("person").IndexCreate("lastName").Run(sess)
 
+	r.Db(dbName).Table("emailConfirmations").IndexCreate("userId").Run(sess)
+
 }
 
 func insertTestData() {
@@ -114,6 +116,8 @@ func insertTestData() {
 func insertTestUsers() {
 
 	u, _ := m.NewUserFor("test@test.com", "somePassword", person7.ID)
+	u.Activated = true
+	u.Disabled = false
 	Users.Store(u)
 	// Users.Store(u2)
 }

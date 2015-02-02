@@ -63,7 +63,18 @@ func CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(201, &APIRes{"user": []m.User{*newUser}})
-
-	// c.JSON(201, &APIRes{"user": []m.Assignment{*a}})
 	return
 }
+
+// func ActivateUser(c *gin.Context) {
+// 	id := c.Params.ByName("id")
+//
+// 	emailConf := m.EmailConfirmation{}
+// 	err := s.EmailConfirmations.FindByID(&emailConf, id)
+// 	if err != nil {
+// 		writeError(c.Writer, notFoundError, 404, err)
+// 	}
+//
+// 	if emailConf.
+//
+// }
