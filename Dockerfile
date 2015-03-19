@@ -1,4 +1,4 @@
-FROM alpine:3.1
+FROM gliderlabs/alpine:3.1
 ENTRYPOINT ["/bin/apiserver"]
 EXPOSE 5005
 
@@ -12,3 +12,5 @@ RUN apk-install go git mercurial \
 	&& go build -ldflags "-X main.version $(git describe --tags)" -o /bin/apiserver \
 	&& rm -rf /go \
 	&& apk del go git mercurial
+
+CMD ["/bin/apiserver"]
