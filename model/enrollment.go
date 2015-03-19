@@ -7,19 +7,19 @@ import (
 )
 
 type Enrollment struct {
-	ID       string `gorethink:"id,omitempty"json:"id"`
-	PersonID string `gorethink:"personId,omitempty"json:"personId"`
-	ClassID  string `gorethink:"classId,omitempty"json:"classId"`
-	TermID   string `gorethink:"termId,omitempty"json:"termId"`
+	ID       string `gorethink:"id,omitempty" json:"id"`
+	PersonID string `gorethink:"personId,omitempty" json:"personId"`
+	ClassID  string `gorethink:"classId,omitempty" json:"classId"`
+	TermID   string `gorethink:"termId,omitempty" json:"termId"`
 	TimeStamp
 }
 
 type EnrollmentAPIRes struct {
-	ID       string `gorethink:"id,omitempty"json:"id"`
-	PersonID string `gorethink:"personId,omitempty"json:"personId"`
-	ClassID  string `gorethink:"classId,omitempty"json:"classId"`
-	TermID   string `gorethink:"termId,omitempty"json:"termId"`
-	Person   Person `gorethink:"person,omitempty"json:"person"`
+	ID       string `gorethink:"id,omitempty" json:"id"`
+	PersonID string `gorethink:"personId,omitempty" json:"personId"`
+	ClassID  string `gorethink:"classId,omitempty" json:"classId"`
+	TermID   string `gorethink:"termId,omitempty" json:"termId"`
+	Person   Person `gorethink:"person,omitempty" json:"person"`
 	TimeStamp
 }
 

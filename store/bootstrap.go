@@ -115,8 +115,7 @@ func insertTestData() {
 
 func insertTestUsers() {
 
-	u, _ := m.NewUserFor("test@test.com", "somePassword", person7.ID)
-	u.Activated = true
+	u, _ := m.NewUserForWithPassword("test@test.com", "somePassword", person7.ID)
 	u.Disabled = false
 	Users.Store(u)
 	// Users.Store(u2)

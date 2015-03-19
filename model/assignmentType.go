@@ -8,10 +8,10 @@ import (
 
 // AssignmentType ...
 type AssignmentType struct {
-	ID         string   `gorethink:"id,omitempty"json:"id"`
-	Name       string   `gorethink:"name,omitempty"json:"name"`
-	Weight     float64  `gorethink:"weight,omitempty"json:"weight"`
-	SubjectIDs []string `gorethink:"subjectIDs,omitempty"json:"subjectIDs,omitempty"`
+	ID         string   `gorethink:"id,omitempty" json:"id"`
+	Name       string   `gorethink:"name,omitempty" json:"name"`
+	Weight     float64  `gorethink:"weight,omitempty" json:"weight"`
+	SubjectIDs []string `gorethink:"subjectIDs,omitempty" json:"subjectIDs,omitempty"`
 	TimeStamp
 }
 

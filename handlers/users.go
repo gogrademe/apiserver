@@ -27,7 +27,6 @@ func GetAllUsers(c *gin.Context) {
 type UserNew struct {
 	PersonID string
 	Email    string
-	Password string
 }
 
 // FieldMap ...
@@ -35,7 +34,6 @@ func (u *UserNew) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&u.PersonID: "personId",
 		&u.Email:    "email",
-		&u.Password: "password",
 	}
 }
 
@@ -50,7 +48,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	newUser, err := m.NewUserFor(u.Email, u.Password, u.PersonID)
+	newUser, err := m.NewUserFor(u.Email, u.PersonID)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

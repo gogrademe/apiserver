@@ -8,6 +8,8 @@ import (
 func SetupHandlers(r *gin.Engine) {
 	r.Use(CORSMiddleware())
 
+	r.OPTIONS("/*path", CORSMiddleware())
+
 	// Auth
 	r.POST("/session", Login)
 
@@ -42,7 +44,7 @@ func SetupHandlers(r *gin.Engine) {
 	g.PUT("/:id", Can("Admin"), UpdateTerm)
 
 	// SchoolYears
-	g = auth.Group("/year")
+	g = auth.Group("/schoolYear")
 	g.GET("", Can("Admin", "Teacher"), GetAllSchoolYears)
 	g.POST("", Can("Admin"), CreateSchoolYear)
 	g.GET("/:id", Can("Admin", "Teacher"), GetSchoolYear)

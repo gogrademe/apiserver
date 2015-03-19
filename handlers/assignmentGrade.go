@@ -85,7 +85,7 @@ func GetAllAssignmentGrades(c *gin.Context) {
 		filter["assignmentId"] = c.Request.URL.Query().Get("assignmentId")
 	}
 
-	grades := []m.AssignmentGrade{}
+	grades := []m.AssignmentGradeAPIRes{}
 	q := store.AssignmentGrades.Filter(filter)
 
 	q = q.EqJoin("assignmentId", r.Table("assignments"))

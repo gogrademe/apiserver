@@ -46,7 +46,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if !user.Activated || user.Disabled {
+	if user.Disabled || len(user.ActivationToken) > 0 {
 		writeError(c.Writer, ErrUserDisabled, 401, err)
 		return
 	}

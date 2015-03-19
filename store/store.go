@@ -44,7 +44,7 @@ var (
 	ErrNotFound   = errors.New("record not found")
 	ErrValidation = errors.New("validation error")
 
-	tables = []string{"users", "classes", "enrollments", "terms", "assignments",
+	tables = []string{"users", "classes", "enrollments", "terms", "schoolYears", "assignments",
 		"grades", "assignmentTypes", "people", "sessions", "emailConfirmations"}
 )
 
@@ -77,13 +77,13 @@ func SetupDB(bootstrap, testData bool) {
 		createTables()
 		createIndexes()
 		log.Println("SetupDB: Bootstrap Done")
-	}
-
-	if testData {
+	} else if testData {
 		log.Println("SetupDB: Cleaning...")
 		cleanTables()
 		log.Println("SetupDB: Inserting Data...")
 		insertTestData()
+	} else {
+		log.Println("SetupDB: Nothing Required.")
 	}
 
 	log.Println("SetupDB: Done")

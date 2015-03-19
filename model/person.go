@@ -8,14 +8,14 @@ import (
 
 type (
 	Person struct {
-		ID          string   `gorethink:"id,omitempty"json:"id"`
-		FirstName   string   `gorethink:"firstName,omitempty"json:"firstName,omitempty"`
-		MiddleName  string   `gorethink:"middleName,omitempty"json:"middleName,omitempty"`
-		LastName    string   `gorethink:"lastName,omitempty"json:"lastName,omitempty"`
-		Types       []string `gorethink:"types,omitempty"json:"types,omitempty"`
-		GradeLevel  string   `gorethink:"gradeLevel,omitempty"json:"gradeLevel"`
-		PhoneNumber string   `gorethink:"phoneNumber,omitempty"json:"personId"`
-		Email       string   `gorethink:"email,omitempty"json:"email"`
+		ID          string   `gorethink:"id,omitempty" json:"id"`
+		FirstName   string   `gorethink:"firstName,omitempty" json:"firstName,omitempty"`
+		MiddleName  string   `gorethink:"middleName,omitempty" json:"middleName,omitempty"`
+		LastName    string   `gorethink:"lastName,omitempty" json:"lastName,omitempty"`
+		Types       []string `gorethink:"types,omitempty" json:"types,omitempty"`
+		GradeLevel  string   `gorethink:"gradeLevel,omitempty" json:"gradeLevel"`
+		PhoneNumber string   `gorethink:"phoneNumber,omitempty" json:"personId"`
+		Email       string   `gorethink:"email,omitempty" json:"email"`
 		TimeStamp
 	}
 	PersonRes struct {

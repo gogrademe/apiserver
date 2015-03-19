@@ -7,10 +7,10 @@ import (
 )
 
 type SchoolYear struct {
-	ID    string `gorethink:"id,omitempty"json:"id"`
-	Start int    `gorethink:"start,omitempty"json:"start"`
-	End   int    `gorethink:"end,omitempty"json:"end"`
-	Terms []Term `gorethink:"terms,omitempty"json:"terms"`
+	ID    string `gorethink:"id,omitempty" json:"id"`
+	Start int    `gorethink:"start,omitempty" json:"start"`
+	End   int    `gorethink:"end,omitempty" json:"end"`
+	Terms []Term `gorethink:"terms,omitempty" json:"terms"`
 	TimeStamp
 }
 

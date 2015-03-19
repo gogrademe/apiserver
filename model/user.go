@@ -1,6 +1,8 @@
 package model
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"strings"
 
@@ -12,23 +14,47 @@ var (
 )
 
 type User struct {
-	ID             string `gorethink:"id,omitempty"json:"id"`
-	Email          string `gorethink:"email,omitempty"json:"email"`
-	EmailLower     string `gorethink:"emailLower,omitempty"json:"emailLower"`
-	HashedPassword string `gorethink:"hashedPassword,omitempty"json:"-"`
-	PersonID       string `gorethink:"personId,omitempty"json:"personId"`
-	Role           string `gorethink:"role,omitempty"json:"role"`
-	Activated      bool   `gorethink:"activated"json:"activated"`
-	Disabled       bool   `gorethink:"disabled,omitempty"json:"disabled"`
+	ID             string `gorethink:"id,omitempty" json:"id"`
+	Email          string `gorethink:"email,omitempty" json:"email"`
+	EmailLower     string `gorethink:"emailLower,omitempty" json:"emailLower"`
+	HashedPassword string `gorethink:"hashedPassword,omitempty" json:"-"`
+	PersonID       string `gorethink:"personId,omitempty" json:"personId"`
+	Role           string `gorethink:"role,omitempty" json:"role"`
+	// base64 url encoded random hash.
+	ActivationToken string `gorethink:"activationToken,omitempty" json:"-"`
+	Disabled        bool   `gorethink:"disabled,omitempty" json:"disabled"`
 	TimeStamp
 }
 
-func NewUserFor(email, password, personID string) (*User, error) {
+func (u *User) GenActivationToken() error {
+	rb := make([]byte, 32)
+	_, err := rand.Read(rb)
+	if err != nil {
+		return err
+	}
+	u.ActivationToken = base64.URLEncoding.EncodeToString(rb)
+	return nil
+}
+
+func NewUserFor(email, personID string) (*User, error) {
 	user := &User{
 		Email:      email,
 		EmailLower: strings.ToLower(email),
 		PersonID:   personID,
-		Activated:  false,
+		Disabled:   true,
+	}
+	if err := user.GenActivationToken(); err != nil {
+		return nil, err
+	}
+	user.UpdateTime()
+	return user, nil
+}
+
+func NewUserForWithPassword(email, password, personID string) (*User, error) {
+	user := &User{
+		Email:      email,
+		EmailLower: strings.ToLower(email),
+		PersonID:   personID,
 		Disabled:   false,
 	}
 
@@ -36,6 +62,7 @@ func NewUserFor(email, password, personID string) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	user.UpdateTime()
 	return user, nil
 }
