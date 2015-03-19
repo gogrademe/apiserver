@@ -13,3 +13,6 @@ dependencies:
     - docker version
   override:
     - docker build -t apiserver .
+test:
+  override:
+    - true
