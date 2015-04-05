@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"math/rand"
+	"os"
 	"strings"
 	"time"
 
@@ -26,6 +27,10 @@ var bootstrap = envconfig.Bool("create_tables", false, "create tables in db")
 var testData = envconfig.Bool("test_data", false, "insert test data into db")
 
 func main() {
+	if len(os.Args) > 1 {
+		envconfig.PrintDefaults()
+		return
+	}
 	log.Println("Starting api server Version:", version)
 
 	// FIXME: I don't think this is needed any more.

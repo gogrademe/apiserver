@@ -519,12 +519,12 @@ func insertTestGrades() {
 	grade1 := m.AssignmentGrade{
 		AssignmentID: assignment1.ID,
 		PersonID:     person1.ID,
-		Grade:        "50",
+		Grade:        50,
 	}
 	grade2 := m.AssignmentGrade{
 		AssignmentID: assignment1.ID,
 		PersonID:     person2.ID,
-		Grade:        "50",
+		Grade:        50,
 	}
 
 	AssignmentGrades.Insert(&grade1, &grade2)

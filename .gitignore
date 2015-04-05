@@ -19,6 +19,7 @@ _cgo_gotypes.go
 _cgo_export.*
 
 gin-bin
+bin
 
 _testmain.go
 
