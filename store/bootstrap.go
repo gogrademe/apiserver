@@ -171,7 +171,10 @@ func insertTestTerms() {
 		StartDate: time.Date(2013, time.May, 10, 8, 0, 0, 0, time.UTC),
 	}
 
-	keys, _ := Terms.Insert(&term1, &term2, &term3, &term4, &term5, &term6)
+	keys, err := Terms.Insert(&term1, &term2, &term3, &term4, &term5, &term6)
+	if err != nil {
+		panic(err)
+	}
 	term1.ID = keys[0]
 	term2.ID = keys[1]
 	term3.ID = keys[2]
