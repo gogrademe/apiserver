@@ -3,32 +3,44 @@
 	"GoVersion": "go1.4.1",
 	"Deps": [
 		{
-			"ImportPath": "code.google.com/p/goprotobuf/proto",
-			"Comment": "go.r60-163",
-			"Rev": "9352842ae63ee1d7e74e074ce7bb10370c4b6b9e"
-		},
-		{
 			"ImportPath": "github.com/Lanciv/rethinkHelper",
 			"Rev": "3eafeb79e098fe132ae6d7ecb7f28d6b94060771"
 		},
 		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.7.3",
+			"Rev": "55eb11d21d2a31a3cc93838241d04800f52e823d"
+		},
+		{
+			"ImportPath": "github.com/cenkalti/backoff",
+			"Rev": "9831e1e25c874e0a0601b6dc43641071414eec7a"
+		},
+		{
 			"ImportPath": "github.com/dancannon/gorethink",
-			"Comment": "v0.6.0",
-			"Rev": "2e7684d7ac636f4ea39a909b624c9298252d5122"
+			"Comment": "v0.7.1",
+			"Rev": "0fcd578dc17224eb4812abb34a472f6b72d9c62f"
 		},
 		{
 			"ImportPath": "github.com/dgrijalva/jwt-go",
-			"Comment": "v2.2.0-15-g61124b6",
-			"Rev": "61124b62ad244d655f87d944aefaa2ae5a0d2f16"
+			"Comment": "v2.2.0-22-g38ff32c",
+			"Rev": "38ff32c7bf2b4030a0c42af215cbaf7188514bad"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v0.4-16-g28b9ff9",
-			"Rev": "28b9ff9e3495dabeaea2da86c100effbf1a68346"
+			"Comment": "v0.6",
+			"Rev": "e2fa89777e344782ef5d31929f095f4589c35dcc"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "655cdfa588ea190e901bc5590e65d5621688847c"
 		},
 		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
-			"Rev": "00ce1c6a267162792c367acc43b1681a884e1872"
+			"Rev": "b59a38004596b696aca7aa2adccfa68760864d86"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Rev": "d67e0b7d1797975196499f79bcc322c08b9f218b"
 		},
 		{
 			"ImportPath": "github.com/mholt/binding",
@@ -36,11 +48,11 @@
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/bcrypt",
-			"Rev": "bfc286917c5fcb7420d7e3092b50bbfd31b38a98"
+			"Rev": "8b27f58b78dbd60e9a26b60b0d908ea642974b6d"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/blowfish",
-			"Rev": "bfc286917c5fcb7420d7e3092b50bbfd31b38a98"
+			"Rev": "8b27f58b78dbd60e9a26b60b0d908ea642974b6d"
 		}
 	]
 }

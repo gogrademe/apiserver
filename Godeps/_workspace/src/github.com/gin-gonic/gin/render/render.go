@@ -26,11 +26,17 @@ type (
 	// Plain text
 	plainRender struct{}
 
+	// HTML Plain text
+	htmlPlainRender struct{}
+
 	// Redirects
 	redirectRender struct{}
 
 	// Redirects
-	htmlDebugRender struct{}
+	htmlDebugRender struct {
+		files []string
+		globs []string
+	}
 
 	// form binding
 	HTMLRender struct {
@@ -42,12 +48,13 @@ var (
 	JSON      = jsonRender{}
 	XML       = xmlRender{}
 	Plain     = plainRender{}
+	HTMLPlain = htmlPlainRender{}
 	Redirect  = redirectRender{}
-	HTMLDebug = htmlDebugRender{}
+	HTMLDebug = &htmlDebugRender{}
 )
 
 func writeHeader(w http.ResponseWriter, code int, contentType string) {
-	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Content-Type", contentType+"; charset=utf-8")
 	w.WriteHeader(code)
 }
 
@@ -82,14 +89,46 @@ func (_ plainRender) Render(w http.ResponseWriter, code int, data ...interface{}
 	return err
 }
 
-func (_ htmlDebugRender) Render(w http.ResponseWriter, code int, data ...interface{}) error {
+func (_ htmlPlainRender) Render(w http.ResponseWriter, code int, data ...interface{}) error {
+	writeHeader(w, code, "text/html")
+	format := data[0].(string)
+	args := data[1].([]interface{})
+	var err error
+	if len(args) > 0 {
+		_, err = w.Write([]byte(fmt.Sprintf(format, args...)))
+	} else {
+		_, err = w.Write([]byte(format))
+	}
+	return err
+}
+
+func (r *htmlDebugRender) AddGlob(pattern string) {
+	r.globs = append(r.globs, pattern)
+}
+
+func (r *htmlDebugRender) AddFiles(files ...string) {
+	r.files = append(r.files, files...)
+}
+
+func (r *htmlDebugRender) Render(w http.ResponseWriter, code int, data ...interface{}) error {
 	writeHeader(w, code, "text/html")
 	file := data[0].(string)
 	obj := data[1]
-	t, err := template.ParseFiles(file)
-	if err != nil {
-		return err
+
+	t := template.New("")
+
+	if len(r.files) > 0 {
+		if _, err := t.ParseFiles(r.files...); err != nil {
+			return err
+		}
 	}
+
+	for _, glob := range r.globs {
+		if _, err := t.ParseGlob(glob); err != nil {
+			return err
+		}
+	}
+
 	return t.ExecuteTemplate(w, file, obj)
 }
 
