@@ -2,13 +2,9 @@ general:
   artifacts:
     - "build"
 machine:
-  environment:
-    GOROOT:
   services:
     - docker
 dependencies:
-  cache_directories:
-    - go
   pre:
     - docker version
   override:
