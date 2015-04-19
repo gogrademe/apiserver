@@ -1,0 +1,15 @@
+api:
+  build: .
+  environment:
+    TEST_DATA: true
+    CREATE_TABLES: true
+  links:
+   - db:rethinkdb
+  ports:
+   - "5005:5005"
+db:
+  image: rethinkdb
+  ports:
+    - "8080:8080"
+    - "29015:29015"
+    - "28015:28015"

@@ -7,8 +7,8 @@ type Model interface {
 }
 
 type TimeStamp struct {
-	CreatedAt time.Time `gorethink:"createdAt"json:"createdAt"`
-	UpdatedAt time.Time `gorethink:"updatedAt"json:"updatedAt"`
+	CreatedAt time.Time `gorethink:"createdAt" json:"createdAt"`
+	UpdatedAt time.Time `gorethink:"updatedAt" json:"updatedAt"`
 }
 
 func (a *TimeStamp) UpdateTime() {

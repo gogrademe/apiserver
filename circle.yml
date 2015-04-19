@@ -11,6 +11,8 @@ dependencies:
     - go
   pre:
     - docker version
-    - PATH=$PWD/go/bin:$PATH make deps
   override:
-    - PATH=$PWD/go/bin:$PATH make build
+    - docker build -t apiserver .
+test:
+  override:
+    - /bin/true

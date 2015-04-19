@@ -9,12 +9,18 @@ import (
 
 //AssignmentGrade ...
 type AssignmentGrade struct {
-	ID           string     `gorethink:"id,omitempty"json:"id"`
-	AssignmentID string     `gorethink:"assignmentId,omitempty"json:"assignmentId"`
-	PersonID     string     `gorethink:"personId,omitempty"json:"personId"`
-	Grade        string     `gorethink:"grade,omitempty"json:"grade"`
-	GradeAverage string     `gorethink:"gradeAverage,omitempty"json:"gradeAverage"`
-	Assignment   Assignment `gorethink:"assignment,omitempty"json:"assignment"`
+	ID           string  `gorethink:"id,omitempty" json:"id"`
+	AssignmentID string  `gorethink:"assignmentId,omitempty" json:"assignmentId"`
+	PersonID     string  `gorethink:"personId,omitempty" json:"personId"`
+	Grade        float32 `gorethink:"grade,omitempty" json:"grade"`
+	GradeAverage float32 `gorethink:"gradeAverage,omitempty" json:"gradeAverage"`
+	TimeStamp
+}
+
+//AssignmentGradeAPIRes ...
+type AssignmentGradeAPIRes struct {
+	AssignmentGrade
+	Assignment Assignment `gorethink:"assignment,omitempty" json:"assignment"`
 	TimeStamp
 }
 
@@ -34,8 +40,8 @@ func (a AssignmentGrade) Validate(req *http.Request, errs binding.Errors) bindin
 	if strings.TrimSpace(a.PersonID) == "" {
 		errs = append(errs, RequiredErr("personId"))
 	}
-	if strings.TrimSpace(a.Grade) == "" {
-		errs = append(errs, RequiredErr("grade"))
-	}
+	// if strings.TrimSpace(a.Grade) == "" {
+	// 	errs = append(errs, RequiredErr("grade"))
+	// }
 	return errs
 }

@@ -2,7 +2,6 @@ package store
 
 import (
 	m "github.com/gogrademe/apiserver/model"
-	// r "github.com/dancannon/gorethink"
 )
 
 type AssignmentStore struct {

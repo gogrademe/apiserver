@@ -44,7 +44,7 @@ var (
 	ErrNotFound   = errors.New("record not found")
 	ErrValidation = errors.New("validation error")
 
-	tables = []string{"users", "classes", "enrollments", "terms", "assignments",
+	tables = []string{"users", "classes", "enrollments", "terms", "schoolYears", "assignments",
 		"grades", "assignmentTypes", "people", "sessions", "emailConfirmations"}
 )
 
@@ -70,7 +70,7 @@ func Connect(address, database string) error {
 
 // SetupDB will be used to bootstrap the DB
 func SetupDB(bootstrap, testData bool) {
-
+	log.Println(bootstrap, testData)
 	if bootstrap {
 		log.Println("SetupDB: Bootstrapping...")
 		createDatabase()

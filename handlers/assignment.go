@@ -16,7 +16,6 @@ func DeleteAssignment(c *gin.Context) {
 	id := c.Params.ByName("id")
 
 	err := store.Assignments.Delete(id)
-
 	if err != nil {
 		handleDBError(c.Writer, err)
 		return

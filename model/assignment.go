@@ -9,14 +9,14 @@ import (
 
 //Assignment ...
 type Assignment struct {
-	ID       string         `gorethink:"id,omitempty"json:"id"`
-	Name     string         `gorethink:"name,omitempty"json:"name"`
-	ClassID  string         `gorethink:"classId,omitempty"json:"classId"`
-	TermID   string         `gorethink:"termId,omitempty"json:"termId"`
-	TypeID   string         `gorethink:"typeId,omitempty"json:"typeId"`
-	MaxScore int16          `gorethink:"maxScore,omitempty"json:"maxScore"`
-	Type     AssignmentType `gorethink:"type,omitempty"json:"type"`
-	DueDate  time.Time      `gorethink:"dueDate,omitempty"json:"dueDate"`
+	ID       string         `gorethink:"id,omitempty" json:"id"`
+	Name     string         `gorethink:"name,omitempty" json:"name"`
+	ClassID  string         `gorethink:"classId,omitempty" json:"classId"`
+	TermID   string         `gorethink:"termId,omitempty" json:"termId"`
+	TypeID   string         `gorethink:"typeId,omitempty" json:"typeId"`
+	MaxScore int16          `gorethink:"maxScore,omitempty" json:"maxScore"`
+	Type     AssignmentType `gorethink:"type,omitempty" json:"type"`
+	DueDate  time.Time      `gorethink:"dueDate,omitempty" json:"dueDate"`
 	TimeStamp
 }
 

@@ -8,11 +8,11 @@ import (
 )
 
 type Term struct {
-	ID         string     `gorethink:"id,omitempty"json:"id"`
-	Name       string     `gorethink:"name,omitempty"json:"name"`
-	SchoolYear SchoolYear `gorethink:"schoolYear,omitempty"json:"schoolYear"`
-	StartDate  time.Time  `gorethink:"startDate,omitempty"json:"startDate"`
-	EndDate    time.Time  `gorethink:"endDate,omitempty"json:"endDate"`
+	ID         string     `gorethink:"id,omitempty" json:"id"`
+	Name       string     `gorethink:"name,omitempty" json:"name"`
+	SchoolYear SchoolYear `gorethink:"schoolYear,omitempty" json:"schoolYear"`
+	StartDate  time.Time  `gorethink:"startDate,omitempty" json:"startDate"`
+	EndDate    time.Time  `gorethink:"endDate,omitempty" json:"endDate"`
 	TimeStamp
 }
 

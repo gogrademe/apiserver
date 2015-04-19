@@ -115,8 +115,7 @@ func insertTestData() {
 
 func insertTestUsers() {
 
-	u, _ := m.NewUserFor("test@test.com", "somePassword", person7.ID)
-	u.Activated = true
+	u, _ := m.NewUserForWithPassword("test@test.com", "somePassword", person7.ID)
 	u.Disabled = false
 	Users.Store(u)
 	// Users.Store(u2)
@@ -172,7 +171,10 @@ func insertTestTerms() {
 		StartDate: time.Date(2013, time.May, 10, 8, 0, 0, 0, time.UTC),
 	}
 
-	keys, _ := Terms.Insert(&term1, &term2, &term3, &term4, &term5, &term6)
+	keys, err := Terms.Insert(&term1, &term2, &term3, &term4, &term5, &term6)
+	if err != nil {
+		panic(err)
+	}
 	term1.ID = keys[0]
 	term2.ID = keys[1]
 	term3.ID = keys[2]
@@ -520,12 +522,12 @@ func insertTestGrades() {
 	grade1 := m.AssignmentGrade{
 		AssignmentID: assignment1.ID,
 		PersonID:     person1.ID,
-		Grade:        "50",
+		Grade:        50,
 	}
 	grade2 := m.AssignmentGrade{
 		AssignmentID: assignment1.ID,
 		PersonID:     person2.ID,
-		Grade:        "50",
+		Grade:        50,
 	}
 
 	AssignmentGrades.Insert(&grade1, &grade2)

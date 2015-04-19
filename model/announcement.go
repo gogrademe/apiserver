@@ -9,10 +9,10 @@ import (
 
 //Announcement ...
 type Announcement struct {
-	ID         string    `gorethink:"id,omitempty"json:"id"`
-	Name       string    `gorethink:"name,omitempty"json:"name"`
-	PersonID   string    `gorethink:"personId,omitempty"json:"personId"`
-	PostedDate time.Time `gorethink:"postedDate,omitempty"json:"postedDate"`
+	ID         string    `gorethink:"id,omitempty" json:"id"`
+	Name       string    `gorethink:"name,omitempty" json:"name"`
+	PersonID   string    `gorethink:"personId,omitempty" json:"personId"`
+	PostedDate time.Time `gorethink:"postedDate,omitempty" json:"postedDate"`
 	TimeStamp
 }
 

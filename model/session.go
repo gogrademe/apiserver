@@ -7,14 +7,14 @@ import (
 )
 
 type Session struct {
-	ID        string    `gorethink:"id,omitempty"json:"id"`
-	Token     string    `gorethink:"token"json:"token"`
-	UserID    string    `gorethink:"userId"json:"userId"`
-	ExpiresAt time.Time `gorethink:"expiresAt"json:"expiresAt"`
+	ID        string    `gorethink:"id,omitempty" json:"id"`
+	Token     string    `gorethink:"token" json:"token"`
+	UserID    string    `gorethink:"userId" json:"userId"`
+	ExpiresAt time.Time `gorethink:"expiresAt" json:"expiresAt"`
 	TimeStamp
 }
 
-// Create a token for the user after we verified their password.
+// NewSession will create a jwt token for the user after we verified their password.
 func NewSession(u User) (Session, error) {
 	var s Session
 	token := jwt.New(jwt.GetSigningMethod("HS256"))

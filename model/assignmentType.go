@@ -8,10 +8,10 @@ import (
 
 // AssignmentType ...
 type AssignmentType struct {
-	ID         string   `gorethink:"id,omitempty"json:"id"`
-	Name       string   `gorethink:"name,omitempty"json:"name"`
-	Weight     float64  `gorethink:"weight,omitempty"json:"weight"`
-	SubjectIDs []string `gorethink:"subjectIDs,omitempty"json:"subjectIDs,omitempty"`
+	ID      string  `gorethink:"id,omitempty" json:"id"`
+	Name    string  `gorethink:"name" json:"name"`
+	Weight  float64 `gorethink:"weight" json:"weight"`
+	ClassID string  `gorethink:"classId" json:"classID"`
 	TimeStamp
 }
 
@@ -20,6 +20,7 @@ func (a *AssignmentType) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&a.ID:     "id",
 		&a.Name:   "name",
+		&a.Name:   "weight",
 		&a.Weight: "weight",
 	}
 }
@@ -28,6 +29,10 @@ func (a *AssignmentType) FieldMap() binding.FieldMap {
 func (a AssignmentType) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if a.Name == "" {
 		errs = append(errs, RequiredErr("name"))
+	}
+
+	if a.ClassID == "" {
+		errs = append(errs, RequiredErr("classId"))
 	}
 
 	if a.Weight > 1 || a.Weight < 0.005 {

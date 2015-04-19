@@ -19,6 +19,7 @@ _cgo_gotypes.go
 _cgo_export.*
 
 gin-bin
+bin
 
 _testmain.go
 
@@ -29,6 +30,7 @@ _testmain.go
 .DS_Store
 GoGradeMeAPI
 GoGradeAPI
+apiserver
 stage
 release
 build

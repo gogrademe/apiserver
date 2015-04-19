@@ -35,8 +35,20 @@
 			"Rev": "655cdfa588ea190e901bc5590e65d5621688847c"
 		},
 		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "655cdfa588ea190e901bc5590e65d5621688847c"
+		},
+		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
 			"Rev": "b59a38004596b696aca7aa2adccfa68760864d86"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Rev": "d67e0b7d1797975196499f79bcc322c08b9f218b"
+		},
+		{
+			"ImportPath": "github.com/mattaitchison/envconfig",
+			"Rev": "f8e9cd3eacc3784fea709cd1ceb554dc61efde22"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-colorable",
