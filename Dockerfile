@@ -6,6 +6,7 @@ RUN apk-install go git mercurial \
 	&& cd /go/src/github.com/gogrademe/apiserver \
 	&& export GOPATH=/go \
 	&& export PATH=$PATH:/go/bin \
+	&& go env \
 	&& go get github.com/tools/godep \
 	&& godep restore \
 	&& go build -o /bin/apiserver \
