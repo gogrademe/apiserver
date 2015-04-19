@@ -28,6 +28,8 @@ var testData = envconfig.Bool("test_data", false, "insert test data into db")
 func main() {
 	log.Println("Starting api server Version:", version)
 
+	log.Println(bootstrap, testData)
+
 	// FIXME: I don't think this is needed any more.
 	// I think it was only for wercker.
 	// Actually I think this may have been for docker links.

@@ -70,20 +70,20 @@ func Connect(address, database string) error {
 
 // SetupDB will be used to bootstrap the DB
 func SetupDB(bootstrap, testData bool) {
-
+	log.Println(bootstrap, testData)
 	if bootstrap {
 		log.Println("SetupDB: Bootstrapping...")
 		createDatabase()
 		createTables()
 		createIndexes()
 		log.Println("SetupDB: Bootstrap Done")
-	} else if testData {
+	}
+
+	if testData {
 		log.Println("SetupDB: Cleaning...")
 		cleanTables()
 		log.Println("SetupDB: Inserting Data...")
 		insertTestData()
-	} else {
-		log.Println("SetupDB: Nothing Required.")
 	}
 
 	log.Println("SetupDB: Done")

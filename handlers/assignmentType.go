@@ -78,8 +78,12 @@ func UpdateAssignmentType(c *gin.Context) {
 
 // GetAllAssignmentTypes ...
 func GetAllAssignmentTypes(c *gin.Context) {
+	filter := map[string]string{
+		"classId": c.Request.URL.Query().Get("classId"),
+	}
+
 	types := []m.AssignmentType{}
-	err := store.AssignmentTypes.FindAll(&types)
+	err := store.AssignmentTypes.Filter(&types, filter)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return

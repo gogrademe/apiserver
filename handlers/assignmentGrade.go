@@ -78,26 +78,41 @@ func UpdateAssignmentGrade(c *gin.Context) {
 	return
 }
 
+// r.db('dev_go_grade').table('grades').eqJoin('assignmentId', r.db('dev_go_grade').table('assignments')).filter({right: {classId: '3dd7e57d-f772-47cf-ade1-a7c6266e631a', termId: 'a80311b9-8c15-44e7-920f-05e5a32d3e8f'}})
+//   .map(function(row) {
+//     return {
+//       assignment: row('right'),
+//       assignmentGrade: {
+//         gradeAverage: row('left')('grade').div(row('right')('maxScore'))
+//       }
+//     }
+//   })
+
 // GetAllAssignmentGrades ...
 func GetAllAssignmentGrades(c *gin.Context) {
-	filter := map[string]string{}
+	filter := map[string]interface{}{}
 	if c.Request.URL.Query().Get("assignmentId") != "" {
 		filter["assignmentId"] = c.Request.URL.Query().Get("assignmentId")
 	}
 
-	grades := []m.AssignmentGradeAPIRes{}
-	q := store.AssignmentGrades.Filter(filter)
+	if c.Request.URL.Query().Get("classId") != "" && c.Request.URL.Query().Get("termId") != "" {
+		filter["right"] = map[string]string{
+			"classId": c.Request.URL.Query().Get("classId"),
+			"termId":  c.Request.URL.Query().Get("termId"),
+		}
+	}
 
-	q = q.EqJoin("assignmentId", r.Table("assignments"))
+	q := store.AssignmentGrades.EqJoin("assignmentId", r.Table("assignments"))
+	q = q.Filter(filter)
 
-	// FIXME: Fix this!
 	q = q.Map(func(row r.Term) r.Term {
 		return row.Field("left").Merge(map[string]interface{}{
-			"assignment": row.Field("right"),
-			// Specifically this part.
-			"gradeAverage": 3,
+			"assignment":   row.Field("right"),
+			"gradeAverage": row.Field("left").Field("grade").Div(row.Field("right").Field("maxScore")),
 		})
 	})
+
+	grades := []m.AssignmentGradeAPIRes{}
 	err := store.DB.All(&grades, q)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
