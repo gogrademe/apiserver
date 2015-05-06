@@ -58,13 +58,13 @@ func SetupHandlers(r *gin.Engine) {
 	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignment)
 	g.DELETE("/:id", Can("Admin", "Teacher"), DeleteAssignment)
 
-	// AssignmentTypes
-	g = auth.Group("/type")
-	g.GET("", Can("Admin", "Teacher"), GetAllAssignmentTypes)
-	g.POST("", Can("Admin"), CreateAssignmentType)
-	g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentType)
-	g.PUT("/:id", Can("Admin"), UpdateAssignmentType)
-	g.DELETE("/:id", Can("Admin"), DeleteAssignmentType)
+	// AssignmentGroups
+	g = auth.Group("/assignmentGroup")
+	g.GET("", Can("Admin", "Teacher"), GetAllAssignmentGroups)
+	g.POST("", Can("Admin"), CreateAssignmentGroup)
+	g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentGroup)
+	g.PUT("/:id", Can("Admin"), UpdateAssignmentGroup)
+	g.DELETE("/:id", Can("Admin"), DeleteAssignmentGroup)
 
 	// AssignmentGrades
 	g = auth.Group("/grade")

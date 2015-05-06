@@ -6,6 +6,7 @@ import (
 	m "github.com/gogrademe/apiserver/model"
 	"github.com/gogrademe/apiserver/store"
 
+	r "github.com/dancannon/gorethink"
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 )
@@ -15,9 +16,13 @@ func DeleteAssignment(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
-	err := store.Assignments.Delete(id)
+	_, err := store.DB.RunWrite(store.Assignments.Get(id).Delete())
+	if err == store.ErrNotFound {
+		writeError(c.Writer, notFoundError, 404, nil)
+		return
+	}
 	if err != nil {
-		handleDBError(c.Writer, err)
+		writeError(c.Writer, serverError, 500, nil)
 		return
 	}
 
@@ -36,12 +41,12 @@ func CreateAssignment(c *gin.Context) {
 		return
 	}
 
-	id, err := store.Assignments.Store(a)
+	ids, err := store.Classes.Insert(a)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
-	a.ID = id
+	a.ID = ids[0]
 
 	c.JSON(201, &APIRes{"assignment": []m.Assignment{*a}})
 	return
@@ -54,7 +59,7 @@ func GetAssignment(c *gin.Context) {
 		a  = m.Assignment{}
 	)
 
-	err := store.Assignments.FindByID(&a, id)
+	err := store.Assignments.One(&a, id)
 	if err != nil {
 		handleDBError(c.Writer, err)
 		return
@@ -102,8 +107,15 @@ func GetAllAssignments(c *gin.Context) {
 		filter["typeId"] = c.Request.URL.Query().Get("typeId")
 	}
 
-	assignments := []m.Assignment{}
-	query := store.AssignmentH.Filter(filter).OrderBy("dueDate", "name")
+	assignments := []m.AssignmentAPIRes{}
+
+	query := store.Assignments.Filter(filter).OrderBy("dueDate", "name")
+	query = query.EqJoin("groupId", r.Table("assignmentGroups"))
+	query = query.Map(func(row r.Term) r.Term {
+		return row.Field("left").Merge(map[string]interface{}{
+			"group": row.Field("right"),
+		})
+	})
 	err := store.DB.All(&assignments, query)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)

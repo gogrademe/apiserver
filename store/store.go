@@ -25,11 +25,11 @@ var (
 	EnrollmentH      = DB.NewCollection("enrollments")
 	People           = DB.NewCollection("people")
 	UserH            = DB.NewCollection("users")
-	AssignmentH      = DB.NewCollection("assignments")
+	Assignments      = DB.NewCollection("assignments")
 	AssignmentGrades = DB.NewCollection("grades")
 
-	Assignments     = NewAssignmentStore()
-	AssignmentTypes = NewAssignmentTypeStore()
+	// Assignments      = NewAssignmentStore()
+	AssignmentGroups = NewAssignmentGroupStore()
 
 	// Classes
 	Enrollments = NewEnrollmentStore()
@@ -45,7 +45,7 @@ var (
 	ErrValidation = errors.New("validation error")
 
 	tables = []string{"users", "classes", "enrollments", "terms", "schoolYears", "assignments",
-		"grades", "assignmentTypes", "people", "sessions", "emailConfirmations"}
+		"grades", "assignmentGroups", "people", "sessions", "emailConfirmations"}
 )
 
 // Connect establishes connection with rethinkDB

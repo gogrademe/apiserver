@@ -3,6 +3,7 @@ package store
 import (
 	"time"
 
+	"github.com/Sirupsen/logrus"
 	r "github.com/dancannon/gorethink"
 	m "github.com/gogrademe/apiserver/model"
 )
@@ -15,11 +16,11 @@ var (
 	term5 m.Term
 	term6 m.Term
 
-	type1 m.AssignmentType
-	type2 m.AssignmentType
-	type3 m.AssignmentType
-	type4 m.AssignmentType
-	type5 m.AssignmentType
+	type1 m.AssignmentGroup
+	type2 m.AssignmentGroup
+	type3 m.AssignmentGroup
+	type4 m.AssignmentGroup
+	type5 m.AssignmentGroup
 
 	class1 m.Class
 	class2 m.Class
@@ -98,12 +99,12 @@ func createIndexes() {
 func insertTestData() {
 
 	insertTestTerms()
-	insertTestTypes()
 
 	insertTestPeople()
 
 	insertTestUsers()
 	insertTestClasses()
+	insertTestTypes()
 
 	insertTestAssignments()
 
@@ -118,7 +119,6 @@ func insertTestUsers() {
 	u, _ := m.NewUserForWithPassword("test@test.com", "somePassword", person7.ID)
 	u.Disabled = false
 	Users.Store(u)
-	// Users.Store(u2)
 }
 
 func insertTestTerms() {
@@ -260,32 +260,42 @@ func insertTestClasses() {
 
 }
 func insertTestTypes() {
-	type1 = m.AssignmentType{
-		Name:   "Class Test",
-		Weight: .20,
+	type1 = m.AssignmentGroup{
+		Name:    "Class Test",
+		Weight:  .20,
+		ClassID: class1.ID,
+		TermID:  term1.ID,
 	}
-	type2 = m.AssignmentType{
-		Name:   "Written Work",
-		Weight: .40,
+	type2 = m.AssignmentGroup{
+		Name:    "Written Work",
+		Weight:  .40,
+		ClassID: class1.ID,
+		TermID:  term1.ID,
 	}
-	type3 = m.AssignmentType{
-		Name:   "Quiz",
-		Weight: .20,
+	type3 = m.AssignmentGroup{
+		Name:    "Quiz",
+		Weight:  .20,
+		ClassID: class1.ID,
+		TermID:  term1.ID,
 	}
-	type4 = m.AssignmentType{
-		Name:   "Project",
-		Weight: .20,
+	type4 = m.AssignmentGroup{
+		Name:    "Project",
+		Weight:  .20,
+		ClassID: class1.ID,
+		TermID:  term1.ID,
 	}
-	type5 = m.AssignmentType{
-		Name:   "Mid Term",
-		Weight: .60,
+	type5 = m.AssignmentGroup{
+		Name:    "Mid Term",
+		Weight:  .60,
+		ClassID: class1.ID,
+		TermID:  term1.ID,
 	}
 
-	type1.ID, _ = AssignmentTypes.Store(&type1)
-	type2.ID, _ = AssignmentTypes.Store(&type2)
-	type3.ID, _ = AssignmentTypes.Store(&type3)
-	type4.ID, _ = AssignmentTypes.Store(&type4)
-	type5.ID, _ = AssignmentTypes.Store(&type5)
+	type1.ID, _ = AssignmentGroups.Store(&type1)
+	type2.ID, _ = AssignmentGroups.Store(&type2)
+	type3.ID, _ = AssignmentGroups.Store(&type3)
+	type4.ID, _ = AssignmentGroups.Store(&type4)
+	type5.ID, _ = AssignmentGroups.Store(&type5)
 
 }
 
@@ -293,56 +303,56 @@ func insertTestAssignments() {
 	assignment1 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type1.ID,
+		GroupID:  type1.ID,
 		MaxScore: 100,
 		Name:     "Notebook Check",
 	}
 	assignment2 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type1.ID,
+		GroupID:  type1.ID,
 		MaxScore: 100,
 		Name:     "Formula Quiz",
 	}
 	assignment3 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type1.ID,
+		GroupID:  type1.ID,
 		MaxScore: 100,
 		Name:     "Solar Model",
 	}
 	assignment4 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type1.ID,
+		GroupID:  type1.ID,
 		MaxScore: 100,
 		Name:     "Cell Model",
 	}
 	assignment5 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type2.ID,
+		GroupID:  type2.ID,
 		MaxScore: 100,
 		Name:     "Test 1",
 	}
 	assignment6 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type3.ID,
+		GroupID:  type3.ID,
 		MaxScore: 100,
 		Name:     "Formula Quiz",
 	}
 	assignment7 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type4.ID,
+		GroupID:  type4.ID,
 		MaxScore: 100,
 		Name:     "Solar Model",
 	}
 	assignment8 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		TypeID:   type5.ID,
+		GroupID:  type5.ID,
 		MaxScore: 100,
 		Name:     "Cell Model",
 	}
@@ -350,35 +360,39 @@ func insertTestAssignments() {
 		ClassID:  class2.ID,
 		TermID:   term1.ID,
 		MaxScore: 100,
-		TypeID:   type5.ID,
+		GroupID:  type5.ID,
 		Name:     "Cell Model",
 	}
 	assignment10 = m.Assignment{
 		ClassID:  class2.ID,
 		TermID:   term1.ID,
-		TypeID:   type5.ID,
+		GroupID:  type5.ID,
 		MaxScore: 100,
 		Name:     "Cell Model",
 	}
 	assignment11 = m.Assignment{
 		ClassID:  class2.ID,
 		TermID:   term2.ID,
-		TypeID:   type5.ID,
+		GroupID:  type5.ID,
 		MaxScore: 100,
 		Name:     "Cell Model",
 	}
 
-	assignment1.ID, _ = Assignments.Store(&assignment1)
-	Assignments.Store(&assignment2)
-	Assignments.Store(&assignment3)
-	Assignments.Store(&assignment4)
-	Assignments.Store(&assignment5)
-	Assignments.Store(&assignment6)
-	Assignments.Store(&assignment7)
-	Assignments.Store(&assignment8)
-	Assignments.Store(&assignment9)
-	Assignments.Store(&assignment10)
-	Assignments.Store(&assignment11)
+	keys, err := Assignments.Insert(&assignment1, &assignment2, &assignment3, &assignment4, &assignment5, &assignment6, &assignment7, &assignment8, &assignment9, &assignment10, &assignment11)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	assignment1.ID = keys[0]
+	assignment2.ID = keys[1]
+	assignment3.ID = keys[2]
+	assignment4.ID = keys[3]
+	assignment5.ID = keys[4]
+	assignment6.ID = keys[5]
+	assignment7.ID = keys[6]
+	assignment8.ID = keys[7]
+	assignment9.ID = keys[8]
+	assignment10.ID = keys[9]
+	assignment11.ID = keys[10]
 }
 func insertTestPeople() {
 

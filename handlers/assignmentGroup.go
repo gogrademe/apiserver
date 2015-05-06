@@ -10,9 +10,9 @@ import (
 	"github.com/mholt/binding"
 )
 
-// CreateAssignmentType ...
-func CreateAssignmentType(c *gin.Context) {
-	a := new(m.AssignmentType)
+// CreateAssignmentGroup ...
+func CreateAssignmentGroup(c *gin.Context) {
+	a := new(m.AssignmentGroup)
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
@@ -21,24 +21,24 @@ func CreateAssignmentType(c *gin.Context) {
 		return
 	}
 
-	id, err := store.AssignmentTypes.Store(a)
+	id, err := store.AssignmentGroups.Store(a)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 	a.ID = id
 
-	c.JSON(201, &APIRes{"type": []m.AssignmentType{*a}})
+	c.JSON(201, &APIRes{"assignmentGroup": []m.AssignmentGroup{*a}})
 	return
 }
 
-// GetAssignmentType ...
-func GetAssignmentType(c *gin.Context) {
+// GetAssignmentGroup ...
+func GetAssignmentGroup(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
-	a := m.AssignmentType{}
-	err := store.AssignmentTypes.FindByID(&a, id)
+	a := m.AssignmentGroup{}
+	err := store.AssignmentGroups.FindByID(&a, id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -48,15 +48,15 @@ func GetAssignmentType(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &APIRes{"type": []m.AssignmentType{a}})
+	c.JSON(200, &APIRes{"assignmentGroup": []m.AssignmentGroup{a}})
 	return
 }
 
-// UpdateAssignmentType ...
-func UpdateAssignmentType(c *gin.Context) {
+// UpdateAssignmentGroup ...
+func UpdateAssignmentGroup(c *gin.Context) {
 	id := c.Params.ByName("id")
 
-	a := new(m.AssignmentType)
+	a := new(m.AssignmentGroup)
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
@@ -65,40 +65,41 @@ func UpdateAssignmentType(c *gin.Context) {
 	}
 
 	a.ID = id
-	err := store.AssignmentTypes.Update(a, id)
+	err := store.AssignmentGroups.Update(a, id)
 
 	if err != nil {
-		writeError(c.Writer, "Error updating AssignmentType", 500, err)
+		writeError(c.Writer, "Error updating AssignmentGroup", 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"type": []m.AssignmentType{*a}})
+	c.JSON(200, &APIRes{"assignmentGroup": []m.AssignmentGroup{*a}})
 	return
 }
 
-// GetAllAssignmentTypes ...
-func GetAllAssignmentTypes(c *gin.Context) {
+// GetAllAssignmentGroups ...
+func GetAllAssignmentGroups(c *gin.Context) {
 	filter := map[string]string{
 		"classId": c.Request.URL.Query().Get("classId"),
+		"termId":  c.Request.URL.Query().Get("termId"),
 	}
 
-	types := []m.AssignmentType{}
-	err := store.AssignmentTypes.Filter(&types, filter)
+	types := []m.AssignmentGroup{}
+	err := store.AssignmentGroups.Filter(&types, filter)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"type": types})
+	c.JSON(200, &APIRes{"assignmentGroup": types})
 	return
 }
 
-// DeleteAssignmentType ...
-func DeleteAssignmentType(c *gin.Context) {
+// DeleteAssignmentGroup ...
+func DeleteAssignmentGroup(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
-	err := store.AssignmentTypes.Delete(id)
+	err := store.AssignmentGroups.Delete(id)
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -108,6 +109,6 @@ func DeleteAssignmentType(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &APIRes{"type": []m.AssignmentType{}})
+	c.JSON(200, &APIRes{"assignmentGroup": []m.AssignmentGroup{}})
 	return
 }
