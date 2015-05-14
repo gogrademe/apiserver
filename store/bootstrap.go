@@ -20,15 +20,14 @@ var (
 	type2 m.AssignmentGroup
 	type3 m.AssignmentGroup
 	type4 m.AssignmentGroup
-	type5 m.AssignmentGroup
 
-	class1 m.Class
-	class2 m.Class
-	class3 m.Class
-	class4 m.Class
-	class5 m.Class
-	class6 m.Class
-	class7 m.Class
+	class1 m.Course
+	class2 m.Course
+	class3 m.Course
+	class4 m.Course
+	class5 m.Course
+	class6 m.Course
+	class7 m.Course
 
 	person1  m.Person
 	person2  m.Person
@@ -185,7 +184,7 @@ func insertTestTerms() {
 
 func insertTestClasses() {
 
-	class1 = m.Class{
+	class1 = m.Course{
 		Name:       "Math",
 		GradeLevel: "Year 7",
 		Terms: []string{
@@ -194,7 +193,7 @@ func insertTestClasses() {
 			term3.ID,
 		},
 	}
-	class2 = m.Class{
+	class2 = m.Course{
 		Name:       "Math",
 		GradeLevel: "Year 8",
 		Terms: []string{
@@ -203,7 +202,7 @@ func insertTestClasses() {
 			term3.ID,
 		},
 	}
-	class3 = m.Class{
+	class3 = m.Course{
 		Name:       "Science",
 		GradeLevel: "Year 10",
 		Terms: []string{
@@ -212,7 +211,7 @@ func insertTestClasses() {
 			term3.ID,
 		},
 	}
-	class4 = m.Class{
+	class4 = m.Course{
 		Name:       "Science",
 		GradeLevel: "Year 7",
 		Terms: []string{
@@ -221,7 +220,7 @@ func insertTestClasses() {
 			term3.ID,
 		},
 	}
-	class5 = m.Class{
+	class5 = m.Course{
 		Name:       "Art",
 		GradeLevel: "Year 7",
 		Terms: []string{
@@ -230,7 +229,7 @@ func insertTestClasses() {
 			term3.ID,
 		},
 	}
-	class6 = m.Class{
+	class6 = m.Course{
 		Name:       "Art",
 		GradeLevel: "Year 8",
 		Terms: []string{
@@ -239,7 +238,7 @@ func insertTestClasses() {
 			term3.ID,
 		},
 	}
-	class7 = m.Class{
+	class7 = m.Course{
 		Name:       "Art",
 		GradeLevel: "Year 10",
 		Terms: []string{
@@ -249,7 +248,7 @@ func insertTestClasses() {
 		},
 	}
 
-	keys, _ := Classes.Insert(&class1, &class2, &class3, &class4, &class5, &class6, &class7)
+	keys, _ := Courses.Insert(&class1, &class2, &class3, &class4, &class5, &class6, &class7)
 	class1.ID = keys[0]
 	class2.ID = keys[1]
 	class3.ID = keys[2]
@@ -273,20 +272,14 @@ func insertTestTypes() {
 		TermID:  term1.ID,
 	}
 	type3 = m.AssignmentGroup{
-		Name:    "Quiz",
-		Weight:  .20,
+		Name:    "Participation/HW",
+		Weight:  .10,
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 	}
 	type4 = m.AssignmentGroup{
-		Name:    "Project",
-		Weight:  .20,
-		ClassID: class1.ID,
-		TermID:  term1.ID,
-	}
-	type5 = m.AssignmentGroup{
-		Name:    "Mid Term",
-		Weight:  .60,
+		Name:    "Final",
+		Weight:  .30,
 		ClassID: class1.ID,
 		TermID:  term1.ID,
 	}
@@ -295,7 +288,6 @@ func insertTestTypes() {
 	type2.ID, _ = AssignmentGroups.Store(&type2)
 	type3.ID, _ = AssignmentGroups.Store(&type3)
 	type4.ID, _ = AssignmentGroups.Store(&type4)
-	type5.ID, _ = AssignmentGroups.Store(&type5)
 
 }
 
@@ -345,37 +337,37 @@ func insertTestAssignments() {
 	assignment7 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		GroupID:  type4.ID,
+		GroupID:  type3.ID,
 		MaxScore: 100,
 		Name:     "Solar Model",
 	}
 	assignment8 = m.Assignment{
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
-		GroupID:  type5.ID,
+		GroupID:  type4.ID,
 		MaxScore: 100,
-		Name:     "Cell Model",
+		Name:     "Mid Term",
 	}
 	assignment9 = m.Assignment{
 		ClassID:  class2.ID,
 		TermID:   term1.ID,
 		MaxScore: 100,
-		GroupID:  type5.ID,
+		GroupID:  type3.ID,
 		Name:     "Cell Model",
 	}
 	assignment10 = m.Assignment{
 		ClassID:  class2.ID,
 		TermID:   term1.ID,
-		GroupID:  type5.ID,
+		GroupID:  type4.ID,
 		MaxScore: 100,
-		Name:     "Cell Model",
+		Name:     "Mid Term",
 	}
 	assignment11 = m.Assignment{
 		ClassID:  class2.ID,
 		TermID:   term2.ID,
-		GroupID:  type5.ID,
+		GroupID:  type4.ID,
 		MaxScore: 100,
-		Name:     "Cell Model",
+		Name:     "Mid Term",
 	}
 
 	keys, err := Assignments.Insert(&assignment1, &assignment2, &assignment3, &assignment4, &assignment5, &assignment6, &assignment7, &assignment8, &assignment9, &assignment10, &assignment11)
@@ -543,6 +535,11 @@ func insertTestGrades() {
 		PersonID:     person2.ID,
 		Grade:        50,
 	}
+	grade3 := m.AssignmentGrade{
+		AssignmentID: assignment2.ID,
+		PersonID:     person2.ID,
+		Grade:        100,
+	}
 
-	AssignmentGrades.Insert(&grade1, &grade2)
+	AssignmentGrades.Insert(&grade1, &grade2, &grade3)
 }

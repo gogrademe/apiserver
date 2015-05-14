@@ -6,7 +6,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-type Class struct {
+type Course struct {
 	ID          string   `gorethink:"id,omitempty" json:"id"`
 	Name        string   `gorethink:"name,omitempty" json:"name"`
 	GradeLevel  string   `gorethink:"gradeLevel,omitempty" json:"gradeLevel"`
@@ -15,7 +15,7 @@ type Class struct {
 	TimeStamp
 }
 
-func (c Class) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+func (c Course) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if c.Name == "" {
 		errs = append(errs, RequiredErr("name"))
 	}
@@ -29,7 +29,7 @@ func (c Class) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	return errs
 }
 
-func (c *Class) FieldMap() binding.FieldMap {
+func (c *Course) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&c.ID:         "id",
 		&c.Name:       "name",

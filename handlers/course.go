@@ -9,30 +9,30 @@ import (
 	"github.com/mholt/binding"
 )
 
-// GetAllClasses ...
-func GetAllClasses(c *gin.Context) {
-	classes := []m.Class{}
+// GetAllCourses ...
+func GetAllCourses(c *gin.Context) {
+	courses := []m.Course{}
 
-	query := store.Classes.OrderBy(r.Asc("gradeLevel"), r.Asc("name"))
-	err := store.DB.All(&classes, query)
-	// err := store.Classes.FindAll(&classes)
+	query := store.Courses.OrderBy(r.Asc("gradeLevel"), r.Asc("name"))
+	err := store.DB.All(&courses, query)
+	// err := store.Coursees.FindAll(&courses)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"class": classes})
+	c.JSON(200, &APIRes{"course": courses})
 	return
 }
 
-// GetClass ...
-func GetClass(c *gin.Context) {
+// GetCourse ...
+func GetCourse(c *gin.Context) {
 	var (
-		id    = c.Params.ByName("id")
-		class = m.Class{}
+		id     = c.Params.ByName("id")
+		course = m.Course{}
 	)
 
-	err := store.Classes.One(&class, id)
+	err := store.Courses.One(&course, id)
 	if err != nil {
 		handleDBError(c.Writer, err)
 		return
@@ -46,62 +46,62 @@ func GetClass(c *gin.Context) {
 	// 	return
 	// }
 
-	c.JSON(200, &APIRes{"class": []m.Class{class}})
+	c.JSON(200, &APIRes{"course": []m.Course{course}})
 	return
 }
 
-//CreateClass ...
-func CreateClass(c *gin.Context) {
-	class := new(m.Class)
+//CreateCourse ...
+func CreateCourse(c *gin.Context) {
+	course := new(m.Course)
 
-	errs := binding.Bind(c.Request, class)
+	errs := binding.Bind(c.Request, course)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
-	ids, err := store.Classes.Insert(class)
+	ids, err := store.Courses.Insert(course)
 
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
-	class.ID = ids[0]
+	course.ID = ids[0]
 
-	c.JSON(201, &APIRes{"class": []m.Class{*class}})
+	c.JSON(201, &APIRes{"course": []m.Course{*course}})
 	return
 }
 
-//UpdateClass ...
-func UpdateClass(c *gin.Context) {
+//UpdateCourse ...
+func UpdateCourse(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
-	class := new(m.Class)
+	course := new(m.Course)
 
-	errs := binding.Bind(c.Request, class)
+	errs := binding.Bind(c.Request, course)
 	if errs != nil {
 		writeError(c.Writer, errs, 400, nil)
 		return
 	}
 
-	class.ID = id
-	err := store.Classes.Update(class, id)
+	course.ID = id
+	err := store.Courses.Update(course, id)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
 	}
 
-	c.JSON(200, &APIRes{"class": []m.Class{*class}})
+	c.JSON(200, &APIRes{"course": []m.Course{*course}})
 	return
 }
 
-// DeleteClass ...
-func DeleteClass(c *gin.Context) {
+// DeleteCourse ...
+func DeleteCourse(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
-	_, err := store.DB.RunWrite(store.Classes.Get(id).Delete())
+	_, err := store.DB.RunWrite(store.Courses.Get(id).Delete())
 	if err == store.ErrNotFound {
 		writeError(c.Writer, notFoundError, 404, nil)
 		return
@@ -111,6 +111,6 @@ func DeleteClass(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, &APIRes{"class": []m.Class{}})
+	c.JSON(200, &APIRes{"course": []m.Course{}})
 	return
 }

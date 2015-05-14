@@ -19,7 +19,7 @@ var (
 	// DB Global DB object
 	DB rh.DB
 
-	Classes          = DB.NewCollection("classes")
+	Courses          = DB.NewCollection("courses")
 	Terms            = DB.NewCollection("terms")
 	SchoolYears      = DB.NewCollection("schoolYears")
 	EnrollmentH      = DB.NewCollection("enrollments")
@@ -44,7 +44,7 @@ var (
 	ErrNotFound   = errors.New("record not found")
 	ErrValidation = errors.New("validation error")
 
-	tables = []string{"users", "classes", "enrollments", "terms", "schoolYears", "assignments",
+	tables = []string{"users", "courses", "enrollments", "terms", "schoolYears", "assignments",
 		"grades", "assignmentGroups", "people", "sessions", "emailConfirmations"}
 )
 

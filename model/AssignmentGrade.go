@@ -20,7 +20,7 @@ type AssignmentGrade struct {
 //AssignmentGradeAPIRes ...
 type AssignmentGradeAPIRes struct {
 	AssignmentGrade
-	Assignment Assignment `gorethink:"assignment,omitempty" json:"assignment"`
+	Assignment AssignmentAPIRes `gorethink:"assignment,omitempty" json:"assignment"`
 	TimeStamp
 }
 
@@ -33,6 +33,7 @@ func (a *AssignmentGrade) FieldMap() binding.FieldMap {
 		&a.Grade:        "grade",
 	}
 }
+
 func (a AssignmentGrade) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if strings.TrimSpace(a.AssignmentID) == "" {
 		errs = append(errs, RequiredErr("assignmentId"))

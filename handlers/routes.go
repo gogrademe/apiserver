@@ -19,14 +19,14 @@ func SetupHandlers(r *gin.Engine) {
 	auth.GET("/user", Can("Admin"), GetAllUsers)
 	auth.POST("/user", Can("Admin"), CreateUser)
 
-	// Classes
-	g := auth.Group("/class")
-	g.GET("", Can("Admin", "Teacher"), GetAllClasses)
-	g.GET("/:id", Can("Admin", "Teacher"), GetClass)
-	g.POST("", Can("Admin"), CreateClass)
-	g.DELETE("/:id", Can("Admin"), DeleteClass)
+	// Courses
+	g := auth.Group("/course")
+	g.GET("", Can("Admin", "Teacher"), GetAllCourses)
+	g.GET("/:id", Can("Admin", "Teacher"), GetCourse)
+	g.POST("", Can("Admin"), CreateCourse)
+	g.DELETE("/:id", Can("Admin"), DeleteCourse)
 
-	g.PUT("/:id", Can("Admin"), UpdateClass)
+	g.PUT("/:id", Can("Admin"), UpdateCourse)
 
 	// Enrollments
 	g = auth.Group("/enrollment")

@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 
+	"github.com/Sirupsen/logrus"
 	m "github.com/gogrademe/apiserver/model"
 	"github.com/gogrademe/apiserver/store"
 
@@ -102,6 +103,8 @@ func GetAllAssignmentGrades(c *gin.Context) {
 		}
 	}
 
+	logrus.Info(filter)
+
 	q := store.AssignmentGrades.EqJoin("assignmentId", r.Table("assignments"))
 	q = q.Filter(filter)
 
@@ -109,6 +112,15 @@ func GetAllAssignmentGrades(c *gin.Context) {
 		return row.Field("left").Merge(map[string]interface{}{
 			"assignment":   row.Field("right"),
 			"gradeAverage": row.Field("left").Field("grade").Div(row.Field("right").Field("maxScore")),
+		})
+	})
+
+	q = q.EqJoin(r.Row.Field("assignment").Field("groupId"), r.Table("assignmentGroups"))
+	q = q.Map(func(row r.Term) r.Term {
+		return row.Field("left").Merge(map[string]interface{}{
+			"assignment": row.Field("left").Field("assignment").Merge(map[string]interface{}{
+				"group": row.Field("right"),
+			}),
 		})
 	})
 

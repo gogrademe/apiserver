@@ -41,7 +41,7 @@ func CreateAssignment(c *gin.Context) {
 		return
 	}
 
-	ids, err := store.Classes.Insert(a)
+	ids, err := store.Courses.Insert(a)
 	if err != nil {
 		writeError(c.Writer, serverError, 500, err)
 		return
