@@ -1,8 +1,5 @@
 package store
 
-// m "github.com/gogrademe/apiserver/model"
-// r "github.com/dancannon/gorethink"
-
 type EmailConfirmationStore struct {
 	DefaultStore
 }

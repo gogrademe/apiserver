@@ -13,7 +13,7 @@ func NewEnrollmentStore() EnrollmentStore {
 	return EnrollmentStore{DefaultStore: NewDefaultStore("enrollments")}
 }
 
-func (pr EnrollmentStore) Filter(enrollments *[]m.EnrollmentAPIRes, filter interface{}) error {
+func (pr EnrollmentStore) Filter(enrollments *[]m.EnrollmentResource, filter interface{}) error {
 	q := r.Table("enrollments").Filter(filter)
 	q = q.EqJoin("personId", r.Table("people"))
 	// Join Students.

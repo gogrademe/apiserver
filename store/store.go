@@ -27,6 +27,7 @@ var (
 	UserH            = DB.NewCollection("users")
 	Assignments      = DB.NewCollection("assignments")
 	AssignmentGrades = DB.NewCollection("grades")
+	Attempts         = DB.NewCollection("attempts")
 
 	// Assignments      = NewAssignmentStore()
 	AssignmentGroups = NewAssignmentGroupStore()
@@ -45,7 +46,7 @@ var (
 	ErrValidation = errors.New("validation error")
 
 	tables = []string{"users", "courses", "enrollments", "terms", "schoolYears", "assignments",
-		"grades", "assignmentGroups", "people", "sessions", "emailConfirmations"}
+		"assignmentGroups", "people", "sessions", "emailConfirmations", "attempts"}
 )
 
 // Connect establishes connection with rethinkDB

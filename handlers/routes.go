@@ -52,11 +52,11 @@ func SetupHandlers(r *gin.Engine) {
 
 	// Assignments
 	g = auth.Group("/assignment")
-	g.GET("", Can("Admin", "Teacher"), GetAllAssignments)
-	g.POST("", Can("Admin", "Teacher"), CreateAssignment)
-	g.GET("/:id", Can("Admin", "Teacher"), GetAssignment)
-	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignment)
-	g.DELETE("/:id", Can("Admin", "Teacher"), DeleteAssignment)
+	g.GET("", Can("Admin", "Teacher"), getAllAssignments)
+	g.POST("", Can("Admin", "Teacher"), createAssignment)
+	g.GET("/:id", Can("Admin", "Teacher"), getAssignment)
+	g.PUT("/:id", Can("Admin", "Teacher"), updateAssignment)
+	g.DELETE("/:id", Can("Admin", "Teacher"), deleteAssignment)
 
 	// AssignmentGroups
 	g = auth.Group("/assignmentGroup")
@@ -70,8 +70,8 @@ func SetupHandlers(r *gin.Engine) {
 	g = auth.Group("/grade")
 	g.GET("", Can("Admin", "Teacher"), GetAllAssignmentGrades)
 	g.POST("", Can("Admin", "Teacher"), CreateAssignmentGrade)
-	g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentGrade)
-	g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignmentGrade)
+	// g.GET("/:id", Can("Admin", "Teacher"), GetAssignmentGrade)
+	// g.PUT("/:id", Can("Admin", "Teacher"), UpdateAssignmentGrade)
 
 	// People
 	g = auth.Group("/person")

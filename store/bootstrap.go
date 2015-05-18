@@ -80,8 +80,8 @@ func createIndexes() {
 	r.Db(dbName).Table("assignments").IndexCreate("termId").Run(sess)
 	r.Db(dbName).Table("assignments").IndexCreate("typeId").Run(sess)
 
-	r.Db(dbName).Table("grades").IndexCreate("assignmentId").Run(sess)
-	r.Db(dbName).Table("grades").IndexCreate("personId").Run(sess)
+	r.Db(dbName).Table("attempts").IndexCreate("assignmentId").Run(sess)
+	r.Db(dbName).Table("attempts").IndexCreate("personId").Run(sess)
 
 	r.Db(dbName).Table("enrollments").IndexCreate("personId").Run(sess)
 	r.Db(dbName).Table("enrollments").IndexCreate("classId").Run(sess)
@@ -90,6 +90,10 @@ func createIndexes() {
 	r.Db(dbName).Table("person").IndexCreate("firstName").Run(sess)
 	r.Db(dbName).Table("person").IndexCreate("middleName").Run(sess)
 	r.Db(dbName).Table("person").IndexCreate("lastName").Run(sess)
+
+	r.Db(dbName).Table("person").IndexCreateFunc("fullName", func(row r.Term) interface{} {
+		return []interface{}{row.Field("firstName"), row.Field("middleName"), row.Field("lastName")}
+	}).RunWrite(sess)
 
 	r.Db(dbName).Table("emailConfirmations").IndexCreate("userId").Run(sess)
 
@@ -303,7 +307,7 @@ func insertTestAssignments() {
 		ClassID:  class1.ID,
 		TermID:   term1.ID,
 		GroupID:  type1.ID,
-		MaxScore: 100,
+		MaxScore: 10,
 		Name:     "Formula Quiz",
 	}
 	assignment3 = m.Assignment{
@@ -525,21 +529,59 @@ func insertTestEnrollments() {
 }
 
 func insertTestGrades() {
-	grade1 := m.AssignmentGrade{
-		AssignmentID: assignment1.ID,
-		PersonID:     person1.ID,
-		Grade:        50,
-	}
-	grade2 := m.AssignmentGrade{
-		AssignmentID: assignment1.ID,
-		PersonID:     person2.ID,
-		Grade:        50,
-	}
-	grade3 := m.AssignmentGrade{
-		AssignmentID: assignment2.ID,
-		PersonID:     person2.ID,
-		Grade:        100,
+	attempts1 := m.AssignmentAttempts{
+		AssignmentID:  assignment1.ID,
+		PersonID:      person1.ID,
+		LatestAttempt: m.Attempt{Score: "65"},
+		AttemptHistory: []*m.Attempt{
+			&m.Attempt{Score: "50"},
+			&m.Attempt{Score: "60"},
+			&m.Attempt{Score: "65"},
+		},
 	}
 
-	AssignmentGrades.Insert(&grade1, &grade2, &grade3)
+	attempts2 := m.AssignmentAttempts{
+		AssignmentID:  assignment2.ID,
+		PersonID:      person1.ID,
+		LatestAttempt: m.Attempt{Score: "7"},
+		AttemptHistory: []*m.Attempt{
+			&m.Attempt{Score: "4"},
+			&m.Attempt{Score: "3"},
+			&m.Attempt{Score: "7"},
+		},
+	}
+
+	attempts3 := m.AssignmentAttempts{
+		AssignmentID:  assignment2.ID,
+		PersonID:      person2.ID,
+		LatestAttempt: m.Attempt{Score: "2"},
+		AttemptHistory: []*m.Attempt{
+			&m.Attempt{Score: "4"},
+			&m.Attempt{Score: "3"},
+			&m.Attempt{Score: "2"},
+		},
+	}
+
+	attempts4 := m.AssignmentAttempts{
+		AssignmentID:  assignment1.ID,
+		PersonID:      person2.ID,
+		LatestAttempt: m.Attempt{Score: "60"},
+		AttemptHistory: []*m.Attempt{
+			&m.Attempt{Score: "20"},
+			&m.Attempt{Score: "60"},
+		},
+	}
+
+	// grade2 := m.AssignmentGrade{
+	// 	AssignmentID: assignment1.ID,
+	// 	PersonID:     person2.ID,
+	// 	Grade:        50,
+	// }
+	// grade3 := m.AssignmentGrade{
+	// 	AssignmentID: assignment2.ID,
+	// 	PersonID:     person2.ID,
+	// 	Grade:        100,
+	// }
+
+	Attempts.Insert(&attempts1, &attempts2, &attempts3, &attempts4)
 }

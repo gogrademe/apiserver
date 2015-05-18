@@ -11,8 +11,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-// DeleteAssignment ...
-func DeleteAssignment(c *gin.Context) {
+func deleteAssignment(c *gin.Context) {
 
 	id := c.Params.ByName("id")
 
@@ -30,8 +29,7 @@ func DeleteAssignment(c *gin.Context) {
 	return
 }
 
-// CreateAssignment ...
-func CreateAssignment(c *gin.Context) {
+func createAssignment(c *gin.Context) {
 	a := new(m.Assignment)
 
 	errs := binding.Bind(c.Request, a)
@@ -52,8 +50,7 @@ func CreateAssignment(c *gin.Context) {
 	return
 }
 
-// GetAssignment ...
-func GetAssignment(c *gin.Context) {
+func getAssignment(c *gin.Context) {
 	var (
 		id = c.Params.ByName("id")
 		a  = m.Assignment{}
@@ -69,8 +66,7 @@ func GetAssignment(c *gin.Context) {
 	return
 }
 
-// UpdateAssignment ...
-func UpdateAssignment(c *gin.Context) {
+func updateAssignment(c *gin.Context) {
 	id := c.Params.ByName("id")
 
 	a := new(m.Assignment)
@@ -94,8 +90,7 @@ func UpdateAssignment(c *gin.Context) {
 	return
 }
 
-// GetAllAssignments ...
-func GetAllAssignments(c *gin.Context) {
+func getAllAssignments(c *gin.Context) {
 	filter := map[string]string{}
 	if c.Request.URL.Query().Get("classId") != "" {
 		filter["classId"] = c.Request.URL.Query().Get("classId")

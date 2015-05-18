@@ -14,7 +14,7 @@ type Enrollment struct {
 	TimeStamp
 }
 
-type EnrollmentAPIRes struct {
+type EnrollmentResource struct {
 	ID       string `gorethink:"id,omitempty" json:"id"`
 	PersonID string `gorethink:"personId,omitempty" json:"personId"`
 	ClassID  string `gorethink:"classId,omitempty" json:"classId"`

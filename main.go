@@ -21,7 +21,7 @@ func init() {
 
 var listenAddress = envconfig.String("listen_address", ":5005", "address to listen on")
 var dbName = envconfig.String("db_name", "dev_go_grade", "rethinkdb database name")
-var dbAddress = envconfig.String("RETHINKDB_PORT_28015_TCP", "localhost:28015", "rethinkdb address")
+var dbAddress = envconfig.String("db_address", "localhost:28015", "rethinkdb address")
 var bootstrap = envconfig.Bool("create_tables", false, "create tables in db")
 var testData = envconfig.Bool("test_data", false, "insert test data into db")
 

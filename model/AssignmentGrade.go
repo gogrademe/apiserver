@@ -7,34 +7,43 @@ import (
 	"github.com/mholt/binding"
 )
 
-//AssignmentGrade ...
-type AssignmentGrade struct {
-	ID           string  `gorethink:"id,omitempty" json:"id"`
-	AssignmentID string  `gorethink:"assignmentId,omitempty" json:"assignmentId"`
-	PersonID     string  `gorethink:"personId,omitempty" json:"personId"`
-	Grade        float32 `gorethink:"grade,omitempty" json:"grade"`
+type Attempt struct {
+	Score        string  `gorethink:"score,omitempty" json:"score"`
 	GradeAverage float32 `gorethink:"gradeAverage,omitempty" json:"gradeAverage"`
 	TimeStamp
 }
 
-//AssignmentGradeAPIRes ...
-type AssignmentGradeAPIRes struct {
-	AssignmentGrade
-	Assignment AssignmentAPIRes `gorethink:"assignment,omitempty" json:"assignment"`
-	TimeStamp
+// AttemptResource is used for in the API to add new attempts.
+type AttemptResource struct {
+	AssignmentID string `gorethink:"assignmentId,omitempty" json:"assignmentId"`
+	PersonID     string `gorethink:"personId,omitempty" json:"personId"`
+	Attempt
+}
+
+type AssignmentAttempts struct {
+	ID             string     `gorethink:"id,omitempty" json:"id"`
+	AssignmentID   string     `gorethink:"assignmentId,omitempty" json:"assignmentId"`
+	PersonID       string     `gorethink:"personId,omitempty" json:"personId"`
+	LatestAttempt  Attempt    `gorethink:"latestAttempt,omitempty" json:"latestAttempt"`
+	AttemptHistory []*Attempt `gorethink:"attemptHistory,omitempty" json:"attemptHistory"`
+}
+
+type GradebookResource struct {
+	Enrollment
+	AssignmentAttempts []AssignmentAttempts `gorethink:"assignmentAttempts,omitempty" json:"assignmentAttempts"`
 }
 
 // FieldMap ...
-func (a *AssignmentGrade) FieldMap() binding.FieldMap {
+func (a *AttemptResource) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
-		&a.ID:           "id",
+
 		&a.AssignmentID: "assignmentId",
 		&a.PersonID:     "personId",
-		&a.Grade:        "grade",
+		&a.Score:        "score",
 	}
 }
 
-func (a AssignmentGrade) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+func (a AttemptResource) Validate(req *http.Request, errs binding.Errors) binding.Errors {
 	if strings.TrimSpace(a.AssignmentID) == "" {
 		errs = append(errs, RequiredErr("assignmentId"))
 	}

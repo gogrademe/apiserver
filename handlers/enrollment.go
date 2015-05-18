@@ -108,7 +108,7 @@ func GetAllEnrollments(c *gin.Context) {
 		filter["termId"] = c.Request.URL.Query().Get("termId")
 	}
 
-	enrollments := []m.EnrollmentAPIRes{}
+	enrollments := []m.EnrollmentResource{}
 	err := store.Enrollments.Filter(&enrollments, filter)
 	//query := store.EnrollmentH.OrderBy("firstName", "middleName", "lastName").Filter(filter)
 	//err := store.DB.All(&enrollments, query)

@@ -7,14 +7,6 @@ import (
 	"errors"
 )
 
-// Storer interface
-type Storer interface {
-	Store(m.Model) (string, error)
-	Update(m.Model, string) error
-	FindAll(interface{}) error
-	FindByID(m.Model, string) error
-}
-
 // DefaultStore ...
 type DefaultStore struct {
 	TableName string
@@ -52,6 +44,8 @@ func (d *DefaultStore) Update(v m.Model, id string) error {
 	}
 	return nil
 }
+
+// Filter ...
 func (d *DefaultStore) Filter(data interface{}, filter interface{}) error {
 	res, err := r.Table(d.TableName).Filter(filter).Run(sess)
 	if err != nil {
