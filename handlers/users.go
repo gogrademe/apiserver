@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"errors"
-
 	"github.com/gin-gonic/gin"
 
 	m "github.com/gogrademe/apiserver/model"
@@ -43,7 +41,7 @@ func CreateUser(c *gin.Context) {
 
 	errs := binding.Bind(c.Request, u)
 	if errs != nil {
-		c.Error(errors.New("validation"), errs)
+
 		c.JSON(StatusUnprocessable, errs)
 		return
 	}

@@ -23,18 +23,18 @@ func RoleIn(role string, roles []string) bool {
 // Can ...
 func Can(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		personID, err := c.Get("personId")
-		if err != nil && personID == nil {
-			c.Fail(401, errors.New("PersonId not found."))
+		personID, ok := c.Get("personId")
+		if !ok && personID == nil {
+			c.AbortWithError(401, errors.New("PersonId not found."))
 			return
 		}
 
 		id := personID.(string)
 
 		person := m.Person{}
-		err = store.People.One(&person, id)
+		err := store.People.One(&person, id)
 		if err != nil {
-			c.Fail(401, errors.New("Person not found."))
+			c.AbortWithError(401, errors.New("Person not found."))
 			return
 		}
 
@@ -45,7 +45,7 @@ func Can(roles ...string) gin.HandlerFunc {
 			}
 		}
 
-		c.Fail(401, errors.New("Unauthorized"))
+		c.AbortWithError(401, errors.New("Unauthorized"))
 		return
 
 	}

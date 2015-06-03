@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"errors"
-
 	"github.com/Sirupsen/logrus"
 	m "github.com/gogrademe/apiserver/model"
 	"github.com/gogrademe/apiserver/store"
@@ -17,7 +15,6 @@ func CreateAssignmentGrade(c *gin.Context) {
 	a := new(m.AttemptResource)
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
-		c.Error(errors.New("validation"), errs)
 		c.JSON(StatusUnprocessable, errs)
 		return
 	}
@@ -74,7 +71,7 @@ func CreateAssignmentGrade(c *gin.Context) {
 //
 // 	errs := binding.Bind(c.Request, a)
 // 	if errs != nil {
-// 		c.Error(errors.New("validation"), errs)
+//
 // 		c.JSON(StatusUnprocessable, errs)
 // 		return
 // 	}

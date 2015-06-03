@@ -77,7 +77,7 @@ func AuthRequired() gin.HandlerFunc {
 		})
 		if err != nil {
 			writeError(c.Writer, "Unauthorized", 401, nil)
-			c.Fail(401, err)
+			c.AbortWithError(401, err)
 			return
 		}
 		c.Set("userId", res.Claims["userId"])

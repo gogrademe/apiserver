@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"errors"
-
 	m "github.com/gogrademe/apiserver/model"
 	"github.com/gogrademe/apiserver/store"
 
@@ -34,7 +32,7 @@ func createAssignment(c *gin.Context) {
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
-		c.Error(errors.New("validation"), errs)
+
 		c.JSON(StatusUnprocessable, errs)
 		return
 	}
@@ -73,7 +71,7 @@ func updateAssignment(c *gin.Context) {
 
 	errs := binding.Bind(c.Request, a)
 	if errs != nil {
-		c.Error(errors.New("validation"), errs)
+
 		c.JSON(StatusUnprocessable, errs)
 		return
 	}
