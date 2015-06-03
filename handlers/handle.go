@@ -13,7 +13,7 @@ import (
 	"github.com/mholt/binding"
 )
 
-func DeleteAssignment(w rest.ResponseWriter, r *rest.Request) {
+func HandleDelete(w rest.ResponseWriter, r *rest.Request) {
 
 	id := r.PathParam("id")
 
@@ -31,7 +31,7 @@ func DeleteAssignment(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func createAssignment(w rest.ResponseWriter, r *rest.Request) {
+func HandleCreate(w rest.ResponseWriter, r *rest.Request) {
 	a := new(m.Assignment)
 
 	errs := binding.Bind(r.Request, a)
@@ -51,7 +51,7 @@ func createAssignment(w rest.ResponseWriter, r *rest.Request) {
 	return
 }
 
-func getAssignment(c *gin.Context) {
+func HandleGet(c *gin.Context) {
 	var (
 		id = c.Params.ByName("id")
 		a  = m.Assignment{}
@@ -67,7 +67,7 @@ func getAssignment(c *gin.Context) {
 	return
 }
 
-func updateAssignment(c *gin.Context) {
+func HandlePut(c *gin.Context) {
 	id := c.Params.ByName("id")
 
 	a := new(m.Assignment)
@@ -91,7 +91,7 @@ func updateAssignment(c *gin.Context) {
 	return
 }
 
-func getAllAssignments(c *gin.Context) {
+func HandleGetAll(c *gin.Context) {
 	filter := map[string]string{}
 	if c.Request.URL.Query().Get("classId") != "" {
 		filter["classId"] = c.Request.URL.Query().Get("classId")
