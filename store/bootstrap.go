@@ -55,12 +55,12 @@ var (
 
 func createDatabase() {
 
-	r.DbCreate(dbName).RunWrite(sess)
+	r.DBCreate(dbName).RunWrite(sess)
 }
 
 func createTables() {
 	for _, name := range tables {
-		r.Db(dbName).TableCreate(name).Run(sess)
+		r.DB(dbName).TableCreate(name).Run(sess)
 	}
 }
 
@@ -72,30 +72,30 @@ func cleanTables() {
 
 func createIndexes() {
 
-	r.Db(dbName).Table("users").IndexCreate("email").Run(sess)
-	r.Db(dbName).Table("users").IndexCreate("emailLower").Run(sess)
-	r.Db(dbName).Table("users").IndexCreate("personId").Run(sess)
+	r.DB(dbName).Table("users").IndexCreate("email").Run(sess)
+	r.DB(dbName).Table("users").IndexCreate("emailLower").Run(sess)
+	r.DB(dbName).Table("users").IndexCreate("personId").Run(sess)
 
-	r.Db(dbName).Table("assignments").IndexCreate("classId").Run(sess)
-	r.Db(dbName).Table("assignments").IndexCreate("termId").Run(sess)
-	r.Db(dbName).Table("assignments").IndexCreate("typeId").Run(sess)
+	r.DB(dbName).Table("assignments").IndexCreate("classId").Run(sess)
+	r.DB(dbName).Table("assignments").IndexCreate("termId").Run(sess)
+	r.DB(dbName).Table("assignments").IndexCreate("typeId").Run(sess)
 
-	r.Db(dbName).Table("attempts").IndexCreate("assignmentId").Run(sess)
-	r.Db(dbName).Table("attempts").IndexCreate("personId").Run(sess)
+	r.DB(dbName).Table("attempts").IndexCreate("assignmentId").Run(sess)
+	r.DB(dbName).Table("attempts").IndexCreate("personId").Run(sess)
 
-	r.Db(dbName).Table("enrollments").IndexCreate("personId").Run(sess)
-	r.Db(dbName).Table("enrollments").IndexCreate("classId").Run(sess)
-	r.Db(dbName).Table("enrollments").IndexCreate("termId").Run(sess)
+	r.DB(dbName).Table("enrollments").IndexCreate("personId").Run(sess)
+	r.DB(dbName).Table("enrollments").IndexCreate("classId").Run(sess)
+	r.DB(dbName).Table("enrollments").IndexCreate("termId").Run(sess)
 
-	r.Db(dbName).Table("person").IndexCreate("firstName").Run(sess)
-	r.Db(dbName).Table("person").IndexCreate("middleName").Run(sess)
-	r.Db(dbName).Table("person").IndexCreate("lastName").Run(sess)
+	r.DB(dbName).Table("person").IndexCreate("firstName").Run(sess)
+	r.DB(dbName).Table("person").IndexCreate("middleName").Run(sess)
+	r.DB(dbName).Table("person").IndexCreate("lastName").Run(sess)
 
-	r.Db(dbName).Table("person").IndexCreateFunc("fullName", func(row r.Term) interface{} {
+	r.DB(dbName).Table("person").IndexCreateFunc("fullName", func(row r.Term) interface{} {
 		return []interface{}{row.Field("firstName"), row.Field("middleName"), row.Field("lastName")}
 	}).RunWrite(sess)
 
-	r.Db(dbName).Table("emailConfirmations").IndexCreate("userId").Run(sess)
+	r.DB(dbName).Table("emailConfirmations").IndexCreate("userId").Run(sess)
 
 }
 
