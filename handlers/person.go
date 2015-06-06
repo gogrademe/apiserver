@@ -33,7 +33,7 @@ func CreatePerson(c *gin.Context) {
 // UpdatePerson ...
 func UpdatePerson(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	p := new(m.Person)
 
@@ -58,7 +58,7 @@ func UpdatePerson(c *gin.Context) {
 // GetPerson ...
 func GetPerson(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	p := m.Person{}
 	// err := store.People.FindByID(&p, id)
@@ -94,7 +94,7 @@ func GetAllPeople(c *gin.Context) {
 // DeletePerson ...
 func DeletePerson(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	_, err := store.DB.RunWrite(store.People.Get(id).Delete())
 	if err == store.ErrNotFound {

@@ -27,7 +27,7 @@ func GetAllTerms(c *gin.Context) {
 //GetTerm ...
 func GetTerm(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 	term := m.Term{}
 
 	//err := store.Terms.FindByID(&term, id)
@@ -71,7 +71,7 @@ func CreateTerm(c *gin.Context) {
 //UpdateTerm ...
 func UpdateTerm(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	term := new(m.Term)
 

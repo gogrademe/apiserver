@@ -63,7 +63,7 @@ func CreateUser(c *gin.Context) {
 }
 
 // func ActivateUser(c *gin.Context) {
-// 	id := c.Params.ByName("id")
+// 	id := c.Param("id")
 //
 // 	emailConf := m.EmailConfirmation{}
 // 	err := s.EmailConfirmations.FindByID(&emailConf, id)

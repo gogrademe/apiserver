@@ -37,16 +37,16 @@ func CreateAssignmentGrade(c *gin.Context) {
 	}
 
 	logrus.Info(res)
-	// a.ID = ids[0]
+	a.ID = ids[0]
 
-	// c.JSON(201, &APIRes{"grade": []m.GradebookResource{*a}})
+	c.JSON(201, &APIRes{"grade": []m.AttemptResource{*a}})
 	return
 }
 
 // GetAssignmentGrade ...
 // func GetAssignmentGrade(c *gin.Context) {
 //
-// 	id := c.Params.ByName("id")
+// 	id := c.Param("id")
 //
 // 	a := m.AssignmentGrade{}
 // 	err := store.AssignmentGrades.One(&a, id)
@@ -65,7 +65,7 @@ func CreateAssignmentGrade(c *gin.Context) {
 
 // UpdateAssignmentGrade ...
 // func UpdateAssignmentGrade(c *gin.Context) {
-// 	id := c.Params.ByName("id")
+// 	id := c.Param("id")
 //
 // 	a := new(m.AssignmentGrade)
 //

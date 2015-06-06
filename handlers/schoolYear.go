@@ -27,7 +27,7 @@ func GetAllSchoolYears(c *gin.Context) {
 //GetSchoolYear ...
 func GetSchoolYear(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 	schoolYear := m.SchoolYear{}
 
 	//err := store.SchoolYears.FindByID(&schoolYear, id)
@@ -71,7 +71,7 @@ func CreateSchoolYear(c *gin.Context) {
 //UpdateSchoolYear ...
 func UpdateSchoolYear(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	schoolYear := new(m.SchoolYear)
 

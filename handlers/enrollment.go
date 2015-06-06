@@ -33,7 +33,7 @@ func CreateEnrollment(c *gin.Context) {
 // GetEnrollment ...
 func GetEnrollment(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	a := m.Enrollment{}
 	err := store.Enrollments.FindByID(&a, id)
@@ -53,7 +53,7 @@ func GetEnrollment(c *gin.Context) {
 // DeleteEnrollment ...
 func DeleteEnrollment(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	err := store.Enrollments.Delete(id)
 	if err == store.ErrNotFound {
@@ -71,7 +71,7 @@ func DeleteEnrollment(c *gin.Context) {
 
 // UpdateEnrollment ...
 func UpdateEnrollment(c *gin.Context) {
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	a := new(m.Enrollment)
 

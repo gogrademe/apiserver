@@ -28,7 +28,7 @@ func GetAllCourses(c *gin.Context) {
 // GetCourse ...
 func GetCourse(c *gin.Context) {
 	var (
-		id     = c.Params.ByName("id")
+		id     = c.Param("id")
 		course = m.Course{}
 	)
 
@@ -75,7 +75,7 @@ func CreateCourse(c *gin.Context) {
 //UpdateCourse ...
 func UpdateCourse(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	course := new(m.Course)
 
@@ -99,7 +99,7 @@ func UpdateCourse(c *gin.Context) {
 // DeleteCourse ...
 func DeleteCourse(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	_, err := store.DB.RunWrite(store.Courses.Get(id).Delete())
 	if err == store.ErrNotFound {

@@ -11,7 +11,7 @@ import (
 
 func deleteAssignment(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	_, err := store.DB.RunWrite(store.Assignments.Get(id).Delete())
 	if err == store.ErrNotFound {
@@ -50,7 +50,7 @@ func createAssignment(c *gin.Context) {
 
 func getAssignment(c *gin.Context) {
 	var (
-		id = c.Params.ByName("id")
+		id = c.Param("id")
 		a  = m.Assignment{}
 	)
 
@@ -65,7 +65,7 @@ func getAssignment(c *gin.Context) {
 }
 
 func updateAssignment(c *gin.Context) {
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	a := new(m.Assignment)
 

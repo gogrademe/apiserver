@@ -33,7 +33,7 @@ func CreateAssignmentGroup(c *gin.Context) {
 // GetAssignmentGroup ...
 func GetAssignmentGroup(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	a := m.AssignmentGroup{}
 	err := store.AssignmentGroups.FindByID(&a, id)
@@ -52,7 +52,7 @@ func GetAssignmentGroup(c *gin.Context) {
 
 // UpdateAssignmentGroup ...
 func UpdateAssignmentGroup(c *gin.Context) {
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	a := new(m.AssignmentGroup)
 
@@ -95,7 +95,7 @@ func GetAllAssignmentGroups(c *gin.Context) {
 // DeleteAssignmentGroup ...
 func DeleteAssignmentGroup(c *gin.Context) {
 
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
 	err := store.AssignmentGroups.Delete(id)
 	if err == store.ErrNotFound {
