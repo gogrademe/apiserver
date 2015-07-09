@@ -37,7 +37,7 @@ func CreateAssignmentGrade(c *gin.Context) {
 	}
 
 	logrus.Info(res)
-	a.ID = ids[0]
+	// a.ID = ids[0]
 
 	c.JSON(201, &APIRes{"grade": []m.AttemptResource{*a}})
 	return
