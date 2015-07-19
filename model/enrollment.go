@@ -36,7 +36,7 @@ func (e Enrollment) Validate(req *http.Request, errs binding.Errors) binding.Err
 	return errs
 }
 
-func (e *Enrollment) FieldMap() binding.FieldMap {
+func (e *Enrollment) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&e.ID:       "id",
 		&e.PersonID: "personId",

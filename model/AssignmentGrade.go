@@ -34,7 +34,7 @@ type GradebookResource struct {
 }
 
 // FieldMap ...
-func (a *AttemptResource) FieldMap() binding.FieldMap {
+func (a *AttemptResource) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 
 		&a.AssignmentID: "assignmentId",

@@ -3,6 +3,8 @@ package handlers
 import (
 	// "log"
 
+	"net/http"
+
 	m "github.com/gogrademe/apiserver/model"
 	s "github.com/gogrademe/apiserver/store"
 
@@ -22,7 +24,7 @@ type LoginForm struct {
 }
 
 // FieldMap ...
-func (lf *LoginForm) FieldMap() binding.FieldMap {
+func (lf *LoginForm) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&lf.Email:    binding.Field{Form: "email", Required: true},
 		&lf.Password: binding.Field{Form: "password", Required: true},

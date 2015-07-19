@@ -17,7 +17,7 @@ type Announcement struct {
 }
 
 // FieldMap ...
-func (a *Announcement) FieldMap() binding.FieldMap {
+func (a *Announcement) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&a.ID:   "id",
 		&a.Name: "name",

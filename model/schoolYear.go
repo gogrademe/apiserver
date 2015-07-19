@@ -28,7 +28,7 @@ func (t SchoolYear) Validate(req *http.Request, errs binding.Errors) binding.Err
 	return errs
 }
 
-func (t *SchoolYear) FieldMap() binding.FieldMap {
+func (t *SchoolYear) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&t.ID:    "id",
 		&t.Start: "start",

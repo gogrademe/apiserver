@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
 	m "github.com/gogrademe/apiserver/model"
@@ -28,7 +30,7 @@ type UserNew struct {
 }
 
 // FieldMap ...
-func (u *UserNew) FieldMap() binding.FieldMap {
+func (u *UserNew) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&u.PersonID: "personId",
 		&u.Email:    "email",

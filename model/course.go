@@ -29,7 +29,7 @@ func (c Course) Validate(req *http.Request, errs binding.Errors) binding.Errors 
 	return errs
 }
 
-func (c *Course) FieldMap() binding.FieldMap {
+func (c *Course) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&c.ID:         "id",
 		&c.Name:       "name",

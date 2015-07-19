@@ -51,7 +51,7 @@ func (p Person) Validate(req *http.Request, errs binding.Errors) binding.Errors 
 	return errs
 }
 
-func (p *Person) FieldMap() binding.FieldMap {
+func (p *Person) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&p.ID:          "id",
 		&p.FirstName:   "firstName",

@@ -20,7 +20,7 @@ type Assignment struct {
 }
 
 // FieldMap ...
-func (a *Assignment) FieldMap() binding.FieldMap {
+func (a *Assignment) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{
 		&a.ID:       "id",
 		&a.Name:     "name",
